@@ -1,15 +1,25 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import Title from "../components/Title.astro";
+import Button from "../components/Button.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>CVTalk</title>
-  </head>
-  <body>
-    <h1>CVTalk</h1>
-  </body>
-</html>
+<Layout>
+  <div class="absolute flex -z-10 w-full justify-center opacity-50">
+    <img src="/assets/chat_bg.png" alt="" />
+  </div>
+  <Title />
+  <article class="mx-16 bg-slate-950/50">
+    <p class="">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil fugit,
+      architecto, optio eaque commodi esse ea officia, repudiandae deleniti
+      labore sunt eum tempore dolor atque? Sequi iste fugit culpa sint.
+    </p>
+  </article>
+  <Button
+    href="/start"
+    className="my-20 mx-auto bg-orange-500 py-3 px-6 text-lg font-bold"
+  >
+    Get started
+  </Button>
+</Layout>

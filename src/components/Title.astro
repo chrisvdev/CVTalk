@@ -1,0 +1,35 @@
+<h1 id="title" class="text-center font-bold text-5xl sm:text-7xl my-20">
+  CVTalk
+</h1>
+<script>
+  const title = document.getElementById("title");
+  let delay = 500;
+  let frame = 0;
+  const frames = [
+    "Chat View Talk",
+    "Cha Vie Talk",
+    "Ch Vi Talk",
+    "C V Talk",
+    "CVTalk",
+  ];
+  title.textContent = frames[0];
+  const nextFrame = () => {
+    setTimeout(() => {
+      title.textContent = frames[frame];
+      frame++;
+      delay -= 100;
+      if (frame < frames.length) nextFrame();
+    }, delay);
+  };
+  setTimeout(() => {
+    nextFrame();
+  }, 5000);
+</script>
+
+<!-- 
+ Chat View Talk
+ Cha Vie Talk
+ Ch Vi Talk
+ C V Talk
+ CVTalk
+-->

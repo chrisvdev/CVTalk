@@ -1,0 +1,10 @@
+---
+const { href, className } = Astro.props;
+---
+
+<a
+  class={`flex w-fit bg-zinc-800 py-2 px-5 rounded-full ${className || ""}`}
+  href={href}
+>
+  <slot />
+</a>
