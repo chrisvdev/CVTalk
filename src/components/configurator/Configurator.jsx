@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "preact/hooks";
 import isURL from "validator/lib/isURL";
 import "./configurator.css";
+import useSpeechSynthesis from "../../hooks/useSpeechSynthesis";
 
 // config de twitch
 const CHANNEL = "channel"; //text 👍
@@ -21,19 +22,6 @@ const PATO_BOT = "pato_bot"; // bool (activo por defecto) 👍
 const HTMLI = "htmli"; // 👍 Checkbox (desactivado y avisando que es experimental)
 const VALID = "_valid";
 
-const A = "a".charCodeAt();
-const Z = "z".charCodeAt();
-const _0 = "0".charCodeAt();
-const _9 = "9".charCodeAt();
-const dash = "_".charCodeAt();
-
-function isAValidUserChar(char) {
-  const code = char.toLowerCase().charCodeAt();
-  return (
-    (code >= A && code <= Z) || (code >= _0 && code <= _9) || code === dash
-  );
-}
-
 const itemStyle = "m-1";
 const labelStyle = "mr-2";
 const input =
@@ -46,14 +34,15 @@ dataInitialState[`${DEFAULT_AVATAR}${VALID}`] = true; // URL si
 dataInitialState[STYLE] = ""; // Validar URL si
 dataInitialState[`${STYLE}${VALID}`] = true; // Validar URL si
 dataInitialState[TTS] = true; // check si
-dataInitialState[TTS_ACCENT] = "es-AR"; // Auto
-dataInitialState[TTS_INDEX] = "2"; // Auto
+dataInitialState[TTS_ACCENT] = ""; // Auto
+dataInitialState[TTS_INDEX] = ""; // Auto
 dataInitialState[RENDER] = true; // check si
 dataInitialState[BOTS] = ""; // Validar Usuario incluye si
 dataInitialState[PATO_BOT] = true; // check si
 dataInitialState[HTMLI] = false; // check si
 
 const typeUser = [CHANNEL, BOTS];
+const typeUsers = [BOTS];
 const typeCheck = [TTS, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
 
@@ -66,13 +55,15 @@ const typeURL = [DEFAULT_AVATAR, STYLE];
 */
 
 export default function Configurator() {
+  const voices = useSpeechSynthesis();
   const [data, setData] = useState(structuredClone(dataInitialState));
   const makeInputHandler = useCallback((key) => {
+    const validUser = /^[A-Za-z0-9_]*$/;
+    const validUsers = /^[A-Za-z0-9_,]*$/;
     const updateState = (value, altKey) => {
       setData((lastState) => {
         const newState = { ...lastState };
         newState[altKey || key] = value;
-        console.log(newState);
         return newState;
       });
     };
@@ -82,7 +73,12 @@ export default function Configurator() {
     if (typeUser.includes(key))
       return (e) => {
         const { value } = e.currentTarget;
-        if (isAValidUserChar(value[value.length - 1])) updateState(value);
+        if (
+          typeUsers.includes(key)
+            ? validUsers.test(value)
+            : validUser.test(value)
+        )
+          updateState(value);
         else refreshState();
       };
     if (typeCheck.includes(key))
@@ -107,6 +103,7 @@ export default function Configurator() {
       setData((initialData) => {
         const data = { ...initialData };
         data[TTS_ACCENT] = speechSynthesis.getVoices()[0].lang;
+        data[TTS_INDEX] = 1;
         return data;
       });
     };
@@ -115,6 +112,16 @@ export default function Configurator() {
       speechSynthesis.removeEventListener("voiceschanged", onEvent);
     };
   }, []);
+  const renderVoicesIndexes = (quantity) => {
+    const options = [];
+    for (let i = 1; i <= quantity; i++) {
+      options.push(<option>{i}</option>);
+    }
+    return options;
+  };
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   return (
     <section className="mx-auto max-w-md">
       <form>
@@ -168,8 +175,11 @@ export default function Configurator() {
             name={TTS_ACCENT}
             onInput={makeInputHandler(TTS_ACCENT)}
           >
-            <option>es-ES</option>
-            <option>es-AR</option>
+            {Object.keys(voices)
+              .sort()
+              .map((voice, i) => (
+                <option key={`voice_${i}`}>{voice}</option>
+              ))}
           </select>
         </div>
         <div className={itemStyle}>
@@ -180,8 +190,8 @@ export default function Configurator() {
             name={TTS_INDEX}
             onInput={makeInputHandler(TTS_INDEX)}
           >
-            <option>1</option>
-            <option>2</option>
+            {data[TTS_ACCENT] !== "" &&
+              renderVoicesIndexes(voices[data[TTS_ACCENT]])}
           </select>
         </div>
         <div className={itemStyle}>
@@ -202,6 +212,9 @@ export default function Configurator() {
             name={BOTS}
             onInput={makeInputHandler(BOTS)}
           />
+          <p className="font-mono text-xs m-1">
+            Usernames separated by "," like "bot1,bot2,etc"
+          </p>
         </div>
         <div className={itemStyle}>
           <label className={labelStyle}>PatoBot compatibility</label>
