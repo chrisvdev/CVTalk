@@ -7,4 +7,7 @@ import preact from "@astrojs/preact";
 export default defineConfig({
   integrations: [tailwind(), preact()],
   outDir: "docs", // For deploy on GHPages
+  build: {
+    assets: 'resources'
+  },
 });
