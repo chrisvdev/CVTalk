@@ -57,11 +57,6 @@ const typeURL = [DEFAULT_AVATAR, STYLE];
 
 export default function Configurator() {
   const voices = useSpeechSynthesis();
-  useEffect(() => {
-    console.log(
-      Object.keys(voices).reduce((prev, voice) => `${prev} ${voice}`, "")
-    );
-  }, [voices]);
   const [data, setData] = useState(structuredClone(dataInitialState));
   const makeInputHandler = useCallback((key) => {
     const validUser = /^[A-Za-z0-9_]*$/;
@@ -125,6 +120,19 @@ export default function Configurator() {
     }
     return options;
   };
+
+  const readyToGenerate = useCallback(() => {
+    return (
+      data[CHANNEL]?.length > 3 &&
+      data[`${DEFAULT_AVATAR}${VALID}`] &&
+      data[`${STYLE}${VALID}`]
+    );
+  }, [
+    data[CHANNEL],
+    data[`${DEFAULT_AVATAR}${VALID}`],
+    data[`${STYLE}${VALID}`],
+  ]);
+
   return (
     <section className="mx-auto max-w-md">
       <form>

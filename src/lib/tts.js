@@ -22,6 +22,9 @@ class TTS {
             : speechSynthesis.getVoices()[0]
         speechSynthesis.speak(toSpeak)
     }
+    getVoices () {
+        return structuredClone(this.voices)
+    }
 }
 
 const tts = new TTS()
