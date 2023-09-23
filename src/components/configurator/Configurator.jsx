@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "preact/hooks";
 import isURL from "validator/lib/isURL";
 import "./configurator.css";
 import useSpeechSynthesis from "../../hooks/useSpeechSynthesis";
+import tts from "../../lib/tts";
 
 // config de twitch
 const CHANNEL = "channel"; //text 👍
@@ -56,6 +57,11 @@ const typeURL = [DEFAULT_AVATAR, STYLE];
 
 export default function Configurator() {
   const voices = useSpeechSynthesis();
+  useEffect(() => {
+    console.log(
+      Object.keys(voices).reduce((prev, voice) => `${prev} ${voice}`, "")
+    );
+  }, [voices]);
   const [data, setData] = useState(structuredClone(dataInitialState));
   const makeInputHandler = useCallback((key) => {
     const validUser = /^[A-Za-z0-9_]*$/;
@@ -119,9 +125,6 @@ export default function Configurator() {
     }
     return options;
   };
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
   return (
     <section className="mx-auto max-w-md">
       <form>
@@ -194,6 +197,15 @@ export default function Configurator() {
               renderVoicesIndexes(voices[data[TTS_ACCENT]])}
           </select>
         </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            tts.speak("Esto es una prueba", data[TTS_ACCENT], data[TTS_INDEX]);
+          }}
+        >
+          Test TTS
+        </button>
         <div className={itemStyle}>
           <label className={labelStyle}>Render</label>
           <input

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "preact/hooks"
 
-
 export default function useSpeechSynthesis () {
     const [voices, setVoices] = useState({})
     useEffect(() => {
