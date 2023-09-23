@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    env:
+      VITE_TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
