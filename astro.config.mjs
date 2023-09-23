@@ -6,7 +6,6 @@ import preact from "@astrojs/preact";
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), preact()],
-  site: "https://javierbalonga.github.io",
   base: "/CVTalk",
   build: {
     assets: "resources",
