@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "preact/hooks";
+import { useEffect, useState, useCallback, useMemo } from "preact/hooks";
 import isURL from "validator/lib/isURL";
 import "./configurator.css";
 import useSpeechSynthesis from "../../hooks/useSpeechSynthesis";
@@ -47,12 +47,31 @@ const typeUsers = [BOTS];
 const typeCheck = [TTS, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
 
+const APP_LOCATION = "https://obs-chat.christianvillegas.com/";
+
+function dataToURL(data) {
+  const url = new URL(APP_LOCATION);
+  typeUser.forEach((key) => {
+    Boolean(data[key]) && url.searchParams.append(key, data[key]);
+  });
+  typeURL.forEach((key) => {
+    Boolean(data[key]) && url.searchParams.append(key, data[key]);
+  });
+  typeCheck.forEach((key) => {
+    Boolean(data[key]) && url.searchParams.append(key, data[key]);
+  });
+  return url.toString();
+}
+
 /*
   Reemplazar onInput por onKeyDown
   Aparentemente desencadena un render pero precisa del preventDefault
 
   En el caso de tener muchos inputs hacer el renderizado dinámico en
   base a las constantes que se agreguen 
+https://obs-chat.christianvillegas.com/?channel=chrisvdev&default_avatar=https%3A%2F%2Fobs-chat.christianvillegas.com%2F%3Fchannel%3Dchrisvdev%26tts%3Dtrue%26render%3Dtrue%26pato_bot%3Dtrue%26default_avatar%3Dhttps%253A%252F%252Fstatic-cdn.jtvnw.net%252Fjtv_user_pictures%252F81d6dc2a-1378-45f2-898a-02bee1aff39d-profile_image-70x70.png&tts=true&render=true&pato_bot=true
+https://obs-chat.christianvillegas.com/?channel=chrisvdev&tts=true&render=true&pato_bot=true
+
 */
 
 export default function Configurator() {
@@ -108,10 +127,7 @@ export default function Configurator() {
         return data;
       });
     };
-    speechSynthesis.addEventListener("voiceschanged", onEvent);
-    return () => {
-      speechSynthesis.removeEventListener("voiceschanged", onEvent);
-    };
+    tts.whenReady(onEvent);
   }, []);
   const renderVoicesIndexes = (quantity) => {
     const options = [];
@@ -121,7 +137,7 @@ export default function Configurator() {
     return options;
   };
 
-  const readyToGenerate = useCallback(() => {
+  const readyToGenerate = useMemo(() => {
     return (
       data[CHANNEL]?.length > 3 &&
       data[`${DEFAULT_AVATAR}${VALID}`] &&
@@ -135,7 +151,19 @@ export default function Configurator() {
 
   return (
     <section className="mx-auto max-w-md">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          navigator.clipboard
+            .writeText(dataToURL(data))
+            .then(() => {
+              console.log("copiado");
+            })
+            .catch(() => {
+              console.error("No se copio");
+            });
+        }}
+      >
         <div className={itemStyle}>
           <label className={labelStyle}>Channel</label>
           <input
@@ -262,6 +290,11 @@ export default function Configurator() {
           />
           <p>(Experimental, Use on your own risk)</p>
         </div>
+        {readyToGenerate ? (
+          <button type="submit">Generate URL</button>
+        ) : (
+          <p> There are some invalid parameters...</p>
+        )}
       </form>
     </section>
   );
