@@ -1,9 +1,17 @@
 ---
 import Button from "./Button.astro";
+
+const isProd = import.meta.env.PROD;
+
+let baseURL = "/";
+
+if (isProd) {
+  baseURL = "/CVTalk/";
+}
 ---
 
 <nav class="flex justify-center gap-6 m-4 p-2">
-  <Button href="/CVTalk/#" className="hidden sm:flex">Home</Button>
-  <Button href="/CVTalk/start">Get Started</Button>
-  <Button href="/CVTalk/involved">Get Involved</Button>
+  <Button href={`${baseURL}`} className="hidden sm:flex">Home</Button>
+  <Button href={`${baseURL}start`}>Get Started</Button>
+  <Button href={`${baseURL}involved`}>Get Involved</Button>
 </nav>
