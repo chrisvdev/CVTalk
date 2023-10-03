@@ -4,5 +4,30 @@ import Configurator from "../components/configurator/Configurator.jsx";
 ---
 
 <Layout>
-  <Configurator client:only="preact" />
+  <section class="mx-auto max-w-md">
+    <h1 class="balance text-center text-3xl mt-10 mb-4">
+      To use CVTalk on your stream you could...
+    </h1>
+    <h2 class="text-2xl mb-2 text-center">Use from the current build</h2>
+    <p class="balance text-center mb-4 text-sm">
+      Through this assistant, you can create the URL to feed the browser source
+      in your OBS/StreamLabs or broadcasting software that is compatible.
+    </p>
+    <Configurator client:only="preact" />
+    <h2 class="text-2xl mt-8 mb-2 text-center">Get the source and build it</h2>
+    <p class="balance text-center mb-16 text-sm">
+      You can clone it from the
+      <a
+        class="font-bold hover:text-yellow-400 transition-all"
+        href="https://github.com/chrisvdev/obs-chat">GitHub Repository</a
+      >
+       and build your own, and if you want a custom build.
+    </p>
+  </section>
 </Layout>
+
+<style>
+  .balance {
+    text-wrap: balance;
+  }
+</style>

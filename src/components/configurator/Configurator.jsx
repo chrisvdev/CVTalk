@@ -23,10 +23,11 @@ const PATO_BOT = "pato_bot"; // bool (activo por defecto) 👍
 const HTMLI = "htmli"; // 👍 Checkbox (desactivado y avisando que es experimental)
 const VALID = "_valid";
 
-const itemStyle = "m-1";
-const labelStyle = "mr-2";
+const itemStyle = "flex flex-col m-1";
+const itemStyleCheckbox = "flex m-1";
+const labelStyle = "mr-2 my-1 text-base";
 const input =
-  "bg-zinc-950 text-zinc-100 border-b-2 border-zinc-300 focus:border-amber-300 transition-all";
+  "px-2 py-1 rounded-lg bg-zinc-800 text-zinc-100 border border-zinc-700 hover:border-zinc-400 focus:border-amber-300 transition-all";
 
 const dataInitialState = {};
 dataInitialState[CHANNEL] = "chrisvdev"; // Validar Usuario si
@@ -77,6 +78,7 @@ https://obs-chat.christianvillegas.com/?channel=chrisvdev&tts=true&render=true&p
 export default function Configurator() {
   const voices = useSpeechSynthesis();
   const [data, setData] = useState(structuredClone(dataInitialState));
+  const [copied, setCopied] = useState(false);
   const makeInputHandler = useCallback((key) => {
     const validUser = /^[A-Za-z0-9_]*$/;
     const validUsers = /^[A-Za-z0-9_,]*$/;
@@ -154,15 +156,21 @@ export default function Configurator() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          navigator.clipboard
-            .writeText(dataToURL(data))
-            .then(() => {
-              console.log("copiado");
-            })
-            .catch(() => {
-              console.error("No se copio");
-            });
+          if (!copied) {
+            navigator.clipboard
+              .writeText(dataToURL(data))
+              .then(() => {
+                setCopied(true);
+                setTimeout(() => {
+                  setCopied(false);
+                }, 1000);
+              })
+              .catch(() => {
+                console.error("No se copio");
+              });
+          }
         }}
+        className="flex flex-col items-start px-4 py-2 border border-zinc-400 rounded-lg"
       >
         <div className={itemStyle}>
           <label className={labelStyle}>Channel</label>
@@ -184,7 +192,9 @@ export default function Configurator() {
             onInput={makeInputHandler(STYLE)}
           />
         </div>
-        {data[`${STYLE}${VALID}`] || <p>Is not a valid URL</p>}
+        {data[`${STYLE}${VALID}`] || (
+          <p className="text-red-600">Is not a valid URL</p>
+        )}
         <div className={itemStyle}>
           <label className={labelStyle}>Default Avatar</label>
           <input
@@ -195,8 +205,10 @@ export default function Configurator() {
             onInput={makeInputHandler(DEFAULT_AVATAR)}
           />
         </div>
-        {data[`${DEFAULT_AVATAR}${VALID}`] || <p>Is not a valid URL</p>}
-        <div className={itemStyle}>
+        {data[`${DEFAULT_AVATAR}${VALID}`] || (
+          <p className="text-red-600">Is not a valid URL</p>
+        )}
+        <div className={itemStyleCheckbox}>
           <label className={labelStyle}>TTS</label>
           <input
             checked={data[TTS]}
@@ -234,6 +246,7 @@ export default function Configurator() {
           </select>
         </div>
         <button
+          className="my-2 px-2 py-1 rounded-lg bg-zinc-800 text-zinc-100 border border-zinc-700 hover:border-zinc-400 focus:border-amber-300 transition-all"
           type="button"
           onClick={(e) => {
             e.preventDefault();
@@ -242,7 +255,7 @@ export default function Configurator() {
         >
           Test TTS
         </button>
-        <div className={itemStyle}>
+        <div className={itemStyleCheckbox}>
           <label className={labelStyle}>Render</label>
           <input
             checked={data[RENDER]}
@@ -264,7 +277,7 @@ export default function Configurator() {
             Usernames separated by "," like "bot1,bot2,etc"
           </p>
         </div>
-        <div className={itemStyle}>
+        <div className={itemStyleCheckbox}>
           <label className={labelStyle}>PatoBot compatibility</label>
           <input
             type="checkbox"
@@ -272,15 +285,15 @@ export default function Configurator() {
             name={PATO_BOT}
             onInput={makeInputHandler(PATO_BOT)}
           />
-          <p>
-            (
-            <a href="https://elpatobot.com/">
-              You need to have the PatoBot configured.
-            </a>
-            )
-          </p>
         </div>
-        <div className={itemStyle}>
+        <p className="italic text-xs text-zinc-400 hover:text-zinc-100 transition-all cursor-pointer">
+          (
+          <a href="https://elpatobot.com/">
+            You need to have the PatoBot configured.
+          </a>
+          )
+        </p>
+        <div className={itemStyleCheckbox}>
           <label className={labelStyle}>HTML Injection</label>
           <input
             type="checkbox"
@@ -288,13 +301,28 @@ export default function Configurator() {
             name={HTMLI}
             onInput={makeInputHandler(HTMLI)}
           />
-          <p>(Experimental, Use on your own risk)</p>
         </div>
-        {readyToGenerate ? (
-          <button type="submit">Generate URL</button>
-        ) : (
-          <p> There are some invalid parameters...</p>
-        )}
+        <p className="italic text-xs text-zinc-400">
+          (Experimental, Use on your own risk)
+        </p>
+        <div className="flex justify-center w-full">
+          {readyToGenerate ? (
+            <button
+              className={`m-4 px-2 py-1 rounded-lg bg-zinc-800 text-zinc-100 border border-zinc-700 hover:border-zinc-400 transition-all${
+                copied
+                  ? " bg-zinc-500 scale-105 text-zinc-950 font-semibold "
+                  : ""
+              }`}
+              type="submit"
+            >
+              {!copied ? "Generate URL" : "Copied to the clipboard"}
+            </button>
+          ) : (
+            <p className="m-4 px-2 py-1 text-red-600">
+              There are some invalid parameters...
+            </p>
+          )}
+        </div>
       </form>
     </section>
   );
