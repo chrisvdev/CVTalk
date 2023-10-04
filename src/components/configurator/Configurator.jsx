@@ -59,7 +59,7 @@ function dataToURL(data) {
     Boolean(data[key]) && url.searchParams.append(key, data[key]);
   });
   typeCheck.forEach((key) => {
-    Boolean(data[key]) && url.searchParams.append(key, data[key]);
+    url.searchParams.append(key, data[key]);
   });
   return url.toString();
 }
@@ -70,9 +70,9 @@ function dataToURL(data) {
 
   En el caso de tener muchos inputs hacer el renderizado dinámico en
   base a las constantes que se agreguen 
-https://obs-chat.christianvillegas.com/?channel=chrisvdev&default_avatar=https%3A%2F%2Fobs-chat.christianvillegas.com%2F%3Fchannel%3Dchrisvdev%26tts%3Dtrue%26render%3Dtrue%26pato_bot%3Dtrue%26default_avatar%3Dhttps%253A%252F%252Fstatic-cdn.jtvnw.net%252Fjtv_user_pictures%252F81d6dc2a-1378-45f2-898a-02bee1aff39d-profile_image-70x70.png&tts=true&render=true&pato_bot=true
-https://obs-chat.christianvillegas.com/?channel=chrisvdev&tts=true&render=true&pato_bot=true
 
+
+  
 */
 
 export default function Configurator() {
