@@ -307,9 +307,7 @@ export default function Configurator() {
           {readyToGenerate ? (
             <button
               className={`m-4 px-2 py-1 rounded-lg bg-zinc-800 text-zinc-100 border border-zinc-700 hover:border-zinc-400 transition-all${
-                copied
-                  ? " bg-zinc-500 scale-105 text-zinc-950 font-semibold "
-                  : ""
+                copied ? "scale-105 font-semibold " : ""
               }`}
               type="submit"
             >
