@@ -47,6 +47,7 @@ const typeUser = [CHANNEL, BOTS];
 const typeUsers = [BOTS];
 const typeCheck = [TTS, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
+const typeData = [TTS_ACCENT, TTS_INDEX];
 
 const APP_LOCATION = "https://obs-chat.christianvillegas.com/";
 
@@ -59,6 +60,9 @@ function dataToURL(data) {
     Boolean(data[key]) && url.searchParams.append(key, data[key]);
   });
   typeCheck.forEach((key) => {
+    url.searchParams.append(key, data[key]);
+  });
+  typeData.forEach((key) => {
     url.searchParams.append(key, data[key]);
   });
   return url.toString();
