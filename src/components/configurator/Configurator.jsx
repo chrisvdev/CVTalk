@@ -71,8 +71,6 @@ function dataToURL(data) {
   En el caso de tener muchos inputs hacer el renderizado dinámico en
   base a las constantes que se agreguen 
 
-
-  
 */
 
 export default function Configurator() {
