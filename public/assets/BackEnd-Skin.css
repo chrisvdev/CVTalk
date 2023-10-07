@@ -10,7 +10,7 @@ body {
 .messages_container {
   font-family: "IBM Plex Mono", monospace;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 .message {
   display: flex;
