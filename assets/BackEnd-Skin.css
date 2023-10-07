@@ -45,6 +45,7 @@ body {
   --size: 2rem;
   width: var(--size);
   height: var(--size);
+  margin-right: 0.5rem;
 }
 
 .message_viewer-avatarImg {
