@@ -42,6 +42,9 @@ body {
 
 .message_viewer-avatar {
   position: relative;
+  --size: 2rem;
+  width: var(--size);
+  height: var(--size);
 }
 
 .message_viewer-avatarImg {
