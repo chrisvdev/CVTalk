@@ -20,6 +20,7 @@ body {
 
 .message_viewer-name {
   font-weight: bold;
+  margin-left: 0.25rem;
 }
 
 .message_userBadge {
