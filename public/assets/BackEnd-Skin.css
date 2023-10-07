@@ -75,6 +75,7 @@ body {
 .message_currentMessage-text {
   display: flex;
   flex-wrap: wrap;
+  margin-left: 0.5rem;
 }
 
 .newMessage .message_currentMessage-text::after {
