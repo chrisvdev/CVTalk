@@ -1,3 +1,5 @@
+![CVTalk Banner](./public/Banner-CVTalk.webp)
+
 # CVTalk
 CVtalk is a web application created with the aim of serving as a chat viewer for your Twitch channel and integrating many more functionalities:
 
