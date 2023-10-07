@@ -59,7 +59,7 @@
   transform: translate(1.25rem, 0.75rem);
 }
 
-.new .message_currentMessage-text::after {
+.newMessage .message_currentMessage-text::after {
   content: "_";
   animation: cursor 250ms linear infinite;
 }
