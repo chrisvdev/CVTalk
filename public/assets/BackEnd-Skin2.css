@@ -1,0 +1,152 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono&display=swap");
+
+body {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.messages_container {
+  font-family: "Space Mono", monospace;
+  display: flex;
+  flex-direction: column;
+}
+.message {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0.5rem;
+  flex-direction: column;
+  align-items: start;
+}
+
+.message_viewer-name {
+  margin-left: 0.25rem;
+}
+
+.message_userBadge {
+  display: none;
+}
+
+.message_userBadge-primary {
+  z-index: 1;
+}
+
+.message_viewer {
+  display: flex;
+}
+.message_currentMessage-box {
+  color: #cccccc;
+  display: flex;
+}
+
+.message_viewer-avatar {
+  display: none;
+}
+
+.message_viewer-avatarImg {
+  --size: 2rem;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 9999px;
+  margin-right: 0.5rem;
+}
+
+.message_currentMessage-otherViewerBadges {
+  display: none;
+}
+
+.message_viewer-name::after {
+  content: ">>> print(";
+  margin: 0 0.25rem;
+  color: #cccccc !important;
+}
+.message_userBadge-primary {
+  position: absolute;
+  top: 1.3rem;
+  left: 1.3rem;
+}
+
+.message_currentMessage-text {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.message_currentMessage-text::before {
+  content: "'";
+}
+.message_currentMessage-text::after {
+  content: "')";
+}
+
+.newMessage .message_currentMessage-text::after {
+  content: "_";
+  animation: cursor 250ms linear infinite;
+}
+
+.message_viewer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message_viewer-defaultImg {
+  position: absolute;
+  top: 0;
+}
+
+.message_currentMessage-otherViewerBadges {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem;
+}
+
+.message_currentMessage-otherViewerBadges:has(> img)::after {
+  content: ">";
+  margin-left: 0.25rem;
+  color: #9146ff;
+}
+.message_currentMessage-otherViewerBadges:has(> img)::before {
+  content: "<";
+  margin-right: 0.25rem;
+  color: #9146ff;
+}
+
+.message_userBadge-others {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.message_viewer-name {
+  color: #cccccc !important;
+}
+
+.moderator .message_viewer-name {
+  color: #0f0 !important;
+}
+
+.vip .message_viewer-name {
+  color: #e005b9 !important;
+}
+.broadcaster .message_viewer-name {
+  color: #f00 !important;
+}
+.subscriber .message_viewer-name {
+  color: #8205b4 !important;
+}
+
+@keyframes cursor {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0;
+  }
+}
