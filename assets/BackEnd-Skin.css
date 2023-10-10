@@ -13,9 +13,12 @@ body {
   flex-direction: column;
 }
 .message {
+  position: relative;
   display: flex;
   align-items: center;
   margin: 0.5rem;
+  flex-direction: column;
+  align-items: start;
 }
 
 .message_viewer-name {
@@ -63,18 +66,20 @@ body {
   margin-left: 0.25rem;
 }
 
-.message_currentMessage-otherViewerBadges::after {
+.message_viewer-name::after {
   content: ">";
   margin: 0 0.25rem;
 }
 .message_userBadge-primary {
   position: absolute;
-  transform: translate(1.25rem, 0.75rem);
+  top: 1.3rem;
+  left: 1.3rem;
 }
 
 .message_currentMessage-text {
   display: flex;
   flex-wrap: wrap;
+  padding-top: 0.5rem;
   margin-left: 0.5rem;
 }
 
@@ -92,6 +97,31 @@ body {
 .message_viewer-defaultImg {
   position: absolute;
   top: 0;
+}
+
+.message_currentMessage-otherViewerBadges {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem;
+}
+
+.message_currentMessage-otherViewerBadges:has(> img)::after {
+  content: ">";
+  margin-left: 0.25rem;
+  color: #9146ff;
+  font-weight: bold;
+}
+.message_currentMessage-otherViewerBadges:has(> img)::before {
+  content: "<";
+  margin-right: 0.25rem;
+  color: #9146ff;
+  font-weight: bold;
+}
+
+.message_userBadge-others {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 @keyframes cursor {
