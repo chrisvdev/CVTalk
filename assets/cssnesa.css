@@ -16,6 +16,7 @@ body {
   border: 0.125rem solid #00ff00;
   box-shadow: 0 0 0.625rem rgba(0, 255, 0, 0.5);
   border-radius: 0.625rem;
+  height: calc(100svh - 1rem);
 }
 .message {
   position: relative;
