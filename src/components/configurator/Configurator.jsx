@@ -3,6 +3,7 @@ import isURL from "validator/lib/isURL";
 import "./configurator.css";
 import useSpeechSynthesis from "../../hooks/useSpeechSynthesis";
 import tts from "../../lib/tts";
+import skins from "../../data/skins";
 
 // config de twitch
 const CHANNEL = "channel"; //text 👍
@@ -81,6 +82,7 @@ export default function Configurator() {
   const voices = useSpeechSynthesis();
   const [data, setData] = useState(structuredClone(dataInitialState));
   const [copied, setCopied] = useState(false);
+  const [ccss, setCcss] = useState(true);
   const makeInputHandler = useCallback((key) => {
     const validUser = /^[A-Za-z0-9_]*$/;
     const validUsers = /^[A-Za-z0-9_,]*$/;
@@ -158,6 +160,7 @@ export default function Configurator() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          console.log("Click");
           if (!copied) {
             navigator.clipboard
               .writeText(dataToURL(data))
@@ -186,12 +189,35 @@ export default function Configurator() {
         </div>
         <div className={itemStyle}>
           <label className={labelStyle}>Custom CSS Style</label>
+          {/* ***************************************************************** */}
+          <select
+            className={`${input} my-1`}
+            onInput={(e) => {
+              const { value } = e.currentTarget;
+              const style = {};
+              style[STYLE] = value;
+              setData((lastState) => {
+                return structuredClone({ ...lastState, ...style });
+              });
+              if (value === "") setCcss(() => true);
+              else setCcss(() => false);
+            }}
+          >
+            <option value="">Custom...</option>
+            {skins.map(({ title, url }, i) => (
+              <option key={`skin_${i}`} value={url}>
+                {title}
+              </option>
+            ))}
+          </select>
           <input
             className={input}
             value={data[STYLE]}
             type="text"
             name={STYLE}
             onInput={makeInputHandler(STYLE)}
+            style={ccss ? {} : { display: "none" }}
+            placeholder="Paste here the skin URL..."
           />
         </div>
         {data[`${STYLE}${VALID}`] || (
