@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+body {
+  font-family: "Press Start 2P", cursive;
+  background-color: #5c94fc;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><path fill="%238bc34a" d="M0 450 Q300 350 600 450 L600 600 L0 600 Z"/><path fill="%23689f38" d="M200 450 Q500 250 800 450 L800 600 L200 600 Z"/><circle fill="white" cx="150" cy="100" r="40"/><circle fill="white" cx="190" cy="100" r="60"/><circle fill="white" cx="250" cy="100" r="40"/><circle fill="white" cx="650" cy="150" r="40"/><circle fill="white" cx="690" cy="150" r="60"/><circle fill="white" cx="750" cy="150" r="40"/><rect fill="%2300A74A" x="100" y="350" width="80" height="150"/><rect fill="%2348B351" x="120" y="350" width="40" height="30"/><rect fill="%2300A74A" x="600" y="350" width="80" height="100"/><rect fill="%2348B351" x="620" y="350" width="40" height="30"/><circle fill="%23FF0000" cx="300" cy="375" r="25"/><circle fill="white" cx="290" cy="360" r="8"/><circle fill="white" cx="310" cy="360" r="8"/><circle fill="white" cx="295" cy="395" r="8"/><circle fill="white" cx="305" cy="395" r="8"/><circle fill="%23FFFFFF" cx="300" cy="385" r="5"/><circle fill="%23E91E63" cx="500" cy="375" r="25"/><circle fill="white" cx="490" cy="360" r="8"/><circle fill="white" cx="510" cy="360" r="8"/><circle fill="white" cx="495" cy="395" r="8"/><circle fill="white" cx="505" cy="395" r="8"/><circle fill="%23FFFFFF" cx="500" cy="385" r="5"/></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-shadow: 1px 1px #000;
+}
+
+.messages_container {
+  overflow-y: scroll;
+  height: 80vh;
+  width: 60vw;
+  padding: 2rem;
+  border: 4px solid #000;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin: 0.5rem;
+  position: relative;
+}
+
+.message_viewer-name {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  background-color: #009900;
+  padding: 0.2rem 0.5rem;
+  border: 2px solid #000;
+  border-radius: 5px;
+  box-shadow: 2px 2px #000;
+}
+
+.message_viewer-avatarImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  margin-right: 10px;
+}
+
+.message_currentMessage-container {
+  background-color: #f7d708;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  max-width: 70%;
+  position: relative;
+  border: 2px solid #000;
+}
+
+.message_currentMessage-text::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 15px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 20px solid #f7d708;
+  border-left-color: transparent;
+  border-right-color: #f7d708;
+  box-shadow: 2px 0px 0px 0px #000;
+}
+
+.message_userBadge {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: -25px;
+  top: 15px;
+  transform: rotate(45deg);
+  background-color: #ff0000;
+  border: 2px solid #000;
+}
+
+.message_userBadge-primary {
+  left: -30px;
+}
+
+.message_userBadge-others {
+  left: -88px;
+  top: 7px;
+}
