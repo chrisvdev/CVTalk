@@ -9,6 +9,10 @@ const skins = [{
 {
     title: "Pythonesa's skin",
     url: "https://raw.githubusercontent.com/chrisvdev/CVTalk/main/public/assets/cssnesa.css"
+},
+{
+    title: "Snakeblack's skin",
+    url: "https://raw.githubusercontent.com/Snakeblack/chatbox-css/main/style.css"
 }
 ]
 
