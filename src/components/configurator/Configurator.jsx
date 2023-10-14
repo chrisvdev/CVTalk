@@ -50,7 +50,7 @@ const typeCheck = [TTS, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
 const typeData = [TTS_ACCENT, TTS_INDEX];
 
-const APP_LOCATION = "https://obs-chat.christianvillegas.com/";
+const APP_LOCATION = "https://chrisvdev.github.io/obs-chat";
 
 function dataToURL(data) {
   const url = new URL(APP_LOCATION);
