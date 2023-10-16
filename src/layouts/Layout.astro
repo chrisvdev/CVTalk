@@ -32,6 +32,43 @@ import { ViewTransitions } from "astro:transitions";
           u+02dc, u+2000-206f, u+2074, u+20ac, u+2122, u+2191, u+2193, u+2212,
           u+2215, u+feff, u+fffd;
       }
+
+      /**
+       * Personalizar scrollbar
+      */
+      body::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+        @apply bg-zinc-950 transition-colors;
+      }
+
+      body::-webkit-scrollbar-thumb {
+        @apply bg-zinc-600;
+        border-radius: 0.25rem;
+      }
+
+      @media (any-hover: hover) {
+        body::-webkit-scrollbar-thumb:hover {
+          @apply bg-zinc-500;
+        }
+      }
+
+      /**
+       * Personalizar scrollbar en Firefox
+       */
+      html,
+      body {
+        scrollbar-color: #52525b #09090b;
+        scrollbar-width: thin;
+      }
+
+      /**
+       * Hacer que la barra de scroll tenga un tamaño estable
+       */
+      html,
+      body {
+        scrollbar-gutter: stable;
+      }
     </style>
   </body>
 </html>
