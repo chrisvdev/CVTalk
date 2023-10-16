@@ -51,7 +51,7 @@ const typeCheck = [TTS, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
 const typeData = [TTS_ACCENT, TTS_INDEX];
 
-const APP_LOCATION = "https://obs-chat.christianvillegas.com/";
+const APP_LOCATION = "https://chrisvdev.github.io/obs-chat";
 
 function dataToURL(data) {
   const url = new URL(APP_LOCATION);
@@ -176,7 +176,8 @@ export default function Configurator() {
               });
           }
         }}
-        className="flex flex-col space-y-4 p-4 border border-gray-700 rounded-lg">
+        className="flex flex-col space-y-4 p-4 border border-gray-700 rounded-lg"
+      >
         <div className={itemStyle}>
           <label className={labelStyle}>Channel</label>
           <input
@@ -201,12 +202,11 @@ export default function Configurator() {
               });
               if (value === "") setCcss(() => true);
               else setCcss(() => false);
-            }}>
+            }}
+          >
             <option value="">Custom...</option>
             {skins.map(({ title, url }, i) => (
-              <option
-                key={`skin_${i}`}
-                value={url}>
+              <option key={`skin_${i}`} value={url}>
                 {title}
               </option>
             ))}
@@ -257,7 +257,8 @@ export default function Configurator() {
             className={input}
             value={data[TTS_ACCENT]}
             name={TTS_ACCENT}
-            onInput={makeInputHandler(TTS_ACCENT)}>
+            onInput={makeInputHandler(TTS_ACCENT)}
+          >
             {Object.keys(voices)
               .sort()
               .map((voice, i) => (
@@ -271,7 +272,8 @@ export default function Configurator() {
             className={input}
             value={data[TTS_INDEX]}
             name={TTS_INDEX}
-            onInput={makeInputHandler(TTS_INDEX)}>
+            onInput={makeInputHandler(TTS_INDEX)}
+          >
             {data[TTS_ACCENT] !== "" &&
               renderVoicesIndexes(voices[data[TTS_ACCENT]])}
           </select>
@@ -282,7 +284,8 @@ export default function Configurator() {
           onClick={(e) => {
             e.preventDefault();
             tts.speak("Esto es una prueba", data[TTS_ACCENT], data[TTS_INDEX]);
-          }}>
+          }}
+        >
           Test TTS
         </button>
 
@@ -354,7 +357,8 @@ export default function Configurator() {
           {readyToGenerate ? (
             <button
               className="w-full text-white font-medium rounded-lg text-sm px-5 py-2 bg-blue-600 transition-all duration-100 focus:outline focus:outline-offset-2 focus:outline-2 focus:outline-blue-500"
-              type="submit">
+              type="submit"
+            >
               {!copied ? "Generate URL" : "Copied to the clipboard"}
             </button>
           ) : (
