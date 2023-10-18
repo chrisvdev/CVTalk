@@ -12,9 +12,38 @@ if (isProd) {
 
 <nav class="flex md:justify-center items-center m-4 p-2 relative">
   <div class="flex gap-4 md:gap-6 items-center">
-    <Button href={`${baseURL}`} className="hidden sm:flex">Home</Button>
-    <Button href={`${baseURL}start`}>Get Started</Button>
-    <Button href={`${baseURL}involved`}>Get Involved</Button>
+    <Button
+      href={`${baseURL}`}
+      className={[
+        "hidden sm:inline",
+        { "border-blue-500": Astro.url.pathname === baseURL },
+        { "border-transparent": Astro.url.pathname !== baseURL },
+      ]}
+    >
+      Home
+    </Button>
+    <Button
+      href={`${baseURL}start`}
+      className={[
+        {
+          "border-blue-500": Astro.url.pathname.includes("start"),
+          "border-transparent": !Astro.url.pathname.includes("start"),
+        },
+      ]}
+    >
+      Get Started
+    </Button>
+    <Button
+      href={`${baseURL}involved`}
+      className={[
+        {
+          "border-blue-500": Astro.url.pathname.includes("involved"),
+          "border-transparent": !Astro.url.pathname.includes("involved"),
+        },
+      ]}
+    >
+      Get Involved
+    </Button>
   </div>
   <div class="absolute right-0 top-1/2 -translate-y-1/2">
     <a
