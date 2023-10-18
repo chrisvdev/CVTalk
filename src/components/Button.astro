@@ -3,7 +3,10 @@ const { href, className } = Astro.props;
 ---
 
 <a
-  class={`flex w-fit bg-zinc-800 py-2 px-5 rounded-full ${className || ""}`}
+  class:list={[
+    "w-fit bg-zinc-800 py-2 px-5 rounded-full border hover:border-blue-500 transition-colors duration-300",
+    className,
+  ]}
   href={href}
 >
   <slot />
