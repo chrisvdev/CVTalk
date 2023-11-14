@@ -4,6 +4,7 @@ import "./configurator.css";
 import useSpeechSynthesis from "../../hooks/useSpeechSynthesis";
 import tts from "../../lib/tts";
 import skins from "../../data/skins";
+import { validUser, validUsers, validChar } from "../../lib/utils";
 
 // config de twitch
 const CHANNEL = "channel"; //text 👍
@@ -18,10 +19,12 @@ const TTS = "tts"; // Checkbox (activo po defecto) 👍
 // Los parámetros TTS deberían de ser obtenidos del navegador 👍
 const TTS_ACCENT = "tts_accent"; // listado desplegable 👍
 const TTS_INDEX = "tts_index"; // Listado desplegable (indices dependiendo del accento)
+export const TTS_ALWAYS_ON = "tts_always_on"; // Checkbox que por defecto esta desactivado
 const RENDER = "render"; // checkbox (activo por defecto) 👍
 const BOTS = "bots"; // Esto es un arreglo de strings 👍
 const PATO_BOT = "pato_bot"; // bool (activo por defecto) 👍
 const HTMLI = "htmli"; // 👍 Checkbox (desactivado y avisando que es experimental)
+const CHAR_COMMANDS = "char_commands"; // Esto es un arreglo de caracteres
 const VALID = "_valid";
 
 const itemStyle = "flex flex-col";
@@ -40,14 +43,17 @@ dataInitialState[`${STYLE}${VALID}`] = true; // Validar URL si
 dataInitialState[TTS] = true; // check si
 dataInitialState[TTS_ACCENT] = ""; // Auto
 dataInitialState[TTS_INDEX] = ""; // Auto
+dataInitialState[TTS_ALWAYS_ON] = false;
 dataInitialState[RENDER] = true; // check si
 dataInitialState[BOTS] = ""; // Validar Usuario incluye si
 dataInitialState[PATO_BOT] = true; // check si
 dataInitialState[HTMLI] = false; // check si
+dataInitialState[CHAR_COMMANDS] = "";
 
 const typeUser = [CHANNEL, BOTS];
 const typeUsers = [BOTS];
-const typeCheck = [TTS, RENDER, PATO_BOT, HTMLI];
+const typeCharacters = [CHAR_COMMANDS];
+const typeCheck = [TTS, TTS_ALWAYS_ON, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
 const typeData = [TTS_ACCENT, TTS_INDEX];
 
@@ -62,6 +68,9 @@ function dataToURL(data) {
     Boolean(data[key]) && url.searchParams.append(key, data[key]);
   });
   typeCheck.forEach((key) => {
+    url.searchParams.append(key, data[key]);
+  });
+  typeCharacters.forEach((key) => {
     url.searchParams.append(key, data[key]);
   });
   typeData.forEach((key) => {
@@ -84,9 +93,8 @@ export default function Configurator() {
   const [data, setData] = useState(structuredClone(dataInitialState));
   const [copied, setCopied] = useState(false);
   const [ccss, setCcss] = useState(true);
+
   const makeInputHandler = useCallback((key) => {
-    const validUser = /^[A-Za-z0-9_]*$/;
-    const validUsers = /^[A-Za-z0-9_,]*$/;
     const updateState = (value, altKey) => {
       setData((lastState) => {
         const newState = { ...lastState };
@@ -94,9 +102,11 @@ export default function Configurator() {
         return newState;
       });
     };
+
     const refreshState = () => {
       setData((lastState) => structuredClone(lastState));
     };
+
     if (typeUser.includes(key))
       return (e) => {
         const { value } = e.currentTarget;
@@ -108,23 +118,53 @@ export default function Configurator() {
           updateState(value);
         else refreshState();
       };
+
     if (typeCheck.includes(key))
       return (e) => {
         const { checked } = e.currentTarget;
         if (typeof checked === "boolean") updateState(checked);
         else refreshState();
       };
+
     if (typeURL.includes(key))
       return (e) => {
         const { value } = e.currentTarget;
         updateState(value);
         updateState(value === "" || isURL(value), `${key}${VALID}`);
       };
+
+    /**  @type {string} */
+    function isACharCommaMix(str = "", i = 0) {
+      if (!str) return true;
+      const thereIsANext = i + 1 < str.length;
+      if (i % 2) {
+        if (str[i] === ",") {
+          if (thereIsANext) return isACharCommaMix(str, i + 1);
+          else return true;
+        } else return false;
+      } else {
+        if (!validChar.test(str[i])) {
+          if (thereIsANext) return isACharCommaMix(str, i + 1);
+          else return true;
+        } else return false;
+      }
+    }
+
+    if (typeCharacters.includes(key)) {
+      return (e) => {
+        let { value } = e.currentTarget;
+        value = value.replaceAll(",", "").split("").join(",");
+        if (isACharCommaMix(value)) updateState(value);
+        else refreshState();
+      };
+    }
+
     return (e) => {
       const { value } = e.currentTarget;
       updateState(value);
     };
   }, []);
+
   useEffect(() => {
     const onEvent = () => {
       setData((initialData) => {
@@ -188,7 +228,6 @@ export default function Configurator() {
             onInput={makeInputHandler(CHANNEL)}
           />
         </div>
-
         <div className={itemStyle}>
           <label className={labelStyle}>Custom CSS Style</label>
           <select
@@ -232,12 +271,12 @@ export default function Configurator() {
             type="text"
             name={DEFAULT_AVATAR}
             onInput={makeInputHandler(DEFAULT_AVATAR)}
+            placeholder="Paste here the image URL..."
           />
         </div>
         {data[`${DEFAULT_AVATAR}${VALID}`] || (
           <p className="text-red-600">Is not a valid URL</p>
         )}
-
         <label class="relative inline-flex items-center mb-5 cursor-pointer">
           <input
             checked={data[TTS]}
@@ -249,7 +288,6 @@ export default function Configurator() {
           <div class={toggleStyle}></div>
           <span class="ml-3 text-sm font-medium text-gray-300">TTS</span>
         </label>
-
         <div className={itemStyle}>
           {/* Si esta desactivado se podrían anular los 2 siguientes inputs */}
           <label className={labelStyle}>TTS Accent</label>
@@ -288,7 +326,6 @@ export default function Configurator() {
         >
           Test TTS
         </button>
-
         <label class="relative inline-flex items-center mb-5 cursor-pointer">
           <input
             type="checkbox"
@@ -299,7 +336,6 @@ export default function Configurator() {
           <div class={toggleStyle}></div>
           <span class="ml-3 text-sm font-medium text-gray-300">Render</span>
         </label>
-
         <div className={itemStyle}>
           <label className={labelStyle}>Bots</label>
           <input
@@ -313,7 +349,21 @@ export default function Configurator() {
             Usernames separated by "," like "bot1,bot2,etc"
           </p>
         </div>
-
+        // asdf
+        <div className={itemStyle}>
+          <label className={labelStyle}>Commands prefixes</label>
+          <input
+            className={input}
+            value={data[CHAR_COMMANDS]}
+            type="text"
+            name={CHAR_COMMANDS}
+            onInput={makeInputHandler(CHAR_COMMANDS)}
+          />
+          <p className="font-mono text-xs m-1">
+            Characters for the prefix of the commands separated by "," like
+            "!,$,%"
+          </p>
+        </div>
         <label class="relative inline-flex items-center mb-5 cursor-pointer">
           <input
             type="checkbox"
@@ -327,7 +377,6 @@ export default function Configurator() {
             PatoBot compatibility
           </span>
         </label>
-
         <p className="italic text-xs text-zinc-400 hover:text-zinc-100 transition-all cursor-pointer">
           (
           <a href="https://elpatobot.com/">
@@ -335,7 +384,6 @@ export default function Configurator() {
           </a>
           )
         </p>
-
         <label class="relative inline-flex items-center mb-5 cursor-pointer">
           <input
             type="checkbox"
@@ -349,7 +397,6 @@ export default function Configurator() {
             HTML Injection
           </span>
         </label>
-
         <p className="italic text-xs text-zinc-400">
           (Experimental, Use on your own risk)
         </p>
