@@ -349,7 +349,6 @@ export default function Configurator() {
             Usernames separated by "," like "bot1,bot2,etc"
           </p>
         </div>
-        // asdf
         <div className={itemStyle}>
           <label className={labelStyle}>Commands prefixes</label>
           <input
