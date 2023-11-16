@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SliderSelect, {
+  type Options,
+} from "@/components/sliderSelect/slider_select";
+
+const options: Options = [
+  {
+    option: "Off",
+  },
+  {
+    option: "By !speak",
+  },
+  {
+    option: "Always On",
+  },
+];
+---
+
+<Layout>
+  <div class="w-full h-[50svh] flex items-center p-4">
+    <SliderSelect options={options} inLine defaultName="TTS" client:load />
+  </div>
+</Layout>

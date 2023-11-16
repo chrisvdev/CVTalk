@@ -1,0 +1,16 @@
+input[type="range"] {
+  appearance: none;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  --size: 1rem;
+  height: var(--size);
+  width: var(--size);
+  border-radius: 9999px;
+  background-color: rgb(209 213 219);
+}
