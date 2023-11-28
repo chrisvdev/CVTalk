@@ -5,6 +5,7 @@ import useSpeechSynthesis from "../../hooks/useSpeechSynthesis";
 import tts from "../../lib/tts";
 import skins from "../../data/skins";
 import { validUser, validUsers, validChar } from "../../lib/utils";
+import SliderSelect from "@/components/sliderSelect/slider_select";
 
 // config de twitch
 const CHANNEL = "channel"; //text 👍
@@ -57,6 +58,8 @@ const typeCheck = [TTS, TTS_ALWAYS_ON, RENDER, PATO_BOT, HTMLI];
 const typeURL = [DEFAULT_AVATAR, STYLE];
 const typeData = [TTS_ACCENT, TTS_INDEX];
 
+const TTSOptions = ["Off", "By !speak", "Always On"];
+
 const APP_LOCATION = "https://chrisvdev.github.io/obs-chat";
 
 function dataToURL(data) {
@@ -93,6 +96,7 @@ export default function Configurator() {
   const [data, setData] = useState(structuredClone(dataInitialState));
   const [copied, setCopied] = useState(false);
   const [ccss, setCcss] = useState(true);
+  const [TTSMode, setTTSmode] = useState(0);
 
   const makeInputHandler = useCallback((key) => {
     const updateState = (value, altKey) => {
@@ -176,6 +180,7 @@ export default function Configurator() {
     };
     tts.whenReady(onEvent);
   }, []);
+
   const renderVoicesIndexes = (quantity) => {
     const options = [];
     for (let i = 1; i <= quantity; i++) {
@@ -196,12 +201,31 @@ export default function Configurator() {
     data[`${STYLE}${VALID}`],
   ]);
 
+  useEffect(() => {
+    const makeEvent = (checked) => ({ currentTarget: { checked } });
+    const setTTS = makeInputHandler(TTS);
+    const setTTSAlwayOn = makeInputHandler(TTS_ALWAYS_ON);
+    [
+      function off() {
+        setTTS(makeEvent(false));
+        setTTSAlwayOn(makeEvent(false));
+      },
+      function byCommand() {
+        setTTS(makeEvent(true));
+        setTTSAlwayOn(makeEvent(false));
+      },
+      function alwaysOn() {
+        setTTS(makeEvent(true));
+        setTTSAlwayOn(makeEvent(true));
+      },
+    ][TTSMode]();
+  }, [TTSMode]);
+
   return (
     <section className="mx-auto max-w-md">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log("Click");
           if (!copied) {
             navigator.clipboard
               .writeText(dataToURL(data))
@@ -243,7 +267,7 @@ export default function Configurator() {
               else setCcss(() => false);
             }}
           >
-            <option value="">Custom...</option>
+            <option value="">Select a skin...</option>
             {skins.map(({ title, url }, i) => (
               <option key={`skin_${i}`} value={url}>
                 {title}
@@ -257,7 +281,7 @@ export default function Configurator() {
             name={STYLE}
             onInput={makeInputHandler(STYLE)}
             style={ccss ? {} : { display: "none" }}
-            placeholder="Paste here the skin URL..."
+            placeholder="Or paste here your custom skin URL..."
           />
         </div>
         {data[`${STYLE}${VALID}`] || (
@@ -277,7 +301,19 @@ export default function Configurator() {
         {data[`${DEFAULT_AVATAR}${VALID}`] || (
           <p className="text-red-600">Is not a valid URL</p>
         )}
-        <label class="relative inline-flex items-center mb-5 cursor-pointer">
+        <div className={itemStyle}>
+          <label className={labelStyle}>TTS Function</label>
+
+          <SliderSelect
+            options={TTSOptions}
+            defaultName="TTS"
+            initial={1}
+            onInput={(e) => {
+              setTTSmode(Number(e.target.value));
+            }}
+          />
+        </div>
+        {/* <label class="relative inline-flex items-center mb-5 cursor-pointer">
           <input
             checked={data[TTS]}
             type="checkbox"
@@ -287,7 +323,7 @@ export default function Configurator() {
           />
           <div class={toggleStyle}></div>
           <span class="ml-3 text-sm font-medium text-gray-300">TTS</span>
-        </label>
+        </label> */}
         <div className={itemStyle}>
           {/* Si esta desactivado se podrían anular los 2 siguientes inputs */}
           <label className={labelStyle}>TTS Accent</label>
