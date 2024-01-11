@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CommGenerator from '@/components/tts_comm_generator/comm_generator.jsx';
+---
+
+<Layout>
+  <section class="mx-auto max-w-md">
+    <h1 class="balance text-center text-3xl mt-10 mb-4">
+      Configure your TTS voice!
+    </h1>
+    <p class="balance text-center mb-4 text-sm">
+      To configurate your TTS voice in Twitch chat, select the voice and accent below and get the command ready to paste.
+    </p>
+    <CommGenerator client:only="preact" />
+  </section>
+</Layout>
+
+<style>
+  .balance {
+    text-wrap: balance;
+  }
+</style>
