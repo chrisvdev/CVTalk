@@ -1,0 +1,196 @@
+---
+/* 
+theme: {
+    extend: {
+      fontFamily: {
+        'futura-pt': ['"futura-pt"', 'sans-serif'],
+        inter: ['"Inter"', 'sans-serif']
+      },
+      colors: {
+        twitch: {
+          mod: '#00AD03',
+          mod_light: '#00E004',
+          vip: '#E005B9',
+          vip_light: '#FF06D3',
+          sub: '#8205B4',
+          sub_light: '#A806E8',
+          brd: '#E7151E',
+          brd_light: '#FF1721'
+        }
+      },
+      msgShadow: `--tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+      text-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);`
+    }
+  }
+*/
+
+/* function _getOrnament(badges) {
+  if (badges.includes('mod')) return 'from-twitch-mod to-twitch-mod_light'
+  if (badges.includes('vip')) return 'from-twitch-vip to-twitch-vip_light'
+  if (badges.includes('broadcaster'))
+    return 'from-twitch-brd to-twitch-brd_light'
+  if (badges.includes('subscriber'))
+    return 'from-twitch-sub to-twitch-sub_light'
+  return ' from-[#111] to-[#333]'
+} */
+---
+
+<template id="user-message">
+  <!--  class={`relative flex flex-col items-start w-full mt-9 ${message.new ? "newMessage" : ""  } ${message.dieing ? "dieingMessage" : ""}`} -->
+  <img id="primaryBagde" /><!-- "class="absolute top-2 left-11" -->
+  <div>
+    <!-- class="flex items-center p-2 rounded-full bg-[#222222] absolute left-1 -top-8" -->
+    <div>
+      <!-- class={`flex justify-center items-center h-[3.15rem] w-[3.15rem] rounded-full bg-gradient-to-b ${_getOrnament(message.badges)}`} -->
+      <img id="avatar" />
+      <!-- class="h-11 w-11 rounded-full" Avatar o Pato si hace quack-->
+      <img id="defaultAvatar" />
+      <!-- class="absolute h-11 w-11 rounded-full" esta imagen se muestra si la anterior no carga src={defaultAvatar || "./assets/st-chrisvdev.gif"} -->
+    </div>
+    <span id="displayName">
+      <!-- class="ml-2 font-bold text-lg mr-4" NOMBRE DEL USUARIO 
+      style={{
+        color: message.color
+          ? message.color
+          : `rgb(${Math.ceil(Math.random() * 128) + 128},${
+              Math.ceil(Math.random() * 128) + 128
+            },${Math.ceil(Math.random() * 128) + 128})`,
+      }}
+      -->
+    </span>
+  </div>
+  <div>
+    <!-- class={`flex justify-center items-center w-[98%] rounded-3xl rounded-tl-none p-[.17rem] m-1 bg-gradient-to-b ${_getOrnament(message.badges)}`} -->
+    <div>
+      <!-- class={`flex flex-col w-full h-full p-5 rounded-3xl rounded-tl-none justify-end items-center bg-[#0A0A0A]`} -->
+      <div id="secondaryBadges">
+        <!-- class="flex self-end h-6" -->
+        {/*  resto de badges */}
+      </div>
+      <span id="message"></span>
+      <!-- class={`self-start text-slate-50 text-xl text-start flex flex-wrap font-inter`} slot para mensaje que se va a anidar-->
+    </div>
+  </div>
+</template>
+
+<script>
+  import { createTimeout } from "@/lib/clean_timers";
+  import type { UserMessageInfoType } from "@/lib/mtmi";
+  import useTemplate from "@/lib/use_template";
+
+  const messageTTL = window.OBSChat.properties?.messageTTL || 10000;
+  const userMessageAttributes = ["message"] as const;
+  type UserMessageAttributes = (typeof userMessageAttributes)[number];
+
+  /**
+   * Custom element para mostrar un mensaje de usuario
+   * Renderiza información del usuario, avatares, badges y el contenido del mensaje
+   * @class UserMessage
+   * @extends {HTMLElement}
+   */
+  export class UserMessage extends HTMLElement {
+    /**
+     * Constructor del elemento custom UserMessage
+     * Clona el template y lo inserta en el elemento
+     */
+    constructor() {
+      super();
+      useTemplate(this, "user-message", "message");
+    }
+
+    /**
+     * Atributos observados por el custom element
+     * @returns {string[]} Array de nombres de atributos a observar
+     */
+    static get observedAttributes() {
+      return userMessageAttributes;
+    }
+
+    /**
+     * Callback ejecutado cuando cambia un atributo observado
+     * @param {UserMessageAttributes} name - Nombre del atributo que cambió
+     * @param {string | null} old - Valor anterior del atributo
+     * @param {string} now - Nuevo valor del atributo
+     */
+    attributeChangedCallback(
+      name: UserMessageAttributes,
+      old: string | null,
+      now: string,
+    ) {
+      switch (name) {
+        case "message":
+          const message = JSON.parse(now) as UserMessageInfoType;
+          this.onNewMessage(message);
+          break;
+        default:
+          console.warn(`Atributo no manejado: ${name}`);
+          break;
+      }
+    }
+
+    private selfDestruct() {
+      createTimeout(() => {
+        this.parentElement?.remove();
+      }, messageTTL);
+    }
+
+    /**
+     * Procesa y renderiza un nuevo mensaje con su información asociada
+     * Actualiza nombre, color, avatar, badges y contenido del mensaje
+     * @private
+     * @param {UserMessageInfoType} message - Información completa del mensaje
+     */
+    private onNewMessage(message: UserMessageInfoType) {
+      const displayName = this.querySelector("#displayName") as HTMLSpanElement;
+      const avatar = this.querySelector("#avatar") as HTMLImageElement;
+      const defaultAvatar = this.querySelector(
+        "#defaultAvatar",
+      ) as HTMLImageElement;
+      const primaryBadge = this.querySelector(
+        "#primaryBagde",
+      ) as HTMLImageElement;
+      const secondaryBadges = this.querySelector(
+        "#secondaryBadges",
+      ) as HTMLDivElement;
+
+      displayName.textContent = message.userInfo.displayName;
+      displayName.style.color =
+        message.userInfo.color ||
+        `rgb(${Math.ceil(Math.random() * 128) + 128},${
+          Math.ceil(Math.random() * 128) + 128
+        },${Math.ceil(Math.random() * 128) + 128})`;
+
+      /* if (message.messageInfo.userId) {
+        avatar.src = message.userInfo.avatarUrl;
+        avatar.style.display = "block";
+        defaultAvatar.style.display = "none";
+      } else {
+        avatar.style.display = "none";
+        defaultAvatar.style.display = "block";
+      } */
+
+      if (message.badges.length > 0) {
+        const primaryBadgeInfo = message.badges[0];
+        primaryBadge.src = primaryBadgeInfo.image;
+        primaryBadge.style.display = "block";
+
+        // Limitar a 2 badges secundarias para evitar saturar el diseño
+        const secondaryBadgeInfos = message.badges.slice(1, 3);
+        secondaryBadges.innerHTML = ""; // Limpiar badges anteriores
+        secondaryBadgeInfos.forEach((badgeInfo) => {
+          const badgeImg = document.createElement("img");
+          badgeImg.src = badgeInfo.image;
+          badgeImg.classList.add("h-6", "ml-1"); // Ajusta el tamaño y margen según tu diseño
+          secondaryBadges.appendChild(badgeImg);
+        });
+      } else {
+        primaryBadge.style.display = "none";
+        secondaryBadges.innerHTML = "";
+      }
+      this.selfDestruct();
+    }
+  }
+
+  window.OBSChat.addCustomElement("user-message", UserMessage);
+</script>

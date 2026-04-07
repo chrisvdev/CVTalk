@@ -1,24 +1,43 @@
-# obs-chat
-A Twitch chat viewer with a TTS integrated, made with React for use in OBS or any streaming software capable of using a browser as a source, which, in addition to using the twitch API, uses WebSockets to connect to their IRC server.
+# Astro Starter Kit: Minimal
 
-## You can use it in two ways...
-
-### Building it
-
-**Prerequisites**: You need to have an account on [Twitch Developers](https://dev.twitch.tv/) to use the console for register an application and get the client ID. Then on the application panel you need to register the allowed URLs to redirect in case of a OAuth login (Always you need to register the URL "http://localhost:5173/" to develop in this repo)
-
-In order to launch or build the App you need to have an .env file like this
-
-```
-VITE_CLIENT_ID=dasdpljsadjpojsdiofgbhdfaiuogvb //the client ID given form the Twitch Developres console
-VITE_CHANNEL=chrisvdev // only for development if you need to hardcode the channel to watch
-VITE_DEFAULT_AVATAR=<some URL o build Path> //to change the default avatar 
-VITE_REDIRECT_URI=https://obs-chat.christianvillegas.com/&scope=chat%3Aread //only for build, if you don't give it the default redirect is to http://localhost:5173/&scope=chat%3Aread
+```sh
+npm create astro@latest -- --template minimal
 ```
 
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-### Use it
+## 🚀 Project Structure
 
-Go to the [project web page](https://chrisvdev.github.io/CVTalk/) 😉
+Inside of your Astro project, you'll see the following folders and files:
 
-...
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
+```
+
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+
+Any static assets, like images, can be placed in the `public/` directory.
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
