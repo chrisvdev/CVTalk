@@ -1,0 +1,21 @@
+/* Futura-pt */
+@import url('https://use.typekit.net/qgq6hoi.css');
+
+/* Inter - Regular 400 */
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/inter-latin-400-normal.woff2') format('woff2'),
+       url('../fonts/inter-latin-400-normal.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - Variable Weight */
+@font-face {
+  font-family: 'Inter Variable';
+  src: url('../fonts/inter-latin-variable-wghtOnly-normal.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

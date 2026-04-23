@@ -1,6 +1,6 @@
 ---
-import ChatView from "@/components/chat-view.astro";
-import UserMessage from "@/components/user-message.astro";
+import ChatView from "@components/chat-view/index.astro";
+import UserMessage from "@components/user-message/index.astro";
 ---
 
 <html lang="en">
@@ -10,13 +10,13 @@ import UserMessage from "@/components/user-message.astro";
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="stylesheet" href="/assets/styles/index.css" />
     <script src="@/scripts/global.ts"></script>
     <title>OBS Chat</title>
   </head>
   <body>
     <UserMessage />
     <ChatView />
-    <script src="@/scripts/start.ts">    
-    </script>
+    <script src="@/scripts/start.ts"></script>
   </body>
 </html>

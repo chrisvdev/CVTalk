@@ -1,4 +1,12 @@
 /**
+ * Configuración global de la aplicación OBSChat
+ * Gestiona propiedades de la aplicación, registro de custom elements y almacenamiento de mensajes
+ * @module scripts/global
+ */
+
+import type { UserMessageInfoType } from "mtmi"
+
+/**
  * Propiedades globales de la aplicación OBSChat
  * @typedef {Object} Properties
  * @property {string} [channel] - Nombre del canal de Twitch
@@ -7,6 +15,15 @@
 export type Properties = {
   channel?: string
   messageTTL: number
+}
+
+export type Message = UserMessageInfoType & {
+  /**
+   * Función para eliminar el mensaje del registro global
+   * @function
+   * @returns {void}
+   */
+  delete: () => void
 }
 
 /**
@@ -58,11 +75,15 @@ function parseProperties<T extends Record<string, any>>(
  * @property {Properties} [properties] - Propiedades globales de la aplicación con tipos correctos
  * @property {Record<string, CustomElementConstructor>} [appCustomElements] - Registro de custom elements definidos en la aplicación
  * @property {(name: string, constructor: CustomElementConstructor) => void} addCustomElement - Función para registrar nuevos custom elements
+ * @property {Record<string, Message>} messages - Almacenamiento de mensajes activos en el chat, indexados por ID
+ * @property {(messageInfo: UserMessageInfoType) => string} addMessage - Función para agregar un nuevo mensaje al almacenamiento global y devolver su ID
  */
 export type OBSChat = {
   properties?: Properties
   appCustomElements?: Record<string, CustomElementConstructor>
   addCustomElement: (name: string, constructor: CustomElementConstructor) => void
+  messages: Record<string, Message>
+  addMessage: (messageInfo: UserMessageInfoType) => string
 }
 
 declare global {
@@ -93,13 +114,13 @@ const OBSChat: OBSChat = {
    * @type {Properties}
    */
   properties: defaultProperties,
-  
+
   /**
    * Registro vacío de custom elements que se llenará dinámicamente
    * @type {Record<string, CustomElementConstructor>}
    */
   appCustomElements: {},
-  
+
   /**
    * Registra un nuevo custom element en el registro global
    * Define el elemento en customElements API del navegador y lo almacena localmente
@@ -113,6 +134,35 @@ const OBSChat: OBSChat = {
       customElements.define(name, constructor);
       window.OBSChat.appCustomElements![name] = constructor;
     }
+  },
+
+  /**
+   * Almacenamiento de todos los mensajes activos en el chat
+   * Indexados por su ID único
+   * @type {Record<string, Message>}
+   */
+  messages: {},
+
+  /**
+   * Añade un nuevo mensaje al almacenamiento global y devuelve su ID
+   * Crea un método delete que permite eliminar el mensaje del registro
+   * @param {UserMessageInfoType} messageInfo - Información del mensaje a añadir
+   * @returns {string} ID único del mensaje agregado
+   * @example
+   * const messageId = OBSChat.addMessage(twitchMessage);
+   * // Más tarde...
+   * OBSChat.messages[messageId].delete();
+   */
+  addMessage: function (messageInfo: UserMessageInfoType) {
+    const id = messageInfo.messageInfo.id;
+    const message: Message = {
+      ...messageInfo,
+      delete: () => {
+        delete window.OBSChat.messages[id];
+      }
+    };
+    OBSChat.messages[id] = message;
+    return id;
   }
 }
 
