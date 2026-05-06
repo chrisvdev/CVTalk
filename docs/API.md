@@ -27,6 +27,7 @@ type Properties = {
   channel?: string        // Canal de Twitch
   messageTTL: number     // Tiempo de vida de mensajes (ms)
   pato_bot: boolean      // Habilitar PatoBotTribute
+  baseUrl: string        // URL base de la aplicación (siempre termina con /)
 }
 ```
 
@@ -34,8 +35,18 @@ type Properties = {
 ```typescript
 {
   messageTTL: 10000,
-  pato_bot: false
+  pato_bot: false,
+  baseUrl: '/'
 }
+```
+
+**Acceso desde código:**
+```typescript
+// ✅ Forma correcta - sistema tipado
+const baseUrl = window.OBSChat.properties?.baseUrl || '/'
+
+// ❌ Forma antigua - NO USAR
+// window.__BASE_URL__
 ```
 
 #### `appCustomElements`
