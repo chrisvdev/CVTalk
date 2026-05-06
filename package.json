@@ -1,7 +1,28 @@
 {
-  "name": "",
+  "name": "cvtalk",
+  "version": "2.0.0",
+  "description": "Widget de chat de Twitch moderno y extensible para OBS Studio",
   "type": "module",
-  "version": "0.0.1",
+  "keywords": [
+    "twitch",
+    "chat",
+    "obs",
+    "obs-studio",
+    "stream",
+    "streaming",
+    "widget",
+    "overlay"
+  ],
+  "author": "ChrisVentura",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisventura/cvtalk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chrisventura/cvtalk/issues"
+  },
+  "homepage": "https://github.com/chrisventura/cvtalk#readme",
   "engines": {
     "node": ">=22.12.0"
   },
