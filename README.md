@@ -148,7 +148,9 @@ export default class MiEfecto {
 
 ### PatoBotTribute Effect
 
-Efecto incluido que:
+🦆 **Tributo a PatoBot** - Homenaje al legendario bot creado por **Nivek el pato** (PatitoDev), un querido amigo y gran creador de contenido que se retiró del streaming. Este efecto mantiene vivo su legado en la comunidad.
+
+**Características:**
 - 🦆 Reproduce sonido de pato cuando detecta `*quack*` en mensajes
 - 🖼️ Cambia el avatar del usuario por uno aleatorio de pato
 - 🔊 Maneja políticas de autoplay del navegador con desbloqueo inteligente
@@ -157,6 +159,8 @@ Efecto incluido que:
 ```
 ?channel=micanal&pato_bot=true
 ```
+
+> 💙 **Nota**: Este efecto es un tributo cariñoso a PatoBot, que aunque ya no está en funcionamiento, dejó una marca especial en la comunidad de streaming.
 
 ## 🛠️ Comandos Disponibles
 
@@ -239,6 +243,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 - [mtmi](https://github.com/ManzDev/mtmi) por el excelente cliente de Twitch IRC - Gracias [ManzDev](https://github.com/ManzDev)!
 - [Astro](https://astro.build) por el excelente framework
+- **Nivek el pato / PatitoDev** por el legado de PatoBot 🦆💙 - Un amigo y creador de contenido que dejó huella en la comunidad
 - La comunidad de Twitch por el apoyo continuo
 
 ---

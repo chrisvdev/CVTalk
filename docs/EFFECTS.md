@@ -333,7 +333,9 @@ interface UserMessageInfoType {
 
 ### PatoBotTribute
 
-Efecto de homenaje a PatoBot que reproduce sonidos de pato.
+**Tributo a PatoBot** - Homenaje al legendario bot creado por **Nivek el pato** (más tarde conocido como **PatitoDev**), un querido amigo y gran creador de contenido que se retiró del streaming. Este efecto mantiene vivo el legado de PatoBot en la comunidad.
+
+**Historia**: PatoBot fue un bot icónico que traía alegría a los chats con sus característicos "*quack*". Aunque el bot ya no está en funcionamiento debido al retiro de su creador, este efecto asegura que su espíritu perdure en nuestros streams.
 
 **Activación:** `?pato_bot=true`
 

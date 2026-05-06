@@ -2,9 +2,14 @@ import type { Effect } from "../index"
 import { type UserMessageInfoType } from "mtmi";
 
 /**
- * Efecto de tributo a PatoBot que reproduce sonidos de pato
- * y cambia el avatar del usuario cuando detecta mensajes con "*quack*"
+ * Efecto de tributo a PatoBot, un bot creado por "Nivek el pato" (más tarde conocido como "PatitoDev"),
+ * un querido amigo y gran creador de contenido que se retiró del streaming.
+ * Este efecto mantiene vivo el legado de PatoBot reproduciendo sonidos de pato
+ * y cambiando avatares cuando detecta mensajes con "*quack*"
+ * 
  * @class PatoBotTribute
+ * @author Christian Villegas (ChrisVDev)
+ * @tribute Nivek el pato / PatitoDev - Creador original de PatoBot
  */
 export default class PatoBotTribute {
   /**
