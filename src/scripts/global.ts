@@ -11,11 +11,14 @@ import type { UserMessageInfoType } from "mtmi"
  * @typedef {Object} Properties
  * @property {string} [channel] - Nombre del canal de Twitch
  * @property {number} messageTTL - Tiempo de vida de los mensajes en milisegundos
+ * @property {boolean} pato_bot - Activar efecto PatoBot
+ * @property {string} baseUrl - URL base de la aplicación (siempre termina con /)
  */
 export type Properties = {
   channel?: string
   messageTTL: number
   pato_bot: boolean
+  baseUrl: string
 }
 
 export type Message = UserMessageInfoType & {
@@ -33,7 +36,8 @@ export type Message = UserMessageInfoType & {
  */
 const defaultProperties: Properties = {
   messageTTL: 10000,
-  pato_bot: false
+  pato_bot: false,
+  baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 
 /**

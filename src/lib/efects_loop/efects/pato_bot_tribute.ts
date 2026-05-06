@@ -39,11 +39,8 @@ export default class PatoBotTribute {
    * la reproducción automática en navegadores
    */
   constructor() {
-    // Obtener BASE_URL y asegurar que termine con /
-    let baseUrl = (window as any).__BASE_URL__ || '/'
-    if (!baseUrl.endsWith('/')) {
-      baseUrl = baseUrl + '/'
-    }
+    // Obtener BASE_URL del sistema global tipado
+    const baseUrl = window.OBSChat.properties?.baseUrl || '/'
     
     // Inicializar avatares de pato con BASE_URL correcto
     this.duckAvatars = [

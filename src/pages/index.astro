@@ -1,12 +1,9 @@
 ---
 import ChatView from "@components/chat-view/index.astro";
 import UserMessage from "@components/user-message/index.astro";
+import { ensureTrailingSlash } from "@/lib/ensure_trailing_slash";
 
-// Asegurar que baseUrl siempre termine con /
-let baseUrl = import.meta.env.BASE_URL;
-if (!baseUrl.endsWith('/')) {
-  baseUrl = baseUrl + '/';
-}
+const baseUrl = ensureTrailingSlash(import.meta.env.BASE_URL);
 ---
 
 <html lang="en">
@@ -18,8 +15,11 @@ if (!baseUrl.endsWith('/')) {
     <meta name="generator" content={Astro.generator} />
     <link rel="stylesheet" href={`${baseUrl}assets/styles/index.css`} />
     <script define:vars={{ baseUrl }}>
-      // Inyectar BASE_URL globalmente para uso en scripts TypeScript
-      window.__BASE_URL__ = baseUrl;
+      // Inyectar BASE_URL en el sistema global tipado OBSChat
+      // Este script se ejecuta antes de global.ts, por lo que inicializa la propiedad
+      window.OBSChat = window.OBSChat || {};
+      window.OBSChat.properties = window.OBSChat.properties || {};
+      window.OBSChat.properties.baseUrl = baseUrl;
     </script>
     <script src="@/scripts/global.ts"></script>
     <title>CVTalk - OBS Chat Widget</title>
