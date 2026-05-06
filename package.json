@@ -13,16 +13,16 @@
     "widget",
     "overlay"
   ],
-  "author": "ChrisVentura",
+  "author": "Christian Villegas (ChrisVDev) <christian@chrisvdev.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chrisventura/cvtalk.git"
+    "url": "https://github.com/chrisvdev/cvtalk.git"
   },
   "bugs": {
-    "url": "https://github.com/chrisventura/cvtalk/issues"
+    "url": "https://github.com/chrisvdev/cvtalk/issues"
   },
-  "homepage": "https://github.com/chrisventura/cvtalk#readme",
+  "homepage": "https://github.com/chrisvdev/cvtalk#readme",
   "engines": {
     "node": ">=22.12.0"
   },

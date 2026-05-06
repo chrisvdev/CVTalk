@@ -393,14 +393,14 @@ Para probar tus cambios:
 
 ## 💬 Comunidad
 
-- **Issues**: [GitHub Issues](https://github.com/OWNER/cvtalk/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/OWNER/cvtalk/discussions)
+- **Issues**: [GitHub Issues](https://github.com/chrisvdev/cvtalk/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/chrisvdev/cvtalk/discussions)
 - **Discord**: [Próximamente]
 
 ## ❓ Preguntas
 
 Si tienes preguntas:
-1. Busca en [GitHub Discussions](https://github.com/OWNER/cvtalk/discussions)
+1. Busca en [GitHub Discussions](https://github.com/chrisvdev/cvtalk/discussions)
 2. Abre una nueva discusión
 3. O crea un issue con la etiqueta `question`
 

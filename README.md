@@ -229,6 +229,12 @@ Las contribuciones son bienvenidas! Por favor:
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
+## 👨‍💻 Autor
+
+**Christian Villegas (ChrisVDev)**
+- Email: christian@chrisvdev.com
+- GitHub: [@chrisvdev](https://github.com/chrisvdev)
+
 ## 🙏 Agradecimientos
 
 - [mtmi](https://github.com/chrisventura/mtmi) por el cliente de Twitch IRC
