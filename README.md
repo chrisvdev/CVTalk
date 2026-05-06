@@ -8,6 +8,8 @@ Widget de chat de Twitch moderno y extensible para OBS Studio, construido con As
 ![Astro](https://img.shields.io/badge/Astro-6.1.3-FF5D01?logo=astro)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
+**🌐 Demo en vivo:** [https://chrisvdev.github.io/CVTalk/](https://chrisvdev.github.io/CVTalk/)
+
 ## ✨ Características
 
 - 🔌 **Conexión en tiempo real** a Twitch IRC usando [mtmi](https://github.com/ManzDev/mtmi)
@@ -31,8 +33,8 @@ Widget de chat de Twitch moderno y extensible para OBS Studio, construido con As
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/cvtalk.git
-cd cvtalk
+git clone https://github.com/chrisvdev/CVTalk.git
+cd CVTalk
 
 # Instalar dependencias
 pnpm install
@@ -45,17 +47,35 @@ El servidor estará disponible en `http://localhost:4321`
 
 ### Uso en OBS Studio
 
+#### Opción 1: Usar la versión desplegada (Recomendado)
+
+Agrega una **Browser Source** en OBS con la URL de producción:
+```
+https://chrisvdev.github.io/CVTalk/?channel=tu_canal_twitch
+```
+
+#### Opción 2: Desarrollo local
+
 1. Construye el proyecto para producción:
    ```bash
    pnpm build
    ```
 
-2. Agrega una **Browser Source** en OBS con la URL:
+2. Previsualiza el build localmente:
+   ```bash
+   pnpm preview
+   ```
+
+3. Agrega una **Browser Source** en OBS con la URL local:
    ```
    http://localhost:4321/?channel=tu_canal_twitch
    ```
 
-3. Configura las dimensiones recomendadas: **1920x1080**
+#### Configuración de OBS
+
+- **Dimensiones recomendadas**: 1920x1080
+- **FPS personalizado**: 60
+- **Shutdown source when not visible**: Desactivado (recomendado)
 
 ## 🎛️ Configuración
 

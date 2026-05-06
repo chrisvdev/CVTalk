@@ -46,13 +46,13 @@ Hay muchas formas de contribuir a CVTalk:
 
 2. **Clonar tu fork**
    ```bash
-   git clone https://github.com/TU_USUARIO/cvtalk.git
-   cd cvtalk
+   git clone https://github.com/TU_USUARIO/CVTalk.git
+   cd CVTalk
    ```
 
 3. **Agregar upstream remoto**
    ```bash
-   git remote add upstream https://github.com/ORIGINAL_OWNER/cvtalk.git
+   git remote add upstream https://github.com/chrisvdev/CVTalk.git
    ```
 
 4. **Instalar dependencias**
@@ -393,14 +393,14 @@ Para probar tus cambios:
 
 ## 💬 Comunidad
 
-- **Issues**: [GitHub Issues](https://github.com/chrisvdev/cvtalk/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/chrisvdev/cvtalk/discussions)
+- **Issues**: [GitHub Issues](https://github.com/chrisvdev/CVTalk/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/chrisvdev/CVTalk/discussions)
 - **Discord**: [Próximamente]
 
 ## ❓ Preguntas
 
 Si tienes preguntas:
-1. Busca en [GitHub Discussions](https://github.com/chrisvdev/cvtalk/discussions)
+1. Busca en [GitHub Discussions](https://github.com/chrisvdev/CVTalk/discussions)
 2. Abre una nueva discusión
 3. O crea un issue con la etiqueta `question`
 

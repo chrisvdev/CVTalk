@@ -17,12 +17,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chrisvdev/cvtalk.git"
+    "url": "https://github.com/chrisvdev/CVTalk.git"
   },
   "bugs": {
-    "url": "https://github.com/chrisvdev/cvtalk/issues"
+    "url": "https://github.com/chrisvdev/CVTalk/issues"
   },
-  "homepage": "https://github.com/chrisvdev/cvtalk#readme",
+  "homepage": "https://github.com/chrisvdev/CVTalk#readme",
   "engines": {
     "node": ">=22.12.0"
   },
