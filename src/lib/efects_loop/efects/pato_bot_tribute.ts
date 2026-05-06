@@ -1,0 +1,128 @@
+import type { Effect } from "../index"
+import { type UserMessageInfoType } from "mtmi";
+
+/**
+ * Efecto de tributo a PatoBot que reproduce sonidos de pato
+ * y cambia el avatar del usuario cuando detecta mensajes con "*quack*"
+ * @class PatoBotTribute
+ */
+export default class PatoBotTribute {
+  /**
+   * Elemento de audio para reproducir el sonido de pato
+   * @private
+   * @type {HTMLAudioElement}
+   */
+  private quack: HTMLAudioElement
+  
+  /**
+   * Indica si el audio ha sido desbloqueado por interacción del usuario
+   * @private
+   * @type {boolean}
+   */
+  private audioUnlocked: boolean = false
+  
+  /**
+   * Array de URLs de avatares de patos disponibles
+   * @private
+   * @type {string[]}
+   */
+  private duckAvatars = [
+    "/assets/pato1.jpg",
+    "/assets/pato2.jpg",
+    "/assets/pato3.jpg",
+    "/assets/pato4.jpg",
+    "/assets/pato5.jpg",
+    "/assets/quack.gif",
+  ]
+  
+  /**
+   * Constructor que inicializa el audio y configura el sistema de desbloqueo
+   * Precarga el archivo de audio y configura listeners para desbloquear
+   * la reproducción automática en navegadores
+   */
+  constructor() {
+    const audioPreload = document.createElement("link")
+    audioPreload.rel = "preload"
+    audioPreload.as = "audio"
+    audioPreload.href = "/assets/audio/quack.mp3"
+    document.head.appendChild(audioPreload)
+    this.quack = new Audio("/assets/audio/quack.mp3")
+    this.quack.volume = 0.5
+    document.body.appendChild(this.quack)
+    this.unlockAudio()
+  }
+  
+  /**
+   * Configura listeners para desbloquear el audio en la primera interacción del usuario
+   * Necesario para cumplir con las políticas de autoplay de los navegadores modernos
+   * @private
+   */
+  private unlockAudio() {
+    const unlock = async () => {
+      try {
+        // Intenta reproducir en silencio para desbloquear
+        this.quack.volume = 0
+        await this.quack.play()
+        this.quack.pause()
+        this.quack.currentTime = 0
+        this.quack.volume = 1
+        this.audioUnlocked = true
+        console.log("Audio desbloqueado correctamente")
+        // Remover listeners una vez desbloqueado
+        document.removeEventListener("click", unlock)
+        document.removeEventListener("touchstart", unlock)
+        document.removeEventListener("keydown", unlock)
+      } catch (e) {
+        console.log("Esperando interacción del usuario para desbloquear audio")
+      }
+    }
+    // Intentar desbloquear en múltiples eventos de usuario
+    document.addEventListener("click", unlock, { once: true })
+    document.addEventListener("touchstart", unlock, { once: true })
+    document.addEventListener("keydown", unlock, { once: true })
+  }
+  
+  /**
+   * Obtiene la función de efecto para usar en el loop de efectos
+   * @public
+   * @returns {Effect} Función de efecto que procesa mensajes
+   */
+  public getEfect(): Effect {
+    return (message, next) => {
+      this.parseMessage(message)
+      next()
+    }
+  }
+  
+  /**
+   * Reproduce el sonido de pato, manejando errores de autoplay
+   * @private
+   * @async
+   */
+  private async playQuack() {
+    try {
+      this.quack.currentTime = 0
+      await this.quack.play()
+    } catch (error) {
+      console.warn("No se pudo reproducir el audio:", error)
+      if (!this.audioUnlocked) {
+        console.log("Haz click en la página para habilitar los sonidos")
+      }
+    }
+  }
+  
+  /**
+   * Analiza el mensaje en busca del texto "*quack*" y aplica los efectos
+   * Cambia el avatar del usuario por uno aleatorio de pato y reproduce el sonido
+   * @private
+   * @param {UserMessageInfoType} message - El mensaje a analizar
+   */
+  private parseMessage(message: UserMessageInfoType) {
+    if (message.message.includes("*quack*")) {
+      message.userInfo.avatar = (async () => {
+        return this.duckAvatars[Math.floor(Math.random() * this.duckAvatars.length)]
+      })()
+      this.playQuack()
+    }
+  }
+}

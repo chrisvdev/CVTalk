@@ -128,7 +128,7 @@ user-message > .messageOrnament > div > .message {
   margin-top: 0.75rem;
 }
 user-message > .messageOrnament > div > .message > img {
-  --size: 1.25rem;
+  --size: 1.5rem;
   height: var(--size);
   width: var(--size);
 }

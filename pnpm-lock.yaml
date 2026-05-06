@@ -14,6 +14,9 @@ importers:
       mtmi:
         specifier: ^0.0.19
         version: 0.0.19
+      mtmi-async-badges:
+        specifier: ^1.0.0
+        version: 1.0.0
 
 packages:
 
@@ -1014,6 +1017,9 @@ packages:
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
+  mtmi-async-badges@1.0.0:
+    resolution: {integrity: sha512-YkpLVpbGP3KmHTId5i6PW0i9nmOgLkh3rcM9RNpAXYrsUBs1ouqtLVQOZNeFIz05pczehYvb7OCWcBvdx6xpbg==}
 
   mtmi@0.0.19:
     resolution: {integrity: sha512-6L6EK3ehsX/b0nrBlGDL2vEjZeI0yzTK/QhZx5yho/Slm92BIUSpWJSBxH1jNkNQp/xDJxDYaKK8/Rx6dm7Ylw==}
@@ -2574,6 +2580,8 @@ snapshots:
   mrmime@2.0.1: {}
 
   ms@2.1.3: {}
+
+  mtmi-async-badges@1.0.0: {}
 
   mtmi@0.0.19: {}
 

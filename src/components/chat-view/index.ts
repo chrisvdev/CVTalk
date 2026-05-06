@@ -1,5 +1,8 @@
+import EfectsLoop from "@/lib/efects_loop";
+import PatoBotTribute from "@/lib/efects_loop/efects/pato_bot_tribute";
 import useTemplate from "@/lib/use_template";
 import type { UserMessageInfoType } from "mtmi";
+
 const UserMessage = window.OBSChat.appCustomElements?.[
   "user-message"
 ] as CustomElementConstructor;
@@ -16,6 +19,13 @@ export default class ChatView extends HTMLElement {
    * @type {HTMLUListElement | null}
    */
   list: HTMLUListElement | null = null;
+  
+  /**
+   * Sistema de procesamiento de mensajes mediante efectos
+   * @public
+   * @type {EfectsLoop}
+   */
+  public efectsLoop : EfectsLoop
 
   /**
    * Constructor del elemento custom ChatView
@@ -23,8 +33,14 @@ export default class ChatView extends HTMLElement {
    */
   constructor() {
     super();
+    this.efectsLoop = new EfectsLoop();
+    this.efectsLoop.addOutput(this.renderMessage.bind(this));
     useTemplate(this, "#chat-view", "#message-list");
     this.list = this.querySelector("ul") as HTMLUListElement;
+    if (window.OBSChat.properties?.pato_bot) {
+      const patoBot = new PatoBotTribute()
+      this.efectsLoop.addEffect(patoBot.getEfect())
+    }
   }
 
   /**
@@ -40,6 +56,16 @@ export default class ChatView extends HTMLElement {
    * });
    */
   newMessage(message: UserMessageInfoType) {
+    this.efectsLoop.input(message);
+  }
+
+  /**
+   * Renderiza un mensaje procesado en la lista de chat
+   * Crea el elemento DOM y lo agrega al contenedor de mensajes
+   * @private
+   * @param {UserMessageInfoType} message - El mensaje procesado a renderizar
+   */
+  private renderMessage(message: UserMessageInfoType) {
     const { addMessage } = window.OBSChat;
     const li = document.createElement("li");
     const userMessage = new UserMessage(

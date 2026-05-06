@@ -5,9 +5,10 @@
  */
 
 import type ChatView from "@components/chat-view";
-import { badges } from "mtmi/badges.full.json"
+// import { badges } from "mtmi-async-badges"
+import badges from "mtmi-async-badges";
 import getPythonesaMessage from "@/lib/mock_messages";
-import { client, type UserMessageInfoType } from "mtmi";
+import { client } from "mtmi";
 
 /**
  * Obtiene la referencia al custom element chat-view
@@ -37,7 +38,7 @@ if (channel) {
    * Escucha nuevos mensajes de chat y los añade al elemento ChatView
    * @param {UserMessageInfoType} message - Información del mensaje de Twitch
    */
-  client.on("message", (message: UserMessageInfoType) => {
+  client.on("message", (message) => {
     chatView.newMessage(message);
   });
   client.on("sub", (data) => console.log("SUB: ", data));
@@ -78,3 +79,4 @@ if (channel) {
     )
   );
 }
+

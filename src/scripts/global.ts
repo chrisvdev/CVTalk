@@ -15,6 +15,7 @@ import type { UserMessageInfoType } from "mtmi"
 export type Properties = {
   channel?: string
   messageTTL: number
+  pato_bot: boolean
 }
 
 export type Message = UserMessageInfoType & {
@@ -31,7 +32,8 @@ export type Message = UserMessageInfoType & {
  * @type {Properties}
  */
 const defaultProperties: Properties = {
-  messageTTL: 10000
+  messageTTL: 10000,
+  pato_bot: false
 }
 
 /**
