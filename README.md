@@ -10,6 +10,22 @@ Widget de chat de Twitch moderno y extensible para OBS Studio, construido con As
 
 **🌐 Demo en vivo:** [https://chrisvdev.github.io/CVTalk/](https://chrisvdev.github.io/CVTalk/)
 
+## 🏗️ Arquitectura del Proyecto
+
+CVTalk es parte de un ecosistema de proyectos para Twitch:
+
+- **[MTMI](https://github.com/ManzDev/mtmi)** - Librería base para conexión IRC de Twitch (by ManzDev)
+- **[mtmi-async-badges](https://github.com/chrisvdev/mtmi-async-badges)** - Paquete para carga asíncrona de badges desde CDN
+- **CVTalk** (este proyecto) - Widget para OBS que consume ambos paquetes
+
+```
+MTMI (IRC Client) + mtmi-async-badges (Badges CDN)
+                    ↓
+              CVTalk Widget
+                    ↓
+         OBS Studio Browser Source
+```
+
 ## ✨ Características
 
 - 🔌 **Conexión en tiempo real** a Twitch IRC usando [mtmi](https://github.com/ManzDev/mtmi)
@@ -217,9 +233,9 @@ Personaliza la apariencia editando:
 
 ## 📚 Dependencias Principales
 
-- **[Astro](https://astro.build)** `^6.1.3` - Framework de frontend
-- **[mtmi](https://github.com/ManzDev/mtmi)** `^0.0.19` - Cliente Twitch IRC by [ManzDev](https://github.com/ManzDev)
-- **[mtmi-async-badges](https://github.com/chrisvdev/mtmi-async-badges)** `^1.0.0` - Badges de Twitch by [ChrisVDev](https://github.com/chrisvdev)
+- **[Astro](https://astro.build)** `^6.1.3` - Framework SSG de alto rendimiento
+- **[mtmi](https://github.com/ManzDev/mtmi)** `^0.0.19` - Cliente Twitch IRC read-only by [ManzDev](https://github.com/ManzDev)
+- **[mtmi-async-badges](https://github.com/chrisvdev/mtmi-async-badges)** `^1.0.4` - Badges de Twitch con carga asíncrona CDN (desarrollo propio)
 
 ## 🐛 Debugging
 
