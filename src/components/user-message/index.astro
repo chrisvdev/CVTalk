@@ -1,5 +1,9 @@
 ---
-const baseUrl = import.meta.env.BASE_URL;
+// Asegurar que baseUrl siempre termine con /
+let baseUrl = import.meta.env.BASE_URL;
+if (!baseUrl.endsWith('/')) {
+  baseUrl = baseUrl + '/';
+}
 ---
 
 <template id="user-message" class="user-message">

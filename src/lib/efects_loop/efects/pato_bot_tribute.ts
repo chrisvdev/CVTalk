@@ -31,14 +31,7 @@ export default class PatoBotTribute {
    * @private
    * @type {string[]}
    */
-  private duckAvatars = [
-    `${(window as any).__BASE_URL__}assets/pato1.jpg`,
-    `${(window as any).__BASE_URL__}assets/pato2.jpg`,
-    `${(window as any).__BASE_URL__}assets/pato3.jpg`,
-    `${(window as any).__BASE_URL__}assets/pato4.jpg`,
-    `${(window as any).__BASE_URL__}assets/pato5.jpg`,
-    `${(window as any).__BASE_URL__}assets/quack.gif`,
-  ]
+  private duckAvatars: string[]
   
   /**
    * Constructor que inicializa el audio y configura el sistema de desbloqueo
@@ -46,7 +39,22 @@ export default class PatoBotTribute {
    * la reproducción automática en navegadores
    */
   constructor() {
-    const baseUrl = (window as any).__BASE_URL__ || '/'
+    // Obtener BASE_URL y asegurar que termine con /
+    let baseUrl = (window as any).__BASE_URL__ || '/'
+    if (!baseUrl.endsWith('/')) {
+      baseUrl = baseUrl + '/'
+    }
+    
+    // Inicializar avatares de pato con BASE_URL correcto
+    this.duckAvatars = [
+      `${baseUrl}assets/pato1.jpg`,
+      `${baseUrl}assets/pato2.jpg`,
+      `${baseUrl}assets/pato3.jpg`,
+      `${baseUrl}assets/pato4.jpg`,
+      `${baseUrl}assets/pato5.jpg`,
+      `${baseUrl}assets/quack.gif`,
+    ]
+    
     const audioPreload = document.createElement("link")
     audioPreload.rel = "preload"
     audioPreload.as = "audio"
