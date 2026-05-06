@@ -32,12 +32,12 @@ export default class PatoBotTribute {
    * @type {string[]}
    */
   private duckAvatars = [
-    "/assets/pato1.jpg",
-    "/assets/pato2.jpg",
-    "/assets/pato3.jpg",
-    "/assets/pato4.jpg",
-    "/assets/pato5.jpg",
-    "/assets/quack.gif",
+    `${(window as any).__BASE_URL__}assets/pato1.jpg`,
+    `${(window as any).__BASE_URL__}assets/pato2.jpg`,
+    `${(window as any).__BASE_URL__}assets/pato3.jpg`,
+    `${(window as any).__BASE_URL__}assets/pato4.jpg`,
+    `${(window as any).__BASE_URL__}assets/pato5.jpg`,
+    `${(window as any).__BASE_URL__}assets/quack.gif`,
   ]
   
   /**
@@ -46,12 +46,13 @@ export default class PatoBotTribute {
    * la reproducción automática en navegadores
    */
   constructor() {
+    const baseUrl = (window as any).__BASE_URL__ || '/'
     const audioPreload = document.createElement("link")
     audioPreload.rel = "preload"
     audioPreload.as = "audio"
-    audioPreload.href = "/assets/audio/quack.mp3"
+    audioPreload.href = `${baseUrl}assets/audio/quack.mp3`
     document.head.appendChild(audioPreload)
-    this.quack = new Audio("/assets/audio/quack.mp3")
+    this.quack = new Audio(`${baseUrl}assets/audio/quack.mp3`)
     this.quack.volume = 0.5
     document.body.appendChild(this.quack)
     this.unlockAudio()

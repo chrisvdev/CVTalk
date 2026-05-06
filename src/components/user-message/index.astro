@@ -1,9 +1,13 @@
+---
+const baseUrl = import.meta.env.BASE_URL;
+---
+
 <template id="user-message" class="user-message">
   <img id="primaryBagde" />
   <div>
     <div class="avatarOrnament">
       <img id="avatar" />
-      <img id="defaultAvatar" src="/assets/st-chrisvdev.gif" />
+      <img id="defaultAvatar" src={`${baseUrl}assets/st-chrisvdev.gif`} />
     </div>
     <span id="displayName"> </span>
   </div>
