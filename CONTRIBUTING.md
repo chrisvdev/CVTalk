@@ -389,7 +389,7 @@ Para probar tus cambios:
 - [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
-- [mtmi Documentation](https://github.com/chrisventura/mtmi)
+- [mtmi Documentation](https://github.com/ManzDev/mtmi)
 
 ## 💬 Comunidad
 

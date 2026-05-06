@@ -8,7 +8,7 @@ Widget de chat de Twitch moderno y extensible para OBS Studio, construido con As
 
 ## ✨ Características
 
-- 🔌 **Conexión en tiempo real** a Twitch IRC usando [mtmi](https://github.com/chrisventura/mtmi)
+- 🔌 **Conexión en tiempo real** a Twitch IRC usando [mtmi](https://github.com/ManzDev/mtmi)
 - 🎨 **Personalización visual** con ornamentos según roles (broadcaster, mod, VIP, suscriptor)
 - 🦆 **Sistema de efectos extensible** para procesar mensajes (incluye PatoBotTribute)
 - 🖼️ **Avatares y badges** de usuarios cargados dinámicamente
@@ -192,8 +192,8 @@ Personaliza la apariencia editando:
 ## 📚 Dependencias Principales
 
 - **[Astro](https://astro.build)** `^6.1.3` - Framework de frontend
-- **[mtmi](https://github.com/chrisventura/mtmi)** `^0.0.19` - Cliente Twitch IRC
-- **[mtmi-async-badges](https://www.npmjs.com/package/mtmi-async-badges)** `^1.0.0` - Badges de Twitch
+- **[mtmi](https://github.com/ManzDev/mtmi)** `^0.0.19` - Cliente Twitch IRC by [ManzDev](https://github.com/ManzDev)
+- **[mtmi-async-badges](https://github.com/chrisvdev/mtmi-async-badges)** `^1.0.0` - Badges de Twitch by [ChrisVDev](https://github.com/chrisvdev)
 
 ## 🐛 Debugging
 
@@ -237,7 +237,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 🙏 Agradecimientos
 
-- [mtmi](https://github.com/chrisventura/mtmi) por el cliente de Twitch IRC
+- [mtmi](https://github.com/ManzDev/mtmi) por el excelente cliente de Twitch IRC - Gracias [ManzDev](https://github.com/ManzDev)!
 - [Astro](https://astro.build) por el excelente framework
 - La comunidad de Twitch por el apoyo continuo
 
