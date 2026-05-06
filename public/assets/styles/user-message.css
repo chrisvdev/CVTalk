@@ -1,0 +1,134 @@
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+user-message.fade-out {
+  animation: fadeOut 0.25s ease-out forwards;
+}
+
+user-message {
+  --mod_decoration: linear-gradient(to bottom, #00ad03, #00e004);
+  --vip_decoration: linear-gradient(to bottom, #e005b9, #ff06d3);
+  --sub_decoration: linear-gradient(to bottom, #8205b4, #a806e8);
+  --brd_decoration: linear-gradient(to bottom, #e7151e, #ff1721);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+  margin-top: 2.25rem;
+  position: relative;
+}
+.moderator {
+  background: var(--mod_decoration);
+}
+.vip {
+  background: var(--vip_decoration);
+}
+.subscriber {
+  background: var(--sub_decoration);
+}
+.broadcaster {
+  background: var(--brd_decoration);
+}
+user-message > #primaryBagde {
+  --size: 1.25rem;
+  position: absolute;
+  height: var(--size);
+  width: var(--size);
+  top: 0.6rem;
+  left: 2.75rem;
+  z-index: 1;
+}
+user-message > :nth-child(2) {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: #222222;
+  position: absolute;
+  left: 0.25rem;
+  top: -1.8rem;
+}
+user-message > :nth-child(2) > .avatarOrnament {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3.15rem;
+  width: 3.15rem;
+  border-radius: 9999px;
+}
+user-message > :nth-child(2) > .avatarOrnament > #avatar {
+  display: none;
+  height: 2.75rem;
+  width: 2.75rem;
+  border-radius: 9999px;
+}
+user-message > :nth-child(2) > .avatarOrnament > #defaultAvatar {
+  position: absolute;
+  height: 2.75rem;
+  width: 2.75rem;
+  border-radius: 9999px;
+}
+user-message > :nth-child(2) > #displayName {
+  margin-left: 0.5rem;
+  margin-right: 0.15rem;
+  color: #f8f8f8;
+  font-family: "futura-pt", sans-serif;
+  font-size: 1.125rem;
+}
+user-message > .messageOrnament {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 98%;
+  border-radius: 1.5rem;
+  border-top-left-radius: 0;
+  padding: 0.15rem;
+  margin: 0.25rem;
+}
+user-message > .messageOrnament > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 1.25rem;
+  padding-top: 0.75rem;
+  border-radius: 1.5rem;
+  border-top-left-radius: 0;
+  justify-content: end;
+  align-items: center;
+  background-color: #0a0a0a;
+}
+user-message > .messageOrnament > div > #secondaryBadges {
+  /* class="flex self-end h-6" */
+  display: flex;
+  align-self: end;
+  height: 1.25rem;
+  gap: 0.25rem;
+}
+user-message > .messageOrnament > div > #secondaryBadges > img {
+  --size: 1.25rem;
+  height: var(--size);
+  width: var(--size);
+}
+user-message > .messageOrnament > div > .message {
+  display: flex;
+  align-self: start;
+  color: #f8f8f8;
+  font-size: 1rem;
+  text-align: start;
+  flex-wrap: wrap;
+  font-family: "Inter", sans-serif;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+user-message > .messageOrnament > div > .message > img {
+  --size: 1.5rem;
+  height: var(--size);
+  width: var(--size);
+}

@@ -1,0 +1,22 @@
+---
+import ChatView from "@components/chat-view/index.astro";
+import UserMessage from "@components/user-message/index.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="stylesheet" href="/assets/styles/index.css" />
+    <script src="@/scripts/global.ts"></script>
+    <title>OBS Chat</title>
+  </head>
+  <body>
+    <UserMessage />
+    <ChatView />
+    <script src="@/scripts/start.ts"></script>
+  </body>
+</html>
