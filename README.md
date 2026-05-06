@@ -1,3 +1,5 @@
+![CVTalk Banner](./public/Banner-CVTalk.webp)
+
 # 🎮 CVTalk
 
 Widget de chat de Twitch moderno y extensible para OBS Studio, construido con Astro y Web Components.
