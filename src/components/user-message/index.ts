@@ -130,7 +130,7 @@ export class UserMessage extends HTMLElement {
       primaryBadge.style.display = "none";
       secondaryBadges.innerHTML = "";
     }
-    //this.selfDestruct();
+    this.selfDestruct();
   }
 }
 
