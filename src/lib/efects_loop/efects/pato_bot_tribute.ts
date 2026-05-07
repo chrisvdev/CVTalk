@@ -52,14 +52,9 @@ export default class PatoBotTribute {
       `${baseUrl}assets/quack.gif`,
     ]
 
-    const audioPreload = document.createElement("link")
-    audioPreload.rel = "preload"
-    audioPreload.as = "fetch"
-    audioPreload.setAttribute("type", "audio/mpeg")
-    audioPreload.setAttribute("crossorigin", "anonymous")
-    audioPreload.href = `${baseUrl}assets/audio/quack.mp3`
-    document.head.appendChild(audioPreload)
+    // Crear elemento de audio con precarga automática
     this.quack = new Audio(`${baseUrl}assets/audio/quack.mp3`)
+    this.quack.preload = "auto"  // Precarga automática (mejor que link preload para uso bajo demanda)
     this.quack.volume = 0.5
     document.body.appendChild(this.quack)
     this.unlockAudio()
