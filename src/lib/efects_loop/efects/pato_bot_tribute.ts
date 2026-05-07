@@ -18,21 +18,21 @@ export default class PatoBotTribute {
    * @type {HTMLAudioElement}
    */
   private quack: HTMLAudioElement
-  
+
   /**
    * Indica si el audio ha sido desbloqueado por interacción del usuario
    * @private
    * @type {boolean}
    */
   private audioUnlocked: boolean = false
-  
+
   /**
    * Array de URLs de avatares de patos disponibles
    * @private
    * @type {string[]}
    */
   private duckAvatars: string[]
-  
+
   /**
    * Constructor que inicializa el audio y configura el sistema de desbloqueo
    * Precarga el archivo de audio y configura listeners para desbloquear
@@ -40,8 +40,8 @@ export default class PatoBotTribute {
    */
   constructor() {
     // Obtener BASE_URL del sistema global tipado
-    const baseUrl = window.OBSChat.properties?.baseUrl || '/'
-    
+    const { baseUrl } = window.OBSChat.properties || { baseUrl: '/' };
+
     // Inicializar avatares de pato con BASE_URL correcto
     this.duckAvatars = [
       `${baseUrl}assets/pato1.jpg`,
@@ -51,10 +51,12 @@ export default class PatoBotTribute {
       `${baseUrl}assets/pato5.jpg`,
       `${baseUrl}assets/quack.gif`,
     ]
-    
+
     const audioPreload = document.createElement("link")
     audioPreload.rel = "preload"
-    audioPreload.as = "audio"
+    audioPreload.as = "fetch"
+    audioPreload.setAttribute("type", "audio/mpeg")
+    audioPreload.setAttribute("crossorigin", "anonymous")
     audioPreload.href = `${baseUrl}assets/audio/quack.mp3`
     document.head.appendChild(audioPreload)
     this.quack = new Audio(`${baseUrl}assets/audio/quack.mp3`)
@@ -62,7 +64,7 @@ export default class PatoBotTribute {
     document.body.appendChild(this.quack)
     this.unlockAudio()
   }
-  
+
   /**
    * Configura listeners para desbloquear el audio en la primera interacción del usuario
    * Necesario para cumplir con las políticas de autoplay de los navegadores modernos
@@ -83,7 +85,7 @@ export default class PatoBotTribute {
         document.removeEventListener("click", unlock)
         document.removeEventListener("touchstart", unlock)
         document.removeEventListener("keydown", unlock)
-      } catch (e) {
+      } catch {
         console.log("Esperando interacción del usuario para desbloquear audio")
       }
     }
@@ -92,7 +94,7 @@ export default class PatoBotTribute {
     document.addEventListener("touchstart", unlock, { once: true })
     document.addEventListener("keydown", unlock, { once: true })
   }
-  
+
   /**
    * Obtiene la función de efecto para usar en el loop de efectos
    * @public
@@ -104,7 +106,7 @@ export default class PatoBotTribute {
       next()
     }
   }
-  
+
   /**
    * Reproduce el sonido de pato, manejando errores de autoplay
    * @private
@@ -121,7 +123,7 @@ export default class PatoBotTribute {
       }
     }
   }
-  
+
   /**
    * Analiza el mensaje en busca del texto "*quack*" y aplica los efectos
    * Cambia el avatar del usuario por uno aleatorio de pato y reproduce el sonido
