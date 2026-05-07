@@ -34,23 +34,22 @@ export default class EfectsLoop {
    * @type {Effect[]}
    */
   private effects: Effect[] = [];
-  
+
   /**
    * Array de funciones de salida que recibirán los mensajes procesados
    * @private
    * @type {Output[]}
    */
   private outputs: Output[] = [];
-  
+
   /**
    * Agrega un nuevo efecto a la cadena de procesamiento
    * @param {Effect} effect - Función de efecto a agregar
    */
   addEffect(effect: Effect) {
-    console.log("Adding effect: ", effect)
     this.effects.push(effect);
   }
-  
+
   /**
    * Agrega una nueva función de salida para recibir mensajes procesados
    * @param {Output} output - Función de salida a agregar
@@ -58,7 +57,7 @@ export default class EfectsLoop {
   addOutput(output: Output) {
     this.outputs.push(output);
   }
-  
+
   /**
    * Procesa un mensaje a través de todos los efectos registrados
    * y lo envía a las salidas una vez completado
@@ -83,7 +82,7 @@ export default class EfectsLoop {
     }
     loop();
   }
-  
+
   /**
    * Envía el mensaje procesado a todas las salidas registradas
    * @private

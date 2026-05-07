@@ -111,16 +111,7 @@ export class UserMessage extends HTMLElement {
     displayName.textContent = message.userInfo.displayName;
     displayName.style.color =
       getCuratedColor(message.userInfo.color);
-
-    /* if (message.messageInfo.userId) {
-      avatar.src = message.userInfo.avatarUrl;
-      avatar.style.display = "block";
-      defaultAvatar.style.display = "none";
-    } else {
-      avatar.style.display = "none";
-      defaultAvatar.style.display = "block";
-    } */
-
+      
     if (message.badges.length > 0) {
       const primaryBadgeInfo = message.badges[0];
       primaryBadge.src = primaryBadgeInfo.image;
@@ -139,7 +130,7 @@ export class UserMessage extends HTMLElement {
       primaryBadge.style.display = "none";
       secondaryBadges.innerHTML = "";
     }
-    this.selfDestruct();
+    //this.selfDestruct();
   }
 }
 

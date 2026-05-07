@@ -19,6 +19,7 @@ export type Properties = {
   messageTTL: number
   pato_bot: boolean
   mute_bots: boolean
+  mute_prefixes: string
   baseUrl: string
 }
 
@@ -39,6 +40,7 @@ const defaultProperties: Properties = {
   messageTTL: 10000,
   pato_bot: false,
   mute_bots: false,
+  mute_prefixes: "",
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 

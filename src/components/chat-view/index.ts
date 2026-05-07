@@ -1,5 +1,5 @@
 import EfectsLoop from "@/lib/efects_loop";
-import PatoBotTribute from "@/lib/efects_loop/efects/pato_bot_tribute";
+import startEfects from "@/lib/efects_loop/start_efects";
 import useTemplate from "@/lib/use_template";
 import type { UserMessageInfoType } from "mtmi";
 
@@ -33,14 +33,11 @@ export default class ChatView extends HTMLElement {
    */
   constructor() {
     super();
+    useTemplate(this, "#chat-view", "#message-list");
     this.efectsLoop = new EfectsLoop();
     this.efectsLoop.addOutput(this.renderMessage.bind(this));
-    useTemplate(this, "#chat-view", "#message-list");
+    startEfects(this.efectsLoop);
     this.list = this.querySelector("ul") as HTMLUListElement;
-    if (window.OBSChat.properties?.pato_bot) {
-      const patoBot = new PatoBotTribute()
-      this.efectsLoop.addEffect(patoBot.getEfect())
-    }
   }
 
   /**

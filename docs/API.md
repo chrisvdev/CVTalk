@@ -27,6 +27,8 @@ type Properties = {
   channel?: string        // Canal de Twitch
   messageTTL: number     // Tiempo de vida de mensajes (ms)
   pato_bot: boolean      // Habilitar PatoBotTribute
+  mute_bots: boolean     // Silenciar mensajes de bots
+  mute_prefixes: string  // Prefijos para silenciar comandos (separados por comas)
   baseUrl: string        // URL base de la aplicación (siempre termina con /)
 }
 ```
@@ -36,6 +38,8 @@ type Properties = {
 {
   messageTTL: 10000,
   pato_bot: false,
+  mute_bots: false,
+  mute_prefixes: '',
   baseUrl: '/'
 }
 ```

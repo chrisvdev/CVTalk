@@ -355,6 +355,150 @@ if (message.message.includes("*quack*")) {
 }
 ```
 
+---
+
+### 😺 cuteMichi
+
+**Convierte emoticones `:3` en emoji de gato.**
+
+**Activación:** Siempre activo
+
+**Comportamiento:**
+- Detecta el emoticón `:3` en mensajes
+- Lo reemplaza con el emoji 😺
+- Procesa tanto HTML como texto plano
+
+**Ejemplo:**
+```
+Entrada: "Hola :3 cómo estás"
+Salida:  "Hola 😺 cómo estás"
+```
+
+---
+
+### ❤️ afordiLove
+
+**Reemplaza corazones genéricos con el emote personalizado "afordiLove".**
+
+**Activación:** Siempre activo
+
+**Comportamiento:**
+- Detecta `<3` y `❤️` en texto
+- Reemplaza con el texto `afordiLove`
+- Cambia emote de Twitch genérico (ID: 555555584) por afordiLove (ID: emotesv2_2440c347e7344f0b9248beb83aa4ac87)
+
+**Ejemplo:**
+```
+Entrada: "Te quiero <3"
+Salida:  "Te quiero afordiLove"
+```
+
+---
+
+### 🚫🔗 antiLinks
+
+**Censura enlaces/URLs en mensajes de chat.**
+
+**Activación:** Siempre activo
+
+**Comportamiento:**
+- Detecta URLs usando regex y validador
+- Los moderadores y broadcaster están exentos
+- Reemplaza URLs con `[🚫🔗]` en HTML
+- Reemplaza con `(Usuario envió un link)` en texto plano
+
+**Ejemplo:**
+```
+Entrada: "Mira esto https://example.com"
+Salida HTML: "Mira esto [🚫🔗]"
+Salida texto: "Mira esto (NombreUsuario envió un link)"
+```
+
+---
+
+### 🦆 antiGoose
+
+**Reemplaza menciones de "goose"/"ganso" por "duck"/"pato".**
+
+**Activación:** Siempre activo
+
+**Comportamiento:**
+- Detecta "goose", "ganso", "ganzo" (incluso con espacios: "g o o s e")
+- Reemplaza "goose" → "duck"
+- Reemplaza "ganso"/"ganzo" → "pato"
+- Usa regex dinámico para detectar variaciones con espacios
+
+**Ejemplo:**
+```
+Entrada: "I love g o o s e"
+Salida:  "I love duck"
+
+Entrada: "El g a n s o es bonito"
+Salida:  "El pato es bonito"
+```
+
+---
+
+### 🚫📏 antiLongWords
+
+**Censura palabras excesivamente largas (spam).**
+
+**Activación:** Siempre activo
+
+**Comportamiento:**
+- Detecta palabras mayores a 23 caracteres (más largas que "electroencefalografista")
+- Reemplaza con `[🚫📏]` en HTML
+- Reemplaza con una palabra turca famosamente larga en texto plano
+
+**Ejemplo:**
+```
+Entrada: "esto es aaaaaaaaaaaaaaaaaaaaaaaaa spam"
+Salida HTML: "esto es [🚫📏] spam"
+Salida texto: "esto es Muvaffakiyetsezlestiricilestiriveremeyebileceklerimizdenmissinizcesine spam"
+```
+
+---
+
+### 🤖 muteBots
+
+**Silencia mensajes provenientes de bots.**
+
+**Activación:** `?mute_bots=true`
+
+**Comportamiento:**
+- Verifica si `message.userInfo.isBot === true`
+- Si es bot, interrumpe la cadena de efectos (no llama a `next()`)
+- El mensaje no se renderiza en el chat
+
+**Ejemplo de uso:**
+```
+URL: ?channel=micanal&mute_bots=true
+```
+
+---
+
+### 🔇 muteCommandsByPrefix
+
+**Silencia mensajes que comienzan con prefijos específicos.**
+
+**Activación:** `?mute_prefixes=!,.,/` (separar prefijos con comas)
+
+**Comportamiento:**
+- Verifica si el mensaje comienza con alguno de los prefijos configurados
+- Si coincide, interrumpe la cadena de efectos
+- Útil para ocultar comandos de bots
+
+**Ejemplo de uso:**
+```
+URL: ?channel=micanal&mute_prefixes=!,.,/
+
+"!comando" → no se muestra
+".roll 6" → no se muestra
+"Hola chat" → se muestra normalmente
+```
+
+---
+
 ## 🎓 Mejores Prácticas
 
 ### ✅ DO

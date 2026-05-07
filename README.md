@@ -101,7 +101,9 @@ Configura el widget mediante parámetros URL:
 |-----------|------|---------|-------------|
 | `channel` | string | - | **Requerido**. Nombre del canal de Twitch |
 | `messageTTL` | number | `10000` | Tiempo de vida de mensajes (ms) |
-| `pato_bot` | boolean | `false` | Habilitar efecto PatoBot (*quack*) |
+| `pato_bot` | boolean | `false` | Habilitar efecto PatoBot (*quack*) 🦆 |
+| `mute_bots` | boolean | `false` | Silenciar mensajes de bots 🤖 |
+| `mute_prefixes` | string | `""` | Prefijos para silenciar comandos (separados por comas) 🔇 |
 
 ### Ejemplos
 
@@ -114,7 +116,25 @@ Configura el widget mediante parámetros URL:
 
 # Con efecto PatoBot habilitado
 ?channel=micanal&pato_bot=true
+
+# Silenciar bots y comandos
+?channel=micanal&mute_bots=true&mute_prefixes=!,.,/
 ```
+
+### ✨ Efectos Incluidos
+
+CVTalk incluye varios efectos que procesan los mensajes antes de mostrarlos:
+
+- **😺 cuteMichi**: Convierte `:3` en emoji de gato
+- **❤️ afordiLove**: Reemplaza `<3` y `❤️` con el emote "afordiLove"
+- **🚫🔗 antiLinks**: Censura URLs (excepto para mods y broadcaster)
+- **🦆 antiGoose**: Reemplaza "goose"/"ganso" por "duck"/"pato"
+- **🚫📏 antiLongWords**: Censura palabras excesivamente largas (spam)
+- **🦆 PatoBotTribute**: Reproduce sonido de pato al detectar `*quack*` (configurable)
+- **🤖 muteBots**: Oculta mensajes de bots (configurable)
+- **🔇 muteCommandsByPrefix**: Oculta comandos por prefijo (configurable)
+
+Ver [documentación completa de efectos](docs/EFFECTS.md) para más detalles.
 
 ## 🏗️ Estructura del Proyecto
 
