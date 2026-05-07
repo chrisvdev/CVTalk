@@ -18,6 +18,7 @@ export type Properties = {
   channel?: string
   messageTTL: number
   pato_bot: boolean
+  mute_bots: boolean
   baseUrl: string
 }
 
@@ -37,6 +38,7 @@ export type Message = UserMessageInfoType & {
 const defaultProperties: Properties = {
   messageTTL: 10000,
   pato_bot: false,
+  mute_bots: false,
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 
@@ -109,6 +111,12 @@ declare global {
 customElements.get("chat-view")
 
 /**
+ * Preserva el baseUrl inyectado desde Astro antes de inicializar OBSChat
+ * El script inline en index.astro establece este valor con import.meta.env.BASE_URL
+ */
+const injectedBaseUrl = window.OBSChat?.properties?.baseUrl;
+
+/**
  * Instancia del objeto global OBSChat
  * Gestiona el registro de custom elements y las propiedades globales de la aplicación
  * Se asigna a window.OBSChat para ser accesible desde cualquier parte de la aplicación
@@ -117,9 +125,13 @@ customElements.get("chat-view")
 const OBSChat: OBSChat = {
   /**
    * Propiedades globales con valores por defecto
+   * Preserva el baseUrl inyectado desde Astro si existe
    * @type {Properties}
    */
-  properties: defaultProperties,
+  properties: {
+    ...defaultProperties,
+    ...(injectedBaseUrl && { baseUrl: injectedBaseUrl })
+  },
 
   /**
    * Registro vacío de custom elements que se llenará dinámicamente
@@ -178,6 +190,14 @@ window.OBSChat = OBSChat
  * Extrae los parámetros de la URL, los convierte a sus tipos correctos
  * y los asigna a las propiedades globales de OBSChat
  * Los valores por defecto se preservan si no están presentes en la URL
+ * Preserva el baseUrl inyectado desde Astro (no se puede sobrescribir por URL)
  */
 const urlParams = Object.fromEntries(new URL(location.href).searchParams);
-OBSChat.properties = parseProperties(urlParams, defaultProperties);
+const parsedProperties = parseProperties(urlParams, defaultProperties);
+
+// Preservar el baseUrl inyectado desde Astro (tiene prioridad sobre URL y defaults)
+if (injectedBaseUrl) {
+  parsedProperties.baseUrl = injectedBaseUrl;
+}
+
+OBSChat.properties = parsedProperties;
