@@ -75,8 +75,9 @@ export default class EfectsLoop {
     };
     if (effects.length > 1) {
       for (let i = effects.length - 2; i >= 0; i--) {
+        const prevLoop = loop;  // Capturar la referencia del loop anterior
         loop = () => {
-          effects[i](message, loop)
+          effects[i](message, prevLoop)  // Usar la referencia capturada, no 'loop'
         }
       }
     }
