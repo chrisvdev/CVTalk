@@ -35,7 +35,7 @@
   "dependencies": {
     "astro": "^6.1.3",
     "mtmi": "^0.0.19",
-    "mtmi-async-badges": "^1.0.4",
+    "mtmi-async-badges": "^1.0.6",
     "validator": "^13.15.35"
   },
   "devDependencies": {
