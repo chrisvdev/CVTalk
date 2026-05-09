@@ -22,19 +22,23 @@ const mostLongWordInSpanish = 'electroencefalografista'
  * // Texto: "esto es Muvaffakiyetsezlestiricilestiriveremeyebileceklerimizdenmissinizcesine spam"
  */
 const antiLongWords: Effect = (message, next) => {
-  message.messageInfo.message.childNodes.forEach((node: ChildNode) => {
-    if (node.nodeName === "SPAN") {
-      const text = node.textContent || ""
-      node.textContent = text.split(' ')
-        .map((word) => {
-          const longerWord = mostLongWordInSpanish.length < word.length
-          return longerWord
-            ? `[🚫📏]`
-            : word
-        })
-        .join(' ')
-    }
-  })
+  const { isMod } = message.userInfo
+  const isBroadcaster = message.userInfo.username === window.OBSChat.properties?.channel
+  if (!(isMod || isBroadcaster)) {
+    message.messageInfo.message.childNodes.forEach((node: ChildNode) => {
+      if (node.nodeName === "SPAN") {
+        const text = node.textContent || ""
+        node.textContent = text.split(' ')
+          .map((word) => {
+            const longerWord = mostLongWordInSpanish.length < word.length
+            return longerWord
+              ? `[🚫📏]`
+              : word
+          })
+          .join(' ')
+      }
+    })
+  }
   message.message = message.message.split(' ')
     .map((word) => {
       const longerWord = mostLongWordInSpanish.length < word.length
