@@ -103,7 +103,11 @@ Configura el widget mediante parámetros URL:
 | `messageTTL` | number | `10000` | Tiempo de vida de mensajes (ms) |
 | `pato_bot` | boolean | `false` | Habilitar efecto PatoBot (*quack*) 🦆 |
 | `mute_bots` | boolean | `false` | Silenciar mensajes de bots 🤖 |
+| `mute_replays` | boolean | `false` | Silenciar mensajes que son respuestas 💬 |
 | `mute_prefixes` | string | `""` | Prefijos para silenciar comandos (separados por comas) 🔇 |
+| `tts` | string | `""` | Habilitar funcionalidad TTS (Text-to-Speech) 🔊 |
+| `tts_accent` | string | `"es-AR"` | Acento predeterminado para TTS (ej: es-AR, en-US) 🌍 |
+| `tts_variant` | number | `1` | Variante de voz predeterminada (1-n) 🎙️ |
 
 ### Ejemplos
 
@@ -117,24 +121,66 @@ Configura el widget mediante parámetros URL:
 # Con efecto PatoBot habilitado
 ?channel=micanal&pato_bot=true
 
-# Silenciar bots y comandos
-?channel=micanal&mute_bots=true&mute_prefixes=!,.,/
+# Silenciar bots, respuestas y comandos
+?channel=micanal&mute_bots=true&mute_replays=true&mute_prefixes=!,.,/
+
+# Con TTS habilitado (español de Argentina, variante 1)
+?channel=micanal&tts=true&tts_accent=es-AR&tts_variant=1
 ```
 
 ### ✨ Efectos Incluidos
 
 CVTalk incluye varios efectos que procesan los mensajes antes de mostrarlos:
 
-- **😺 cuteMichi**: Convierte `:3` en emoji de gato
+- **😺 cuteMichi**: Convierte `:3` en "AliMoyi"
 - **❤️ afordiLove**: Reemplaza `<3` y `❤️` con el emote "afordiLove"
 - **🚫🔗 antiLinks**: Censura URLs (excepto para mods y broadcaster)
 - **🦆 antiGoose**: Reemplaza "goose"/"ganso" por "duck"/"pato"
 - **🚫📏 antiLongWords**: Censura palabras excesivamente largas (spam)
 - **🦆 PatoBotTribute**: Reproduce sonido de pato al detectar `*quack*` (configurable)
 - **🤖 muteBots**: Oculta mensajes de bots (configurable)
+- **💬 muteReplays**: Oculta mensajes que son respuestas (configurable)
 - **🔇 muteCommandsByPrefix**: Oculta comandos por prefijo (configurable)
+- **🎙️ commandsProcessor**: Procesador de comandos TTS (habilitado con `tts=true`)
 
 Ver [documentación completa de efectos](docs/EFFECTS.md) para más detalles.
+
+## 🎙️ Sistema TTS (Text-to-Speech)
+
+CVTalk incluye un sistema completo de síntesis de voz que permite a los usuarios del chat sintetizar mensajes con diferentes acentos y voces.
+
+### Comandos TTS Disponibles
+
+| Comando | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `!speak <texto>` | Sintetiza el texto con configuración predeterminada | `!speak Hola mundo` |
+| `!s <texto>` | Alias corto de !speak | `!s Hola` |
+| `!speak <acento> <texto>` | Sintetiza con acento específico | `!speak es-MX Hola desde México` |
+| `!speak <acento> <variante> <texto>` | Sintetiza con acento y variante específicos | `!speak es-AR 2 Hola Argentina` |
+| `!speak -config <acento> [variante]` | Configura acento personalizado del usuario | `!speak -config es-AR 2` |
+| `!speak -reset` | Resetea la configuración personalizada | `!speak -reset` |
+
+### Acentos Disponibles
+
+Los acentos disponibles dependen del navegador/sistema. Ejemplos comunes:
+
+- **Español**: `es-ES` (España), `es-MX` (México), `es-AR` (Argentina), `es-US` (Estados Unidos)
+- **Inglés**: `en-US` (Estados Unidos), `en-GB` (Reino Unido), `en-AU` (Australia)
+- **Otros**: `pt-BR` (Portugués Brasil), `fr-FR` (Francés), `de-DE` (Alemán), etc.
+
+### Personalización TTS
+
+Cada usuario puede configurar su propio acento y variante que se aplicará automáticamente a sus mensajes:
+
+```
+Usuario: !speak -config es-AR 2
+[Se configura la voz española argentina, variante 2]
+
+Usuario: !speak Hola chat
+[Sintetiza "Hola chat" con la configuración guardada: es-AR, variante 2]
+```
+
+La configuración se guarda en `localStorage` del navegador y persiste entre sesiones.
 
 ## 🏗️ Estructura del Proyecto
 

@@ -359,19 +359,20 @@ if (message.message.includes("*quack*")) {
 
 ### 😺 cuteMichi
 
-**Convierte emoticones `:3` en emoji de gato.**
+**Convierte emoticones `:3` en "AliMoyi".**
 
 **Activación:** Siempre activo
 
 **Comportamiento:**
 - Detecta el emoticón `:3` en mensajes
-- Lo reemplaza con el emoji 😺
-- Procesa tanto HTML como texto plano
+- Lo reemplaza con el emoji 😺 en HTML
+- Lo reemplaza con el texto "AliMoyi" en texto plano
 
 **Ejemplo:**
 ```
 Entrada: "Hola :3 cómo estás"
-Salida:  "Hola 😺 cómo estás"
+Salida HTML: "Hola 😺 cómo estás"
+Salida texto: "Hola AliMoyi cómo estás"
 ```
 
 ---
@@ -488,6 +489,8 @@ URL: ?channel=micanal&mute_bots=true
 - Si coincide, interrumpe la cadena de efectos
 - Útil para ocultar comandos de bots
 
+**Nota especial:** Incluye una excepción hardcodeada para el comando `!hit @jp__is` (A.K.A. e4yttuh).
+
 **Ejemplo de uso:**
 ```
 URL: ?channel=micanal&mute_prefixes=!,.,/
@@ -496,6 +499,80 @@ URL: ?channel=micanal&mute_prefixes=!,.,/
 ".roll 6" → no se muestra
 "Hola chat" → se muestra normalmente
 ```
+
+---
+
+### 💬 muteReplays
+
+**Silencia mensajes que son respuestas a otros mensajes.**
+
+**Activación:** `?mute_replays=true`
+
+**Comportamiento:**
+- Verifica si el mensaje tiene información de reply (`message.replyInfo`)
+- Si es una respuesta, interrumpe la cadena de efectos (no llama a `next()`)
+- El mensaje no se renderiza en el chat
+- Útil para mantener el chat limpio de conversaciones anidadas
+
+**Autor:** tadeo_dev
+
+**Ejemplo de uso:**
+```
+URL: ?channel=micanal&mute_replays=true
+
+Usuario1: "Hola chat"
+Usuario2: "@Usuario1 Hola!" → no se muestra (es un reply)
+Usuario3: "¿Qué tal?" → se muestra normalmente
+```
+
+---
+
+### 🎙️ commandsProcessor
+
+**Procesador de comandos TTS (Text-to-Speech).**
+
+**Activación:** `?tts=true` (junto con `tts_accent` y `tts_variant` opcionales)
+
+**Comportamiento:**
+- Intercepta comandos especiales en el chat
+- Procesa comandos TTS para sintetizar voz
+- Ignora mensajes de bots
+- Si un comando retorna `true`, el mensaje no se renderiza
+
+**Comandos soportados:**
+- `!speak <texto>` - Sintetiza el texto con configuración predeterminada
+- `!s <texto>` - Alias corto de !speak
+- `!speak <acento> <texto>` - Sintetiza con acento específico (ej: es-AR, en-US)
+- `!speak <acento> <variante> <texto>` - Sintetiza con acento y variante
+- `!speak -config <acento> [variante]` - Configura preferencias del usuario
+- `!speak -reset` - Resetea la configuración personalizada
+
+**Características:**
+- Configuración personalizada por usuario guardada en localStorage
+- Validación de acentos y variantes disponibles en el sistema
+- Fallback a configuración global si el usuario no tiene preferencias
+
+**Ejemplo de uso:**
+```
+URL: ?channel=micanal&tts=true&tts_accent=es-AR&tts_variant=1
+
+Usuario: "!speak Hola mundo"
+[Sintetiza "Hola mundo" con es-AR, variante 1]
+
+Usuario: "!speak -config es-MX 2"
+[Guarda preferencia: español mexicano, variante 2]
+
+Usuario: "!speak Buenos días"
+[Sintetiza con su configuración guardada: es-MX, variante 2]
+
+Usuario: "!speak en-US 1 Hello world"
+[Sintetiza "Hello world" con inglés estadounidense, variante 1]
+```
+
+**Implementación:**
+- Usa la clase `TTS` para síntesis de voz (singleton)
+- Usa la clase `TTSConfigVault` para gestionar configuraciones personalizadas
+- Usa `ComManzContainer` para registrar y buscar comandos mediante árbol de decisión
 
 ---
 

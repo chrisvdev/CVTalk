@@ -19,7 +19,11 @@ export type Properties = {
   messageTTL: number
   pato_bot: boolean
   mute_bots: boolean
+  mute_replays: boolean
   mute_prefixes: string
+  tts: string
+  tts_accent: string
+  tts_variant: number
   baseUrl: string
 }
 
@@ -40,7 +44,11 @@ const defaultProperties: Properties = {
   messageTTL: 10000,
   pato_bot: false,
   mute_bots: false,
+  mute_replays: false,
   mute_prefixes: "",
+  tts: "",
+  tts_accent: "es-AR",
+  tts_variant: 1,
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 

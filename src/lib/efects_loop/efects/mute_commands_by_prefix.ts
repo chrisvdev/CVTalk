@@ -16,6 +16,7 @@ import type { Effect } from "../index"
  */
 const muteCommandsByPrefix: Effect = (message, next) => {
   const { mute_prefixes } = window.OBSChat.properties || {}
+  if (message.message.includes('!hit @jp__is')) next() // Pablo (A.K.A. e4yttuh) was here
   if (mute_prefixes) {
     const isACommand =
       mute_prefixes.split(",").some(
