@@ -131,6 +131,15 @@ export default class PatoBotTribute {
         return this.duckAvatars[Math.floor(Math.random() * this.duckAvatars.length)]
       })()
       this.playQuack()
+      message.messageInfo.message.childNodes.forEach((node: ChildNode) => {
+        if (node.nodeName === "SPAN") {
+          const text = node.textContent || ""
+          node.textContent = text
+            .replaceAll("*quack*", '🦆')
+        }
+      })
+      message.message = message.message
+        .replaceAll("*quack*", `[${message.userInfo.username} quackeó]`)
     }
   }
 }
