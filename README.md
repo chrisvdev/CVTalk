@@ -108,6 +108,7 @@ Configura el widget mediante parámetros URL:
 | `tts` | string | `""` | Habilitar funcionalidad TTS (Text-to-Speech) 🔊 |
 | `tts_accent` | string | `"es-AR"` | Acento predeterminado para TTS (ej: es-AR, en-US) 🌍 |
 | `tts_variant` | number | `1` | Variante de voz predeterminada (1-n) 🎙️ |
+| `insecureHTML` | string | `""` | ⚠️ Permitir HTML en mensajes: `"onCommand"` (con $html) o `"onHighlight"` ⚡ |
 
 ### Ejemplos
 
@@ -126,6 +127,9 @@ Configura el widget mediante parámetros URL:
 
 # Con TTS habilitado (español de Argentina, variante 1)
 ?channel=micanal&tts=true&tts_accent=es-AR&tts_variant=1
+
+# ⚠️ Con HTML habilitado en comandos (USAR CON PRECAUCIÓN)
+?channel=micanal&insecureHTML=onCommand
 ```
 
 ### ✨ Efectos Incluidos
@@ -141,9 +145,55 @@ CVTalk incluye varios efectos que procesan los mensajes antes de mostrarlos:
 - **🤖 muteBots**: Oculta mensajes de bots (configurable)
 - **💬 muteReplays**: Oculta mensajes que son respuestas (configurable)
 - **🔇 muteCommandsByPrefix**: Oculta comandos por prefijo (configurable)
+- **⚡ insecureHTML**: ⚠️ Permite HTML controlado en mensajes (configurable, usar con precaución)
 - **🎙️ commandsProcessor**: Procesador de comandos TTS (habilitado con `tts=true`)
 
 Ver [documentación completa de efectos](docs/EFFECTS.md) para más detalles.
+
+## ⚡ HTML en Mensajes (insecureHTML)
+
+⚠️ **CARACTERÍSTICA EXPERIMENTAL Y POTENCIALMENTE PELIGROSA**
+
+CVTalk permite la inyección controlada de HTML en mensajes del chat. Esta funcionalidad está **deshabilitada por defecto** y debe usarse solo en entornos controlados donde confías en los usuarios.
+
+### Modos de Activación
+
+1. **`insecureHTML=onCommand`**: Permite HTML solo en mensajes que empiezan con `$html`
+   ```
+   Usuario: $html <b>Texto en negrita</b> y <i>cursiva</i>
+   ```
+
+2. **`insecureHTML=onHighlight`**: Permite HTML solo en mensajes destacados (highlighted messages)
+   ```
+   [Usuario con mensaje destacado]: <span style="color: red;">Mensaje importante</span>
+   ```
+
+### Filtros de Seguridad
+
+Se bloquean automáticamente las siguientes etiquetas y atributos peligrosos:
+- `<script>` - Ejecución de JavaScript
+- `<iframe>` - Carga de contenido externo
+- `<object>` - Objetos embebidos
+- `<details>` - Elementos interactivos
+- `onload`, `onerror` - Eventos JavaScript inline
+
+### ⚠️ Advertencias de Seguridad
+
+- **NO** garantiza protección total contra XSS (Cross-Site Scripting)
+- Usar **SOLO** en streams privados o con comunidad de confianza
+- Los usuarios pueden usar CSS para modificar la apariencia del chat
+- Posibles riesgos: robo de cookies, phishing, defacement
+
+### Ejemplo de Uso Seguro
+
+```bash
+# Solo permitir HTML en comandos específicos
+?channel=micanal&insecureHTML=onCommand
+
+# Ahora los usuarios pueden usar:
+# $html <marquee>¡Texto en movimiento!</marquee>
+# $html <span style="font-size: 2em;">Grande</span>
+```
 
 ## 🎙️ Sistema TTS (Text-to-Speech)
 

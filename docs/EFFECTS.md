@@ -527,6 +527,86 @@ Usuario3: "¿Qué tal?" → se muestra normalmente
 
 ---
 
+### ⚡ insecureHTML
+
+**Permite la inyección controlada de HTML en mensajes del chat.**
+
+⚠️ **ADVERTENCIA DE SEGURIDAD CRÍTICA**
+
+Este efecto permite que los usuarios inyecten HTML personalizado en sus mensajes. Aunque se filtran las etiquetas más peligrosas, **NO SE GARANTIZA PROTECCIÓN TOTAL CONTRA XSS**.
+
+**Usar SOLO en entornos controlados donde confías en todos los usuarios.**
+
+**Activación:** 
+- `?insecureHTML=onCommand` - Solo mensajes que empiezan con `$html`
+- `?insecureHTML=onHighlight` - Solo mensajes destacados (highlighted)
+
+**Comportamiento:**
+- Verifica si el usuario no es un bot
+- Según el modo, habilita HTML en:
+  - `onCommand`: Mensajes que comienzan con `$html`
+  - `onHighlight`: Mensajes destacados del usuario
+- Filtra etiquetas y atributos peligrosos antes de renderizar
+- Crea un elemento `<span>` con el HTML sanitizado
+
+**Filtros de seguridad aplicados:**
+- ❌ `<script>` - Bloqueado (ejecución de JavaScript)
+- ❌ `<iframe>` - Bloqueado (contenido externo)
+- ❌ `<object>` - Bloqueado (objetos embebidos)
+- ❌ `<details>` - Bloqueado (elementos interactivos)
+- ❌ `onload` - Bloqueado (eventos inline)
+- ❌ `onerror` - Bloqueado (eventos inline)
+
+**Implementación:**
+- Usa `dynamicRegex()` para detectar tags incluso con espacios (ej: `s c r i p t`)
+- Reemplaza el objeto `message.messageInfo.message` con un span HTML
+
+**Ejemplo de uso (onCommand):**
+```
+URL: ?channel=micanal&insecureHTML=onCommand
+
+Usuario: "$html <b>Texto en negrita</b>"
+[Se renderiza con el formato HTML aplicado]
+
+Usuario: "$html <marquee>¡En movimiento!</marquee>"
+[Se renderiza con efecto marquee]
+
+Usuario: "$html <script>alert('hack')</script> seguro"
+[Se renderiza: " seguro" (script bloqueado)]
+```
+
+**Ejemplo de uso (onHighlight):**
+```
+URL: ?channel=micanal&insecureHTML=onHighlight
+
+Usuario (con mensaje destacado): "<span style='color: red; font-size: 2em;'>¡IMPORTANTE!</span>"
+[Se renderiza con estilos aplicados]
+
+Usuario (sin highlight): "<b>Hola</b>"
+[Se renderiza como texto plano: "<b>Hola</b>"]
+```
+
+**Casos de uso legítimos:**
+- Overlays personalizados en streams privados
+- Demos técnicas o educativas sobre HTML/CSS
+- Comunidades pequeñas de confianza
+- Testing y desarrollo
+
+**Riesgos potenciales:**
+- ⚠️ XSS (Cross-Site Scripting) - Robo de cookies/tokens
+- ⚠️ CSS injection - Modificación visual del chat
+- ⚠️ Phishing - Enlaces o formularios falsos
+- ⚠️ Defacement - Alteración del diseño del widget
+
+**Recomendaciones:**
+1. **NO USAR** en streams públicos con audiencia grande
+2. **MONITOREAR** constantemente el chat si está habilitado
+3. **TENER** moderadores de confianza
+4. **CONSIDERAR** usar solo modo `onCommand` para mayor control
+5. **DOCUMENTAR** claramente las reglas de uso en tu comunidad
+
+---
+
 ### 🎙️ commandsProcessor
 
 **Procesador de comandos TTS (Text-to-Speech).**

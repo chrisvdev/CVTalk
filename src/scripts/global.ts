@@ -13,6 +13,13 @@ import type { UserMessageInfoType } from "mtmi"
  * @property {number} messageTTL - Tiempo de vida de los mensajes en milisegundos
  * @property {boolean} pato_bot - Activar efecto PatoBot
  * @property {string} baseUrl - URL base de la aplicación (siempre termina con /)
+ * @property {boolean} mute_bots - Silenciar mensajes de bots
+ * @property {boolean} mute_replays - Silenciar mensajes que son respuestas a otros mensajes
+ * @property {string} mute_prefixes - Prefijos para silenciar mensajes (separados por comas)
+ * @property {string} tts - Voz a utilizar para Text-to-Speech (TTS), si está habilitado
+ * @property {string} tts_accent - Acento para la voz de TTS (ej: "es-AR")
+ * @property {number} tts_variant - Variante de la voz de TTS (ej: 1, 2, etc.)
+ * @property {boolean} insecureHTML - Permitir HTML inseguro en los mensajes
  */
 export type Properties = {
   channel?: string
@@ -24,6 +31,7 @@ export type Properties = {
   tts: string
   tts_accent: string
   tts_variant: number
+  insecureHTML: "" | "onCommand" | "onHighlight" 
   baseUrl: string
 }
 
@@ -49,6 +57,7 @@ const defaultProperties: Properties = {
   tts: "",
   tts_accent: "es-AR",
   tts_variant: 1,
+  insecureHTML: "",
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 
