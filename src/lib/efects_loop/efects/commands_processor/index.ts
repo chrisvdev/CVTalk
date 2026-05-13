@@ -2,7 +2,7 @@
 import type { Effect } from '../..'
 import { speak, config, reset } from './commands/speak'
 import ComManzContainer from './commands_container'
-
+import remoteAdminCommand from './commands/remote_admin'
 /**
  * Procesador de comandos de chat.
  * Inicializa y registra los comandos disponibles (!speak, !s, etc.) 
@@ -12,12 +12,16 @@ import ComManzContainer from './commands_container'
  */
 
 const commandsContainer = ComManzContainer.getInstance()
-const { tts } = window.OBSChat.properties || {}
+const { tts, remoteAdmin } = window.OBSChat.properties || {}
 if (tts) {
   commandsContainer.addCommand('!speak', speak)
   commandsContainer.addCommand('!s', speak)
   commandsContainer.addCommand('!speak -config', config)
   commandsContainer.addCommand('!speak -reset', reset)
+}
+if (remoteAdmin) {
+  commandsContainer.addCommand('!remoteAdmin', remoteAdminCommand)
+  commandsContainer.addCommand('!cvsudo', remoteAdminCommand)
 }
 
 /**

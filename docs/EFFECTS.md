@@ -607,19 +607,137 @@ Usuario (sin highlight): "<b>Hola</b>"
 
 ---
 
+### �️ remoteAdmin (commandsProcessor)
+
+**Comando de administración remota del widget desde el chat.**
+
+🔐 **CARACTERÍSTICA DE CONTROL REMOTO**
+
+Permite al streamer y/o moderadores modificar las propiedades del widget en tiempo real desde el chat de Twitch, sin necesidad de recargar la página.
+
+**Activación:** 
+- `?remoteAdmin=streamer` - Solo el streamer puede ejecutar comandos
+- `?remoteAdmin=moderators` - Streamer y moderadores pueden ejecutar comandos
+
+**Comandos disponibles:**
+- `!remoteAdmin <propiedad> <valor>` - Comando completo
+- `!cvsudo <propiedad> <valor>` - Alias corto
+
+**Comportamiento:**
+- Verifica que el usuario tenga permisos (streamer o mod según configuración)
+- Valida que la propiedad sea modificable (no protegida)
+- Convierte el tipo de valor según la propiedad (boolean, number, string)
+- Aplica el cambio inmediatamente sin recargar
+- Registra todos los comandos en la consola del navegador
+
+**Propiedades modificables:**
+- `messageTTL` (number) - Tiempo de vida de mensajes
+- `pato_bot` (boolean) - Habilitar/deshabilitar PatoBot
+- `mute_bots` (boolean) - Silenciar mensajes de bots
+- `mute_replays` (boolean) - Silenciar respuestas
+- `mute_prefixes` (string) - Prefijos a silenciar (separados por comas)
+- `tts` (string) - Habilitar TTS
+- `tts_accent` (string) - Acento para TTS (ej: es-AR)
+- `tts_variant` (number) - Variante de voz
+- `insecureHTML` (string) - Modo HTML ("", "onCommand", "onHighlight")
+
+**Propiedades protegidas (NO modificables):**
+- ❌ `remoteAdmin` - No se puede cambiar su propio nivel de seguridad
+- ❌ `baseUrl` - URL base del sistema
+- ❌ `channel` - Canal de Twitch conectado
+
+**Conversión automática de tipos:**
+- Detecta el tipo de la propiedad
+- Convierte "true"/"false" a boolean
+- Convierte números string a number
+- Mantiene strings como string
+
+**Ejemplo de uso (modo streamer):**
+```
+URL: ?channel=micanal&remoteAdmin=streamer
+
+Streamer: "!cvsudo pato_bot true"
+[Activa PatoBot inmediatamente]
+
+Streamer: "!remoteAdmin messageTTL 20000"
+[Cambia tiempo de vida de mensajes a 20 segundos]
+
+Streamer: "!cvsudo tts_accent es-MX"
+[Cambia acento TTS a español mexicano]
+
+Moderador: "!cvsudo mute_bots true"
+[❌ Comando denegado - solo streamer tiene permisos]
+```
+
+**Ejemplo de uso (modo moderators):**
+```
+URL: ?channel=micanal&remoteAdmin=moderators
+
+Moderador: "!cvsudo mute_bots true"
+[✅ Activa silenciar bots - moderador tiene permisos]
+
+Streamer: "!remoteAdmin insecureHTML onCommand"
+[✅ Activa HTML en comandos]
+
+Moderador: "!cvsudo mute_prefixes !,.,/"
+[✅ Configura prefijos a silenciar]
+```
+
+**Logs en consola:**
+```javascript
+// Comando exitoso
+"Comando remoto de administración ejecutado por DisplayName (username)"
+"Variable: pato_bot, valor actual: false, nuevo valor: true"
+
+// Comando denegado
+"Intento de comando remoto denegado: DisplayName (username) no tiene permisos."
+
+// Propiedad no encontrada
+"Propiedad invalid_prop no encontrada en las propiedades globales."
+```
+
+**Casos de uso:**
+- 🎮 **Streams interactivos**: Ajustar configuración según eventos en vivo
+- 🎪 **Testing en producción**: Probar configuraciones sin recargar
+- 🔧 **Debugging**: Cambiar parámetros para diagnosticar problemas
+- 🎨 **Personalización dinámica**: Adaptar el widget al contenido del stream
+- 🚀 **Respuesta rápida**: Cambiar configuración ante situaciones inesperadas
+
+**Seguridad:**
+- ⚠️ Solo usar con moderadores de alta confianza en modo `moderators`
+- 🔒 Todos los comandos se registran en consola (auditable)
+- 🛡️ Propiedades críticas están protegidas contra modificación
+- 📝 Los cambios no persisten (se reinician al recargar la página)
+
+**Limitaciones:**
+- Los cambios NO son permanentes (se pierden al recargar)
+- No se puede cambiar el canal conectado
+- No se puede modificar el nivel de seguridad de remoteAdmin
+- No se puede cambiar la baseUrl del sistema
+
+**Recomendaciones:**
+1. **Documentar** los comandos disponibles para tu equipo de moderación
+2. **Establecer** reglas claras sobre cuándo usar comandos remotos
+3. **Monitorear** la consola del navegador regularmente
+4. **Usar** modo `streamer` para máxima seguridad
+5. **Entrenar** a moderadores antes de dar acceso
+
+---
+
 ### 🎙️ commandsProcessor
 
-**Procesador de comandos TTS (Text-to-Speech).**
+**Procesador de comandos TTS (Text-to-Speech) y administración remota.**
 
-**Activación:** `?tts=true` (junto con `tts_accent` y `tts_variant` opcionales)
+**Activación:** `?tts=true` y/o `?remoteAdmin=streamer|moderators`
 
 **Comportamiento:**
 - Intercepta comandos especiales en el chat
 - Procesa comandos TTS para sintetizar voz
+- Procesa comandos de administración remota (si está habilitado)
 - Ignora mensajes de bots
 - Si un comando retorna `true`, el mensaje no se renderiza
 
-**Comandos soportados:**
+**Comandos TTS soportados:**
 - `!speak <texto>` - Sintetiza el texto con configuración predeterminada
 - `!s <texto>` - Alias corto de !speak
 - `!speak <acento> <texto>` - Sintetiza con acento específico (ej: es-AR, en-US)
@@ -627,7 +745,11 @@ Usuario (sin highlight): "<b>Hola</b>"
 - `!speak -config <acento> [variante]` - Configura preferencias del usuario
 - `!speak -reset` - Resetea la configuración personalizada
 
-**Características:**
+**Comandos de administración remota soportados:**
+- `!remoteAdmin <propiedad> <valor>` - Cambia propiedad del widget (requiere permisos)
+- `!cvsudo <propiedad> <valor>` - Alias corto de remoteAdmin
+
+**Características TTS:**
 - Configuración personalizada por usuario guardada en localStorage
 - Validación de acentos y variantes disponibles en el sistema
 - Fallback a configuración global si el usuario no tiene preferencias

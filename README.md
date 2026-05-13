@@ -109,6 +109,7 @@ Configura el widget mediante parámetros URL:
 | `tts_accent` | string | `"es-AR"` | Acento predeterminado para TTS (ej: es-AR, en-US) 🌍 |
 | `tts_variant` | number | `1` | Variante de voz predeterminada (1-n) 🎙️ |
 | `insecureHTML` | string | `""` | ⚠️ Permitir HTML en mensajes: `"onCommand"` (con $html) o `"onHighlight"` ⚡ |
+| `remoteAdmin` | string | `""` | 🎛️ Control remoto: `"streamer"` (solo streamer) o `"moderators"` (streamer + mods) 🔐 |
 
 ### Ejemplos
 
@@ -130,6 +131,12 @@ Configura el widget mediante parámetros URL:
 
 # ⚠️ Con HTML habilitado en comandos (USAR CON PRECAUCIÓN)
 ?channel=micanal&insecureHTML=onCommand
+
+# 🎛️ Con control remoto para streamer (puede cambiar propiedades desde el chat)
+?channel=micanal&remoteAdmin=streamer
+
+# 🔐 Con control remoto para streamer y moderadores
+?channel=micanal&remoteAdmin=moderators
 ```
 
 ### ✨ Efectos Incluidos
@@ -146,9 +153,83 @@ CVTalk incluye varios efectos que procesan los mensajes antes de mostrarlos:
 - **💬 muteReplays**: Oculta mensajes que son respuestas (configurable)
 - **🔇 muteCommandsByPrefix**: Oculta comandos por prefijo (configurable)
 - **⚡ insecureHTML**: ⚠️ Permite HTML controlado en mensajes (configurable, usar con precaución)
-- **🎙️ commandsProcessor**: Procesador de comandos TTS (habilitado con `tts=true`)
+- **🎙️ commandsProcessor**: Procesador de comandos TTS y control remoto (habilitado con `tts=true` o `remoteAdmin`)
 
 Ver [documentación completa de efectos](docs/EFFECTS.md) para más detalles.
+
+## 🎛️ Control Remoto del Widget (remoteAdmin)
+
+🔐 **CARACTERÍSTICA DE ADMINISTRACIÓN REMOTA**
+
+CVTalk permite controlar las propiedades del widget en tiempo real desde el chat de Twitch, sin necesidad de recargar la página. Esta funcionalidad está **deshabilitada por defecto**.
+
+### Modos de Seguridad
+
+1. **`remoteAdmin=""` (default)**: Deshabilitado - nadie puede ejecutar comandos remotos
+2. **`remoteAdmin=streamer`**: Solo el streamer/broadcaster puede ejecutar comandos
+3. **`remoteAdmin=moderators`**: El streamer y los moderadores pueden ejecutar comandos
+
+### Comandos Disponibles
+
+| Comando | Descripción |
+|---------|-------------|
+| `!remoteAdmin <propiedad> <valor>` | Comando completo para cambiar propiedades |
+| `!cvsudo <propiedad> <valor>` | Alias corto del comando |
+
+### Propiedades Modificables
+
+| Propiedad | Tipo | Ejemplo |
+|-----------|------|---------|
+| `messageTTL` | number | `!cvsudo messageTTL 15000` |
+| `pato_bot` | boolean | `!remoteAdmin pato_bot true` |
+| `mute_bots` | boolean | `!cvsudo mute_bots false` |
+| `mute_replays` | boolean | `!remoteAdmin mute_replays true` |
+| `mute_prefixes` | string | `!cvsudo mute_prefixes !,.,/` |
+| `tts` | string | `!remoteAdmin tts true` |
+| `tts_accent` | string | `!cvsudo tts_accent es-MX` |
+| `tts_variant` | number | `!remoteAdmin tts_variant 2` |
+| `insecureHTML` | string | `!cvsudo insecureHTML onCommand` |
+
+### Propiedades Protegidas (NO modificables)
+
+- ❌ `remoteAdmin` - No se puede cambiar su propio nivel de seguridad
+- ❌ `baseUrl` - URL base del sistema
+- ❌ `channel` - Canal de Twitch conectado
+
+### Ejemplos de Uso
+
+```bash
+# Habilitar en modo streamer
+?channel=micanal&remoteAdmin=streamer
+
+# En el chat, el streamer puede escribir:
+!cvsudo pato_bot true          # Activa PatoBot
+!remoteAdmin messageTTL 20000  # Cambia TTL a 20 segundos
+!cvsudo tts_accent es-MX       # Cambia acento TTS a mexicano
+```
+
+```bash
+# Habilitar para moderadores también
+?channel=micanal&remoteAdmin=moderators
+
+# Ahora tanto el streamer como los mods pueden usar:
+!cvsudo mute_bots true
+!remoteAdmin insecureHTML onCommand
+```
+
+### ⚠️ Consideraciones de Seguridad
+
+- **Control total**: Los comandos remotos pueden cambiar cualquier configuración del widget
+- **Moderadores de confianza**: Solo usar modo `moderators` con mods de alta confianza
+- **Logs en consola**: Todos los comandos se registran en la consola del navegador
+- **Cambios en vivo**: Los cambios se aplican inmediatamente sin recargar
+
+### Casos de Uso
+
+- 🎮 **Streams interactivos**: Ajustar configuración en respuesta a eventos
+- 🎪 **Testing en vivo**: Probar diferentes configuraciones durante el stream
+- 🔧 **Debugging**: Cambiar parámetros para diagnosticar problemas
+- 🎨 **Personalización dinámica**: Adaptar el widget según el contenido
 
 ## ⚡ HTML en Mensajes (insecureHTML)
 

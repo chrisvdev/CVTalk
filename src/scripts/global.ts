@@ -31,7 +31,8 @@ export type Properties = {
   tts: string
   tts_accent: string
   tts_variant: number
-  insecureHTML: "" | "onCommand" | "onHighlight" 
+  insecureHTML: "" | "onCommand" | "onHighlight"
+  remoteAdmin: "" | "streamer" | "moderators"
   baseUrl: string
 }
 
@@ -58,6 +59,7 @@ const defaultProperties: Properties = {
   tts_accent: "es-AR",
   tts_variant: 1,
   insecureHTML: "",
+  remoteAdmin: "",
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 
