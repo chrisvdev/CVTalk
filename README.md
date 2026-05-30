@@ -110,6 +110,8 @@ Configura el widget mediante parámetros URL:
 | `tts_variant` | number | `1` | Variante de voz predeterminada (1-n) 🎙️ |
 | `insecureHTML` | string | `""` | ⚠️ Permitir HTML en mensajes: `"onCommand"` (con $html) o `"onHighlight"` ⚡ |
 | `remoteAdmin` | string | `""` | 🎛️ Control remoto: `"streamer"` (solo streamer) o `"moderators"` (streamer + mods) 🔐 |
+| `hl1Vox` | boolean | `false` | 🎮 Habilitar sistema de voz VOX de Half-Life 1 |
+| `hl1Suit` | boolean | `false` | 🦾 Habilitar sistema de voz del traje HEV de Half-Life 1 |
 
 ### Ejemplos
 
@@ -313,6 +315,149 @@ Usuario: !speak Hola chat
 
 La configuración se guarda en `localStorage` del navegador y persiste entre sesiones.
 
+## 🔊 Sistema de Audio
+
+CVTalk incluye un sistema robusto de gestión de audio que permite reproducir sonidos de forma centralizada y eficiente, con soporte para colas de reproducción secuencial y manejo automático de políticas de autoplay.
+
+### AudioProcessor
+
+El componente `AudioProcessor` es el núcleo del sistema de audio y proporciona:
+
+- **Carga dinámica de audios**: Carga archivos de audio bajo demanda desde URLs
+- **Sistema de colas**: Reproducción secuencial automática de múltiples audios
+- **Desbloqueo automático**: Manejo inteligente de políticas de autoplay de navegadores
+- **Control de volumen**: Ajuste de volumen global para todos los audios
+- **Gestión de memoria**: Los audios se crean y eliminan dinámicamente
+
+### Integración desde JavaScript
+
+```typescript
+const processor = window.OBSChat.audioProcessor;
+
+// Cargar un audio
+processor.loadAudio("notification", "/assets/notification.mp3");
+
+// Reproducir un audio inmediatamente
+processor.playAudio("notification");
+
+// Reproducir múltiples audios en secuencia
+processor.enqueueAudios("audio1 audio2 audio3");
+
+// Control de volumen
+processor.volume = 0.5; // 50% de volumen
+```
+
+## 🎮 Sistema de Voces de Half-Life 1
+
+CVTalk incluye dos sistemas completos de síntesis de voz basados en los icónicos audios de Half-Life 1, perfectos para agregar un toque nostálgico y retro-gaming a tu stream.
+
+### HL1 VOX (Sistema de Anuncios)
+
+🎙️ Sistema de voz sintética utilizado en Black Mesa para anuncios públicos y alertas del complejo.
+
+**Activación:**
+```
+?channel=micanal&hl1Vox=true
+```
+
+**Uso desde JavaScript:**
+```typescript
+const vox = window.OBSChat.hl1Vox;
+
+// Mensajes informativos (prefijo: "bloop")
+vox.log("system online");
+// Reproduce: "bloop" + "system" + "online"
+
+// Advertencias (prefijo: "buzwarn buzwarn")
+vox.warn("temperature critical");
+// Reproduce: "buzwarn" + "buzwarn" + "temperature" + "critical"
+
+// Errores (prefijo: "woop woop")
+vox.error("meltdown imminent");
+// Reproduce: "woop" + "woop" + "meltdown" + "imminent"
+```
+
+**Características:**
+- ✅ 500+ palabras del vocabulario VOX original
+- ✅ Soporte para números, alfabeto fonético NATO, y términos científicos
+- ✅ Carga automática desde CDN (GitHub)
+- ✅ Sin impacto en rendimiento (lazy loading)
+
+### HL1 Suit (Traje HEV)
+
+🦾 Sistema de voz del traje de protección de entornos peligrosos (HEV Suit) de Half-Life.
+
+**Activación:**
+```
+?channel=micanal&hl1Suit=true
+```
+
+**Uso desde JavaScript:**
+```typescript
+const suit = window.OBSChat.hl1Suit;
+
+// Mensajes informativos (prefijo: "boop")
+suit.log("power restored");
+// Reproduce: "boop" + "power" + "restored"
+
+// Advertencias (prefijo: "fuzz fuzz")
+suit.warn("health critical seek medic");
+// Reproduce: "fuzz" + "fuzz" + "health" + "critical" + "seek" + "medic"
+
+// Errores (prefijo: "buzz buzz")
+suit.error("warning evacuate area immediately");
+// Reproduce: "buzz" + "buzz" + "warning" + "evacuate" + "area" + "immediately"
+```
+
+**Características:**
+- ✅ 150+ clips de audio del traje HEV
+- ✅ Alertas de salud, armadura, y sistemas del traje
+- ✅ Notificaciones de armas y munición
+- ✅ Mensajes de inicio/apagado del traje
+- ✅ Carga automática desde CDN (GitHub)
+
+### Vocabulario Disponible
+
+**VOX**: Contiene palabras genéricas para construir frases como:
+- Números: `zero` a `one hundred`, `thousand`, `million`
+- Direcciones: `north`, `south`, `east`, `west`, `up`, `down`
+- Estados: `online`, `offline`, `activated`, `deactivated`, `nominal`
+- Alertas: `warning`, `danger`, `alert`, `alarm`, `emergency`
+- Instalaciones: `sector`, `level`, `chamber`, `reactor`, `laboratory`
+- Muchas más...
+
+**HEV Suit**: Contiene mensajes especializados del traje:
+- Estado: `power_level_is`, `armor_compromised`, `health_critical`
+- Médico: `administering_medical`, `morphine_shot`, `seek_medic`
+- Equipamiento: `get_medkit`, `weapon_pickup`, `ammo_depleted`
+- Sistema: `hev_logon`, `online`, `communications_on`
+- Y más...
+
+### Ejemplos de Uso Combinado
+
+```bash
+# Habilitar ambos sistemas
+?channel=micanal&hl1Vox=true&hl1Suit=true
+
+# Usar desde efectos personalizados o eventos
+```
+
+```typescript
+// Ejemplo: Notificar raid con VOX
+client.on("raid", (data) => {
+  window.OBSChat.hl1Vox?.log(`alert raid detected from ${data.username}`);
+});
+
+// Ejemplo: Alerta de suscripción con HEV Suit
+client.on("sub", (data) => {
+  window.OBSChat.hl1Suit?.warn("new subscriber detected");
+});
+```
+
+### Créditos
+
+Los audios de Half-Life 1 provienen del repositorio [sourcesounds/hl1](https://github.com/sourcesounds/hl1) y son propiedad de Valve Corporation.
+
 ## 🏗️ Estructura del Proyecto
 
 ```text
@@ -325,6 +470,7 @@ La configuración se guarda en `localStorage` del navegador y persiste entre ses
 │   └── favicon.ico
 ├── src/
 │   ├── components/         # Web Components
+│   │   ├── audio_processor/ # Gestor centralizado de audio
 │   │   ├── chat-view/      # Contenedor principal del chat
 │   │   └── user-message/   # Mensaje individual de usuario
 │   ├── lib/                # Utilidades y lógica de negocio
@@ -332,6 +478,8 @@ La configuración se guarda en `localStorage` del navegador y persiste entre ses
 │   │   │   ├── index.ts    # EfectsLoop core
 │   │   │   └── efects/     # Efectos disponibles
 │   │   │       └── pato_bot_tribute.ts
+│   │   ├── hl1_vox.ts      # Sistema VOX de Half-Life 1
+│   │   ├── hl1_suit.ts     # Sistema HEV Suit de Half-Life 1
 │   │   ├── get_curated_color.ts
 │   │   ├── get_ornament.ts
 │   │   └── mock_messages.ts

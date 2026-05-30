@@ -1,3 +1,4 @@
+import type AudioProcessor from "@/components/audio_processor";
 import type { Effect } from "../index"
 import { type UserMessageInfoType } from "mtmi";
 
@@ -12,12 +13,7 @@ import { type UserMessageInfoType } from "mtmi";
  * @tribute Nivek el pato / PatitoDev - Creador original de PatoBot
  */
 export default class PatoBotTribute {
-  /**
-   * Elemento de audio para reproducir el sonido de pato
-   * @private
-   * @type {HTMLAudioElement}
-   */
-  private quack: HTMLAudioElement
+  private audioProcessor: AudioProcessor
 
   /**
    * Indica si el audio ha sido desbloqueado por interacción del usuario
@@ -39,6 +35,7 @@ export default class PatoBotTribute {
    * la reproducción automática en navegadores
    */
   constructor() {
+    this.audioProcessor = window.OBSChat.audioProcessor as AudioProcessor
     // Obtener BASE_URL del sistema global tipado
     const { baseUrl } = window.OBSChat.properties || { baseUrl: '/' };
 
@@ -53,41 +50,7 @@ export default class PatoBotTribute {
     ]
 
     // Crear elemento de audio con precarga automática
-    this.quack = new Audio(`${baseUrl}assets/audio/quack.mp3`)
-    this.quack.preload = "auto"  // Precarga automática (mejor que link preload para uso bajo demanda)
-    this.quack.volume = 0.5
-    document.body.appendChild(this.quack)
-    this.unlockAudio()
-  }
-
-  /**
-   * Configura listeners para desbloquear el audio en la primera interacción del usuario
-   * Necesario para cumplir con las políticas de autoplay de los navegadores modernos
-   * @private
-   */
-  private unlockAudio() {
-    const unlock = async () => {
-      try {
-        // Intenta reproducir en silencio para desbloquear
-        this.quack.volume = 0
-        await this.quack.play()
-        this.quack.pause()
-        this.quack.currentTime = 0
-        this.quack.volume = 1
-        this.audioUnlocked = true
-        console.log("Audio desbloqueado correctamente")
-        // Remover listeners una vez desbloqueado
-        document.removeEventListener("click", unlock)
-        document.removeEventListener("touchstart", unlock)
-        document.removeEventListener("keydown", unlock)
-      } catch {
-        console.log("Esperando interacción del usuario para desbloquear audio")
-      }
-    }
-    // Intentar desbloquear en múltiples eventos de usuario
-    document.addEventListener("click", unlock, { once: true })
-    document.addEventListener("touchstart", unlock, { once: true })
-    document.addEventListener("keydown", unlock, { once: true })
+    this.audioProcessor.loadAudio("quack", `${baseUrl}assets/audio/quack.mp3`)
   }
 
   /**
@@ -108,15 +71,7 @@ export default class PatoBotTribute {
    * @async
    */
   private async playQuack() {
-    try {
-      this.quack.currentTime = 0
-      await this.quack.play()
-    } catch (error) {
-      console.warn("No se pudo reproducir el audio:", error)
-      if (!this.audioUnlocked) {
-        console.log("Haz click en la página para habilitar los sonidos")
-      }
-    }
+      this.audioProcessor.playAudio("quack")
   }
 
   /**

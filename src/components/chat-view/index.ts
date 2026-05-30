@@ -2,10 +2,7 @@ import EfectsLoop from "@/lib/efects_loop";
 import startEfects from "@/lib/efects_loop/start_efects";
 import useTemplate from "@/lib/use_template";
 import type { UserMessageInfoType } from "mtmi";
-
-const UserMessage = window.OBSChat.appCustomElements?.[
-  "user-message"
-] as CustomElementConstructor;
+import { UserMessage } from "../user-message";
 
 /**
  * Custom element para mostrar una lista de mensajes de chat

@@ -9,6 +9,8 @@ import type ChatView from "@components/chat-view";
 import badges from "mtmi-async-badges";
 import getPythonesaMessage from "@/lib/mock_messages";
 import { client } from "mtmi";
+import HL1Vox from "@/lib/hl1_vox";
+import HL1Suit from "@/lib/hl1_suit";
 
 /**
  * Obtiene la referencia al custom element chat-view
@@ -32,6 +34,7 @@ if (channel) {
    * Conecta el cliente de IRC con las credenciales y configuración necesaria
    * Usa el proveedor de avatares 'decapi' y carga los badges de Twitch
    */
+  // @ts-expect-error - tipo en el paquete de mtmi esta roto
   client.connect({ channels: [channel], badges, avatarProvider: "decapi", });
 
   /**
@@ -72,6 +75,23 @@ if (channel) {
   client.on("r9k_on", (data) => console.log("MODE: ", data));
   client.on("r9k_off", (data) => console.log("MODE: ", data));
   client.on("raw", (data) => console.log("RAW: ", data));
+  
+  /**
+   * Inicializa el sistema de voz VOX de Half-Life 1 si está habilitado en las propiedades
+   * Carga y registra todos los audios del sistema VOX para reproducción de mensajes sintéticos
+   */
+  if (window.OBSChat.properties?.hl1Vox) {
+    HL1Vox.loadHL1VoxInstance();
+  }
+  
+  /**
+   * Inicializa el sistema de voz del traje HEV de Half-Life 1 si está habilitado en las propiedades
+   * Carga y registra todos los audios del traje para alertas y notificaciones del sistema
+   */
+  if (window.OBSChat.properties?.hl1Suit) {
+    console.log("Cargando HL1Suit...");
+    HL1Suit.loadHL1SuitInstance();
+  }
 } else {
   chatView.newMessage(
     getPythonesaMessage(
