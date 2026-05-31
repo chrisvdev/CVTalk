@@ -1,23 +1,23 @@
 {
   "soundsRepositoryUrl": "notifications",
   "onSub": {
-    "messageTemplate": "",
+    "messageTemplate": "{user} se ha suscrito! 🎉",
     "soundEffect": ["ba_yell"]
   },
   "onResub": {
-    "messageTemplate": "",
+    "messageTemplate": "{user} se ha suscrito por {months} meses! 🎉",
     "soundEffect": ["ba_yell"]
   },
   "onSubGift": {
-    "messageTemplate": "",
+    "messageTemplate": "{gifter} ha regalado {months} meses de suscripción a {recipient} ({plan})! 🎉",
     "soundEffect": ["ba_yell"]
   },
   "onSubMysteryGift": {
-    "messageTemplate": "",
+    "messageTemplate": "{user} ha recibido un regalo misterioso de suscripción! 🎉",
     "soundEffect": ["ba_yell"]
   },
   "onPrimePaidUpgrade": {
-    "messageTemplate": "",
+    "messageTemplate": "{user} ha mejorado su suscripción a Prime! 🎉",
     "soundEffect": ["ba_yell"]
   },
   "onCommunityPayforward": {
@@ -65,8 +65,8 @@
     "soundEffect": [""]
   },
   "onBits": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "{user} ha donado {bits} bits! 🎉",
+    "soundEffect": ["ba_yell"]
   },
   "onAction": {
     "messageTemplate": "",

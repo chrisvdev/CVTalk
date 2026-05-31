@@ -3,7 +3,9 @@
  * @module components/notifications-view
  */
 
+import { createTimeout } from "@/lib/clean_timers";
 import SoundsBank, { type SoundRepositoryConfigUrl } from "@/lib/sounds_bank";
+import type SoundsRepository from "@/lib/sounds_repository";
 import type { SoundName } from "@/lib/sounds_repository";
 import useTemplate from "@/lib/use_template";
 import {
@@ -121,16 +123,16 @@ export const defaultNotificationsConfigUrl =
 
 /**
  * Custom element para gestionar y mostrar notificaciones de eventos de Twitch
- * 
+ *
  * Escucha todos los eventos de Twitch (suscripciones, raids, bits, etc.) y
  * los procesa según la configuración cargada desde un archivo JSON.
- * 
+ *
  * @class NotificationsView
  * @extends {HTMLElement}
  * @example
  * // En HTML
  * <notifications-view></notifications-view>
- * 
+ *
  * // En TypeScript
  * const notificationsView = document.querySelector('notifications-view');
  */
@@ -141,14 +143,16 @@ export default class NotificationsView extends HTMLElement {
    * @type {SoundsBank}
    */
   private soundsBank = SoundsBank.getInstance();
-  
+
+  private soundsRepository: SoundsRepository | null = null;
+
   /**
    * Configuración de notificaciones cargada
    * @private
    * @type {NotificationsConfig | null}
    */
   private config: NotificationsConfig | null = null;
-  
+
   /**
    * Valida que la configuración de notificaciones tenga todos los campos requeridos
    * @private
@@ -217,47 +221,55 @@ export default class NotificationsView extends HTMLElement {
     }
     return true;
   }
-  
+
   /**
    * Constructor del elemento custom NotificationsView
    * Inicializa el template, carga la configuración y registra todos los event listeners
    */
   constructor() {
     super();
-    useTemplate(this, "#notifications-view", ".notifications-view");
-    this.loadNotificationsConfig();
-    client.on("sub", this.onSub.bind(this));
-    client.on("resub", this.onResub.bind(this));
-    client.on("subgift", this.onSubGift.bind(this));
-    client.on("submysterygift", this.onSubMysteryGift.bind(this));
-    client.on("communitypayforward", this.onCommunityPayforward.bind(this));
-    client.on("standardpayforward", this.onStandardPayforward.bind(this));
-    client.on("giftpaidupgrade", this.onGiftPaidUpgrade.bind(this));
-    client.on("primepaidupgrade", this.onPrimePaidUpgrade.bind(this));
-    client.on("clearchat", this.onClearChat.bind(this));
-    client.on("ban", this.onBan.bind(this));
-    client.on("timeout", this.onTimeout.bind(this));
-    client.on("clearmsg", this.onClearMsg.bind(this));
-    client.on("raid", this.onRaid.bind(this));
-    client.on("viewermilestone", this.onViewerMilestone.bind(this));
-    client.on("roomstate", this.onRoomState.bind(this));
-    client.on("announcement", this.onAnnouncement.bind(this));
-    client.on("bits", this.onBits.bind(this));
-    client.on("action", this.onAction.bind(this));
-    // MODES
-    client.on("emote_only_on", this.onEmoteOnlyOn.bind(this));
-    client.on("emote_only_off", this.onEmoteOnlyOff.bind(this));
-    client.on("followers_on", this.onFollowersOn.bind(this));
-    client.on("followers_off", this.onFollowersOff.bind(this));
-    client.on("slow_on", this.onSlowOn.bind(this));
-    client.on("slow_off", this.onSlowOff.bind(this));
-    client.on("subs_on", this.onSubsOn.bind(this));
-    client.on("subs_off", this.onSubsOff.bind(this));
-    client.on("r9k_on", this.onR9kOn.bind(this));
-    client.on("r9k_off", this.onR9kOff.bind(this));
-    client.on("raw", this.onRaw.bind(this));
+    if (window.OBSChat.properties?.experimental_features) {
+      useTemplate(this, "#notifications-view", ".notifications-view");
+      this.loadNotificationsConfig();
+      client.on("sub", this.onSub.bind(this));
+      client.on(
+        "resub",
+        this.onResub.bind(this) as unknown as (data: SubInfoType) => void,
+      );
+      client.on("subgift", this.onSubGift.bind(this));
+      client.on("submysterygift", this.onSubMysteryGift.bind(this));
+      client.on("communitypayforward", this.onCommunityPayforward.bind(this));
+      client.on("standardpayforward", this.onStandardPayforward.bind(this));
+      client.on("giftpaidupgrade", this.onGiftPaidUpgrade.bind(this));
+      client.on("primepaidupgrade", this.onPrimePaidUpgrade.bind(this));
+      client.on("clearchat", this.onClearChat.bind(this));
+      client.on("ban", this.onBan.bind(this));
+      client.on("timeout", this.onTimeout.bind(this));
+      client.on("clearmsg", this.onClearMsg.bind(this));
+      client.on("raid", this.onRaid.bind(this));
+      client.on("viewermilestone", this.onViewerMilestone.bind(this));
+      client.on("roomstate", this.onRoomState.bind(this));
+      client.on("announcement", this.onAnnouncement.bind(this));
+      client.on(
+        "bits",
+        this.onBits.bind(this) as unknown as (data: BitsInfoType) => void,
+      );
+      client.on("action", this.onAction.bind(this));
+      // MODES
+      client.on("emote_only_on", this.onEmoteOnlyOn.bind(this));
+      client.on("emote_only_off", this.onEmoteOnlyOff.bind(this));
+      client.on("followers_on", this.onFollowersOn.bind(this));
+      client.on("followers_off", this.onFollowersOff.bind(this));
+      client.on("slow_on", this.onSlowOn.bind(this));
+      client.on("slow_off", this.onSlowOff.bind(this));
+      client.on("subs_on", this.onSubsOn.bind(this));
+      client.on("subs_off", this.onSubsOff.bind(this));
+      client.on("r9k_on", this.onR9kOn.bind(this));
+      client.on("r9k_off", this.onR9kOff.bind(this));
+      client.on("raw", this.onRaw.bind(this));
+    }
   }
-  
+
   /**
    * Carga la configuración de notificaciones desde una URL
    * @private
@@ -286,7 +298,12 @@ export default class NotificationsView extends HTMLElement {
             `Notifications config loaded successfully from ${fullUrl}.`,
           );
           if (config.soundsRepositoryUrl) {
-            this.soundsBank.loadRepository(config.soundsRepositoryUrl);
+            this.soundsBank.loadRepository(
+              config.soundsRepositoryUrl,
+              (repository) => {
+                this.soundsRepository = repository;
+              },
+            );
           }
         } else {
           console.error(
@@ -301,7 +318,38 @@ export default class NotificationsView extends HTMLElement {
         );
       });
   }
-  
+
+  /**
+   * Renderiza una notificación en el contenedor
+   * Crea un timeout automático para eliminar el mensaje después del tiempo configurado
+   * @private
+   * @param {HTMLSpanElement} message - Elemento HTML a renderizar
+   * @returns {void}
+   */
+  private renderNotification(message: HTMLSpanElement) {
+    const container = this.querySelector(".notifications-view");
+    if (container) {
+      message.id = createTimeout(() => {
+        message.remove();
+      }, window.OBSChat.properties?.messageTTL || 5000).toString();
+      container.appendChild(message);
+    } else {
+      console.error(
+        "Failed to render notification: Container element not found.",
+      );
+    }
+  }
+
+  /**
+   * Obtiene un índice aleatorio de un array
+   * @private
+   * @param {any[]} array - Array del cual obtener el índice
+   * @returns {number} Índice aleatorio entre 0 y array.length - 1
+   */
+  private getRandomIndex(array: any[]): number {
+    return Math.floor(Math.random() * array.length);
+  }
+
   /**
    * Maneja el evento de nueva suscripción
    * @private
@@ -312,49 +360,142 @@ export default class NotificationsView extends HTMLElement {
     messageInfo: { message },
     userInfo: { displayName },
   }: SubNoticeType) {
-    console.debug("Not Implemented SUB: ", { message, displayName });
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      // si no hay plantilla, no se muestra notificación ni se reproduce sonido
+      const finalMessage = messageTemplate.replace("{user}", displayName);
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      this.renderNotification(message);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
-  
+
   /**
    * Maneja el evento de resuscripción
    * @private
    * @param {SubInfoType} data - Información de la resuscripción
    * @returns {void}
    */
-  private onResub(data: SubInfoType) {
-    console.debug("Not Implemented RESUB: ", data);
+  private onResub({
+    messageInfo: { message },
+    userInfo: { displayName },
+    // @ts-expect-error - cumulativeMonths no está documentado oficialmente pero está presente en los datos de resub
+    subInfo: { cumulativeMonths },
+  }: SubNoticeType) {
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      // si no hay plantilla, no se muestra notificación ni se reproduce sonido
+      const finalMessage = messageTemplate
+        .replace("{user}", displayName)
+        .replace("{months}", cumulativeMonths.toString());
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      this.renderNotification(message);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
-  
+
   /**
    * Maneja el evento de regalo de suscripción
    * @private
    * @param {GiftInfoType} data - Información del regalo
    * @returns {void}
    */
-  private onSubGift(data: GiftInfoType) {
-    console.debug("Not Implemented SUBGIFT: ", data);
+  private onSubGift({
+    gifterDisplayName,
+    giftMonths,
+    isAnonymous,
+    recipientDisplayName,
+    subPlan: { planName },
+  }: GiftInfoType) {
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      // si no hay plantilla, no se muestra notificación ni se reproduce sonido
+      const finalMessage = messageTemplate
+        .replace("{gifter}", isAnonymous ? "Anonymous user" : gifterDisplayName)
+        .replace("{months}", giftMonths.toString())
+        .replace("{recipient}", recipientDisplayName)
+        .replace("{plan}", planName);
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
-  
+
   /**
    * Maneja el evento de regalo misterioso de suscripciones
    * @private
    * @param {MysteryGiftInfoType} data - Información del regalo misterioso
    * @returns {void}
    */
-  private onSubMysteryGift(data: MysteryGiftInfoType) {
-    console.debug("Not Implemented SUBMYSTERYGIFT: ", data);
+  private onSubMysteryGift({
+    isAnonymous,
+    massGiftCount,
+    senderUsername,
+    subPlan,
+  }: MysteryGiftInfoType) {
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      // si no hay plantilla, no se muestra notificación ni se reproduce sonido
+      const finalMessage = messageTemplate
+        .replace("{gifter}", isAnonymous ? "Anonymous user" : senderUsername)
+        .replace("{months}", massGiftCount.toString())
+        .replace("{recipient}", senderUsername)
+        .replace("{plan}", subPlan);
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
-  
+
   /**
    * Maneja el evento de upgrade de suscripción Prime
    * @private
    * @param {PrimePaidUpgradeInfoType} data - Información del upgrade
    * @returns {void}
    */
-  private onPrimePaidUpgrade(data: PrimePaidUpgradeInfoType) {
-    console.debug("Not Implemented PRIMEPAIDUPGRADE: ", data);
+  private onPrimePaidUpgrade({
+    displayName,
+    subPlan,
+  }: PrimePaidUpgradeInfoType) {
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      // si no hay plantilla, no se muestra notificación ni se reproduce sonido
+      const finalMessage = messageTemplate
+        .replace("{user}", displayName)
+        .replace("{plan}", subPlan);
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
-  
+
   /**
    * Maneja el evento de pago adelantado de comunidad
    * @private
@@ -364,7 +505,7 @@ export default class NotificationsView extends HTMLElement {
   private onCommunityPayforward(data: CommunityPayforwardInfoType) {
     console.debug("Not Implemented COMMUNITYPAYFORWARD: ", data);
   }
-  
+
   /**
    * Maneja el evento de pago adelantado estándar
    * @private
@@ -374,7 +515,7 @@ export default class NotificationsView extends HTMLElement {
   private onStandardPayforward(data: StandardPayforwardInfoType) {
     console.debug("Not Implemented STANDARDPAYFORWARD: ", data);
   }
-  
+
   /**
    * Maneja el evento de upgrade pagado de regalo
    * @private
@@ -384,7 +525,7 @@ export default class NotificationsView extends HTMLElement {
   private onGiftPaidUpgrade(data: GiftPaidUpgradeInfoType) {
     console.debug("Not Implemented GIFTPAIDUPGRADE: ", data);
   }
-  
+
   /**
    * Maneja el evento de limpieza de chat
    * @private
@@ -394,7 +535,7 @@ export default class NotificationsView extends HTMLElement {
   private onClearChat(data: ClearChatInfoType) {
     console.debug("Not Implemented CLEARCHAT: ", data);
   }
-  
+
   /**
    * Maneja el evento de baneo de usuario
    * @private
@@ -404,7 +545,7 @@ export default class NotificationsView extends HTMLElement {
   private onBan(data: BanInfoType) {
     console.debug("Not Implemented BAN: ", data);
   }
-  
+
   /**
    * Maneja el evento de timeout de usuario
    * @private
@@ -414,7 +555,7 @@ export default class NotificationsView extends HTMLElement {
   private onTimeout(data: TimeoutInfoType) {
     console.debug("Not Implemented TIMEOUT: ", data);
   }
-  
+
   /**
    * Maneja el evento de eliminación de mensaje
    * @private
@@ -424,7 +565,7 @@ export default class NotificationsView extends HTMLElement {
   private onClearMsg(data: ClearMsgInfoType) {
     console.debug("Not Implemented CLEARMSG: ", data);
   }
-  
+
   /**
    * Maneja el evento de raid
    * @private
@@ -434,7 +575,7 @@ export default class NotificationsView extends HTMLElement {
   private onRaid(data: RaidInfoType) {
     console.debug("Not Implemented RAID: ", data);
   }
-  
+
   /**
    * Maneja el evento de hito de espectador
    * @private
@@ -444,7 +585,7 @@ export default class NotificationsView extends HTMLElement {
   private onViewerMilestone(data: ViewerMilestoneType) {
     console.debug("Not Implemented VIEWERMILESTONE: ", data);
   }
-  
+
   /**
    * Maneja el evento de cambio de estado de sala
    * @private
@@ -454,7 +595,7 @@ export default class NotificationsView extends HTMLElement {
   private onRoomState(data: RoomStateInfoType) {
     console.debug("Not Implemented ROOMSTATE: ", data);
   }
-  
+
   /**
    * Maneja el evento de anuncio
    * @private
@@ -464,17 +605,37 @@ export default class NotificationsView extends HTMLElement {
   private onAnnouncement(data: AnnouncementInfoType) {
     console.debug("Not Implemented ANNOUNCEMENT: ", data);
   }
-  
+
   /**
    * Maneja el evento de bits (Cheers)
    * @private
    * @param {BitsInfoType} data - Información de los bits
    * @returns {void}
    */
-  private onBits(data: BitsInfoType) {
-    console.debug("Not Implemented BITS: ", data);
+  private onBits({
+    userInfo: { displayName },
+    // @ts-expect-error - bits no está documentado oficialmente pero está presente en los datos de bits
+    bitsInfo: { bits },
+    messageInfo: { message },
+  }: UserMessageInfoType) {
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      // si no hay plantilla, no se muestra notificación ni se reproduce sonido
+      const finalMessage = messageTemplate
+        .replace("{user}", displayName)
+        .replace("{bits}", bits.toString());
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      this.renderNotification(message);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
-  
+
   /**
    * Maneja el evento de acción (/me)
    * @private
@@ -484,7 +645,7 @@ export default class NotificationsView extends HTMLElement {
   private onAction(data: UserMessageInfoType) {
     console.debug("Not Implemented ACTION: ", data);
   }
-  
+
   /**
    * Maneja la activación del modo solo emotes
    * @private
@@ -494,7 +655,7 @@ export default class NotificationsView extends HTMLElement {
   private onEmoteOnlyOn(data: NoticeGroupType) {
     console.debug("Not Implemented EMOTE_ONLY_ON: ", data);
   }
-  
+
   /**
    * Maneja la desactivación del modo solo emotes
    * @private
@@ -504,7 +665,7 @@ export default class NotificationsView extends HTMLElement {
   private onEmoteOnlyOff(data: NoticeGroupType) {
     console.debug("Not Implemented EMOTE_ONLY_OFF: ", data);
   }
-  
+
   /**
    * Maneja la activación del modo solo seguidores
    * @private
@@ -514,7 +675,7 @@ export default class NotificationsView extends HTMLElement {
   private onFollowersOn(data: NoticeGroupType) {
     console.debug("Not Implemented FOLLOWERS_ON: ", data);
   }
-  
+
   /**
    * Maneja la desactivación del modo solo seguidores
    * @private
@@ -524,7 +685,7 @@ export default class NotificationsView extends HTMLElement {
   private onFollowersOff(data: NoticeGroupType) {
     console.debug("Not Implemented FOLLOWERS_OFF: ", data);
   }
-  
+
   /**
    * Maneja la activación del modo lento
    * @private
@@ -534,7 +695,7 @@ export default class NotificationsView extends HTMLElement {
   private onSlowOn(data: NoticeGroupType) {
     console.debug("Not Implemented SLOW_ON: ", data);
   }
-  
+
   /**
    * Maneja la desactivación del modo lento
    * @private
@@ -544,7 +705,7 @@ export default class NotificationsView extends HTMLElement {
   private onSlowOff(data: NoticeGroupType) {
     console.debug("Not Implemented SLOW_OFF: ", data);
   }
-  
+
   /**
    * Maneja la activación del modo solo suscriptores
    * @private
@@ -554,7 +715,7 @@ export default class NotificationsView extends HTMLElement {
   private onSubsOn(data: NoticeGroupType) {
     console.debug("Not Implemented SUBS_ON: ", data);
   }
-  
+
   /**
    * Maneja la desactivación del modo solo suscriptores
    * @private
@@ -564,7 +725,7 @@ export default class NotificationsView extends HTMLElement {
   private onSubsOff(data: NoticeGroupType) {
     console.debug("Not Implemented SUBS_OFF: ", data);
   }
-  
+
   /**
    * Maneja la activación del modo R9K (mensajes únicos)
    * @private
@@ -574,7 +735,7 @@ export default class NotificationsView extends HTMLElement {
   private onR9kOn(data: NoticeGroupType) {
     console.debug("Not Implemented R9K_ON: ", data);
   }
-  
+
   /**
    * Maneja la desactivación del modo R9K
    * @private
@@ -584,7 +745,7 @@ export default class NotificationsView extends HTMLElement {
   private onR9kOff(data: NoticeGroupType) {
     console.debug("Not Implemented R9K_OFF: ", data);
   }
-  
+
   /**
    * Maneja eventos raw (sin procesar) de IRC
    * @private

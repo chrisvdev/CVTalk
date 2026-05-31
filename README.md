@@ -108,6 +108,7 @@ Configura el widget mediante parámetros URL:
 | `tts` | string | `""` | Habilitar funcionalidad TTS (Text-to-Speech) 🔊 |
 | `tts_accent` | string | `"es-AR"` | Acento predeterminado para TTS (ej: es-AR, en-US) 🌍 |
 | `tts_variant` | number | `1` | Variante de voz predeterminada (1-n) 🎙️ |
+| `experimental_features` | boolean | `false` | ⚡ Activar funcionalidades experimentales (notificaciones) |
 | `insecureHTML` | string | `""` | ⚠️ Permitir HTML en mensajes: `"onCommand"` (con $html) o `"onHighlight"` ⚡ |
 | `remoteAdmin` | string | `""` | 🎛️ Control remoto: `"streamer"` (solo streamer) o `"moderators"` (streamer + mods) 🔐 |
 
@@ -156,6 +157,91 @@ CVTalk incluye varios efectos que procesan los mensajes antes de mostrarlos:
 - **🎙️ commandsProcessor**: Procesador de comandos TTS y control remoto (habilitado con `tts=true` o `remoteAdmin`)
 
 Ver [documentación completa de efectos](docs/EFFECTS.md) para más detalles.
+
+## 🔔 Sistema de Notificaciones (Experimental)
+
+⚡ **FUNCIONALIDAD EXPERIMENTAL**
+
+CVTalk incluye un sistema de notificaciones para eventos de Twitch (subs, raids, bits, etc.) que se encuentra en fase experimental. Esta funcionalidad está **deshabilitada por defecto**.
+
+### Activación
+
+Para habilitar las notificaciones, añade el parámetro `experimental_features=true`:
+
+```bash
+?channel=micanal&experimental_features=true
+```
+
+### Características
+
+El sistema de notificaciones escucha y procesa más de 28 eventos diferentes de Twitch:
+
+- **Suscripciones**: Nuevas suscripciones, resubs, gift subs, mystery gifts
+- **Bits**: Donaciones con bits (Cheers)
+- **Raids**: Notificaciones de raids entrantes
+- **Moderación**: Bans, timeouts, mensajes eliminados
+- **Modos de sala**: Emote-only, subs-only, followers-only, slow mode, R9K
+
+### Configuración
+
+Las notificaciones se configuran mediante un archivo JSON que define:
+- **Plantillas de mensaje**: Texto con variables reemplazables (ej: `{user}`, `{bits}`, `{months}`)
+- **Efectos de sonido**: Array de sonidos aleatorios a reproducir
+- **Repositorio de sonidos**: URL del repositorio de audio a utilizar
+
+#### Archivo de Configuración por Defecto
+
+El sistema carga automáticamente la configuración desde:
+```
+/default_config_files/notifications.json
+```
+
+#### Ejemplo de Configuración
+
+```json
+{
+  "soundsRepositoryUrl": "notifications",
+  "onSub": {
+    "messageTemplate": "{user} se ha suscrito! 🎉",
+    "soundEffect": ["ba_yell"]
+  },
+  "onBits": {
+    "messageTemplate": "{user} ha donado {bits} bits! 🎉",
+    "soundEffect": ["ba_yell"]
+  }
+}
+```
+
+#### Variables Disponibles
+
+Cada tipo de evento tiene variables específicas que puedes usar en las plantillas:
+
+- **onSub, onResub**: `{user}`, `{months}`
+- **onSubGift**: `{gifter}`, `{recipient}`, `{months}`, `{plan}`
+- **onBits**: `{user}`, `{bits}`
+- **onRaid**: `{raider}`, `{viewers}`
+
+### Estado Actual
+
+**✅ Implementado:**
+- Sistema de configuración JSON
+- Carga de repositorios de sonidos
+- Renderizado de notificaciones con auto-expiración
+- Plantillas de mensaje con variables
+- Eventos: `onSub`, `onResub`, `onSubGift`, `onSubMysteryGift`, `onPrimePaidUpgrade`, `onBits`
+
+**🚧 Pendiente:**
+- Implementar lógica para eventos restantes (raid, moderación, etc.)
+- Sistema de animaciones y transiciones
+- Editor visual de configuración
+- Soporte para GIFs y stickers
+
+### ⚠️ Consideraciones
+
+- Esta es una funcionalidad en desarrollo activo
+- La API puede cambiar sin previo aviso
+- Algunos eventos pueden no funcionar completamente
+- Se recomienda usar solo en entornos de prueba
 
 ## 🎛️ Control Remoto del Widget (remoteAdmin)
 

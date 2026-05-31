@@ -49,7 +49,7 @@ export type SoundPrefix = string;
 
 /**
  * Configuración JSON para definir un repositorio de sonidos
- * 
+ *
  * @typedef {Object} SoundsRepositoryConfig
  * @property {SoundRepositoryName} name - Nombre único del repositorio
  * @property {SoundRepositoryBaseURL} baseURL - URL base donde están los archivos de audio
@@ -57,7 +57,7 @@ export type SoundPrefix = string;
  * @property {SoundPrefix} [logPrefix] - Prefijo opcional para mensajes tipo "log"
  * @property {SoundPrefix} [warnPrefix] - Prefijo opcional para mensajes tipo "warn"
  * @property {SoundPrefix} [errorPrefix] - Prefijo opcional para mensajes tipo "error"
- * 
+ *
  * @example
  * {
  *   "name": "hl1_vox",
@@ -78,15 +78,15 @@ export type SoundsRepositoryConfig = {
   logPrefix?: SoundPrefix;
   warnPrefix?: SoundPrefix;
   errorPrefix?: SoundPrefix;
-}
+};
 
 /**
  * Repositorio de sonidos que gestiona un conjunto temático de audios
- * 
+ *
  * Permite cargar, registrar y reproducir sonidos desde una configuración JSON.
  * Incluye métodos de conveniencia (log, warn, error) que automáticamente añaden
  * prefijos configurables para crear secuencias de audio complejas.
- * 
+ *
  * @class SoundsRepository
  * @example
  * const config = {
@@ -99,10 +99,10 @@ export type SoundsRepositoryConfig = {
  *   warnPrefix: "warning"
  * };
  * const repo = new SoundsRepository(config);
- * 
+ *
  * // Reproduce un sonido individual
  * repo.playSound("beep");
- * 
+ *
  * // Reproduce una secuencia con prefijo automático
  * repo.warn("system online"); // Reproduce: "warning system online"
  */
@@ -112,46 +112,46 @@ export default class SoundsRepository {
    * @private
    * @type {SoundRepositoryName}
    */
-  private name: SoundRepositoryName
-  
+  private name: SoundRepositoryName;
+
   /**
    * Referencia al AudioProcessor global para reproducir sonidos
    * @private
    * @type {AudioProcessor}
    */
-  private audioProcessor: AudioProcessor
-  
+  private audioProcessor: AudioProcessor;
+
   /**
    * URL base donde están alojados los archivos de audio
    * @private
    * @type {SoundRepositoryBaseURL}
    */
-  private baseURL: SoundRepositoryBaseURL
-  
+  private baseURL: SoundRepositoryBaseURL;
+
   /**
    * Prefijo para mensajes tipo "log"
    * @private
    * @type {SoundPrefix}
    */
-  private logPrefix: SoundPrefix
-  
+  private logPrefix: SoundPrefix;
+
   /**
    * Prefijo para mensajes tipo "warn"
    * @private
    * @type {SoundPrefix}
    */
-  private warnPrefix: SoundPrefix
-  
+  private warnPrefix: SoundPrefix;
+
   /**
    * Prefijo para mensajes tipo "error"
    * @private
    * @type {SoundPrefix}
    */
-  private errorPrefix: SoundPrefix
-  
+  private errorPrefix: SoundPrefix;
+
   /**
    * Normaliza un prefijo de sonido para asegurar que termine con espacio
-   * 
+   *
    * @private
    * @static
    * @param {SoundPrefix | undefined} prefix - Prefijo a normalizar
@@ -162,16 +162,19 @@ export default class SoundsRepository {
    * prefixCurator("error ")     // → "error "
    * prefixCurator(undefined)    // → ""
    */
-  private static prefixCurator(prefix: SoundPrefix | undefined, defaultPrefix: SoundPrefix = ""): SoundPrefix {
+  private static prefixCurator(
+    prefix: SoundPrefix | undefined,
+    defaultPrefix: SoundPrefix = "",
+  ): SoundPrefix {
     if (!prefix) return defaultPrefix;
     return prefix.endsWith(" ") ? prefix : prefix + " ";
   }
-  
+
   /**
    * Valida si una configuración de repositorio es válida
-   * 
+   *
    * Verifica que todos los campos obligatorios estén presentes y tengan el tipo correcto.
-   * 
+   *
    * @public
    * @static
    * @param {SoundsRepositoryConfig} config - Configuración a validar
@@ -184,31 +187,45 @@ export default class SoundsRepository {
    */
   public static validateConfig(config: SoundsRepositoryConfig): boolean {
     if (!config) {
-      console.error("SoundsRepositoryConfig inválida: el objeto de configuración es nulo o indefinido");
+      console.error(
+        "SoundsRepositoryConfig inválida: el objeto de configuración es nulo o indefinido",
+      );
       return false;
     }
     if (typeof config !== "object") {
-      console.error("SoundsRepositoryConfig inválida: se esperaba un objeto de configuración");
+      console.error(
+        "SoundsRepositoryConfig inválida: se esperaba un objeto de configuración",
+      );
       return false;
     }
     if (!config.name || typeof config.name !== "string") {
-      console.error("SoundsRepositoryConfig inválida: falta el campo 'name' o no es una cadena");
+      console.error(
+        "SoundsRepositoryConfig inválida: falta el campo 'name' o no es una cadena",
+      );
       return false;
     }
-    if (!config.baseURL || typeof config.baseURL !== "string") {
-      console.error("SoundsRepositoryConfig inválida: falta el campo 'baseURL' o no es una cadena");
+    if (typeof config.baseURL !== "string") {
+      console.error(
+        "SoundsRepositoryConfig inválida: falta el campo 'baseURL' o no es una cadena",
+      );
       return false;
     }
-    if (!config.sounds || typeof config.sounds !== "object" || Object.keys(config.sounds).length === 0) {
-      console.error("SoundsRepositoryConfig inválida: el campo 'sounds' debe contener al menos un sonido");
+    if (
+      !config.sounds ||
+      typeof config.sounds !== "object" ||
+      Object.keys(config.sounds).length === 0
+    ) {
+      console.error(
+        "SoundsRepositoryConfig inválida: el campo 'sounds' debe contener al menos un sonido",
+      );
       return false;
     }
     return true;
   }
-  
+
   /**
    * Crea una instancia de SoundsRepository y registra todos sus sonidos en el AudioProcessor
-   * 
+   *
    * @constructor
    * @param {SoundsRepositoryConfig} config - Configuración del repositorio
    * @throws {Error} Si el AudioProcessor no está inicializado
@@ -229,7 +246,10 @@ export default class SoundsRepository {
     this.audioProcessor = window.OBSChat.audioProcessor as AudioProcessor;
     const audioProcessor = window.OBSChat.audioProcessor;
     if (!audioProcessor) {
-      console.error("AudioProcessor no encontrado. Asegúrate de que el componente AudioProcessor esté inicializado antes de cargar los sonidos de " + this.name);
+      console.error(
+        "AudioProcessor no encontrado. Asegúrate de que el componente AudioProcessor esté inicializado antes de cargar los sonidos de " +
+          this.name,
+      );
       return;
     }
     for (const [key, filename] of Object.entries(config.sounds)) {
@@ -237,10 +257,10 @@ export default class SoundsRepository {
       audioProcessor.loadAudio(`${this.name}_${key}`, url);
     }
   }
-  
+
   /**
    * Encola múltiples sonidos en secuencia añadiendo el alias del repositorio a cada palabra
-   * 
+   *
    * @private
    * @param {string} message - Mensaje con nombres de sonidos separados por espacios
    * @returns {void}
@@ -250,12 +270,17 @@ export default class SoundsRepository {
    * // Encolará: "hl1_vox_beep hl1_vox_online hl1_vox_ready"
    */
   private enqueWithAlias(message: string) {
-    this.audioProcessor.enqueueAudios(message.split(" ").map(word => `${this.name}_${word}`).join(" "));
+    this.audioProcessor.enqueueAudios(
+      message
+        .split(" ")
+        .map((word) => `${this.name}_${word}`)
+        .join(" "),
+    );
   }
-  
+
   /**
    * Reproduce un sonido individual del repositorio
-   * 
+   *
    * @public
    * @param {SoundName} soundName - Nombre del sonido a reproducir (sin el prefijo del repositorio)
    * @param {OnEndedCallback} [onEnded] - Callback que se ejecuta cuando termina la reproducción
@@ -267,10 +292,10 @@ export default class SoundsRepository {
   public playSound(soundName: SoundName, onEnded?: OnEndedCallback) {
     this.audioProcessor.playAudio(`${this.name}_${soundName}`, onEnded);
   }
-  
+
   /**
    * Encola una secuencia de sonidos con el prefijo "log" configurado
-   * 
+   *
    * @public
    * @param {string} message - Secuencia de nombres de sonidos separados por espacios
    * @returns {void}
@@ -281,10 +306,10 @@ export default class SoundsRepository {
   public log(message: string) {
     this.enqueWithAlias(`${this.logPrefix}${message}`);
   }
-  
+
   /**
    * Encola una secuencia de sonidos con el prefijo "warn" configurado
-   * 
+   *
    * @public
    * @param {string} message - Secuencia de nombres de sonidos separados por espacios
    * @returns {void}
@@ -295,10 +320,10 @@ export default class SoundsRepository {
   public warn(message: string) {
     this.enqueWithAlias(`${this.warnPrefix}${message}`);
   }
-  
+
   /**
    * Encola una secuencia de sonidos con el prefijo "error" configurado
-   * 
+   *
    * @public
    * @param {string} message - Secuencia de nombres de sonidos separados por espacios
    * @returns {void}

@@ -20,7 +20,9 @@ import type { UserMessageInfoType } from "mtmi"
  * @property {string} tts - Voz a utilizar para Text-to-Speech (TTS), si está habilitado
  * @property {string} tts_accent - Acento para la voz de TTS (ej: "es-AR")
  * @property {number} tts_variant - Variante de la voz de TTS (ej: 1, 2, etc.)
- * @property {boolean} insecureHTML - Permitir HTML inseguro en los mensajes
+ * @property {boolean} experimental_features - Activar funcionalidades experimentales (como notificaciones)
+ * @property {"" | "onCommand" | "onHighlight"} insecureHTML - Permitir HTML inseguro en los mensajes
+ * @property {"" | "streamer" | "moderators"} remoteAdmin - Nivel de permisos para administración remota
  */
 export type Properties = {
   channel?: string
@@ -32,6 +34,7 @@ export type Properties = {
   tts: string
   tts_accent: string
   tts_variant: number
+  experimental_features: boolean
   insecureHTML: "" | "onCommand" | "onHighlight"
   remoteAdmin: "" | "streamer" | "moderators"
   baseUrl: string
@@ -61,6 +64,7 @@ const defaultProperties: Properties = {
   tts_variant: 1,
   insecureHTML: "",
   remoteAdmin: "",
+  experimental_features: false,
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 
