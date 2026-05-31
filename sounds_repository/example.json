@@ -1,0 +1,11 @@
+{
+  "name": "",
+  "baseURL": "",
+  "sounds": {
+    "sound1": "relative_path/sound1.mp3",
+    "sound2": "relative_path/sound2.mp3"
+  },
+  "logPrefix": "",
+  "warnPrefix": "",
+  "errorPrefix": ""
+}

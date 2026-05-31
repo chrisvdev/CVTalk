@@ -5,8 +5,6 @@
  */
 
 import type AudioProcessor from "@/components/audio_processor"
-import type HL1Suit from "@/lib/hl1_suit"
-import type HL1Vox from "@/lib/hl1_vox"
 import type { UserMessageInfoType } from "mtmi"
 
 /**
@@ -36,8 +34,6 @@ export type Properties = {
   tts_variant: number
   insecureHTML: "" | "onCommand" | "onHighlight"
   remoteAdmin: "" | "streamer" | "moderators"
-  hl1Vox: boolean
-  hl1Suit: boolean
   baseUrl: string
 }
 
@@ -65,8 +61,6 @@ const defaultProperties: Properties = {
   tts_variant: 1,
   insecureHTML: "",
   remoteAdmin: "",
-  hl1Vox: false,
-  hl1Suit: false,
   baseUrl: '/' // Será sobrescrito por el valor inyectado desde Astro
 }
 
@@ -117,8 +111,6 @@ function parseProperties<T extends Record<string, any>>(
 export type OBSChat = {
   properties?: Properties
   audioProcessor?: AudioProcessor
-  hl1Vox?: HL1Vox
-  hl1Suit?: HL1Suit
   appCustomElements?: Record<string, CustomElementConstructor>
   addCustomElement: (name: string, constructor: CustomElementConstructor) => void
   messages: Record<string, Message>

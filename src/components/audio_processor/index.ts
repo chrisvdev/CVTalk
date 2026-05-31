@@ -1,10 +1,14 @@
+import SoundsBank from "@/lib/sounds_bank";
 import useTemplate from "@/lib/use_template";
 
 /**
  * Diccionario que mapea nombres de audios a sus URLs
  * @typedef {Record<string, string>} AudioBank
  */
-type AudioBank = Record<string, string>;
+type AudioRegister = Record<string, string>;
+
+export type OnEndedCallback = () => void;
+type OnEndedQueueCallbacks = OnEndedCallback[];
 
 /**
  * Custom Element para gestión centralizada de reproducción de audio
@@ -33,9 +37,9 @@ export default class AudioProcessor extends HTMLElement {
   /**
    * Banco de audios cargados (nombre -> URL)
    * @private
-   * @type {AudioBank}
+   * @type {AudioRegister}
    */
-  private audioBank: AudioBank = {};
+  private audioRegister: AudioRegister = {};
   
   /**
    * Cola de nombres de audios pendientes de reproducción
@@ -64,6 +68,10 @@ export default class AudioProcessor extends HTMLElement {
    * @type {boolean}
    */
   private audioUnlocked: boolean = false
+
+  private soundBank: SoundsBank = SoundsBank.getInstance();
+
+  private onEndedCallbacks: OnEndedQueueCallbacks = [];
   
   /**
    * Crea una instancia de AudioProcessor
@@ -77,6 +85,12 @@ export default class AudioProcessor extends HTMLElement {
     this.loadAudio("_comma", "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/_comma.wav");
     this.unlockAudio() // Configurar desbloqueo de audio en la primera interacción
     window.OBSChat.audioProcessor = this; // Registrar instancia en el sistema global tipado
+    this.soundBank.loadRepository("hl1_vox",(hl1_vox) => {
+      hl1_vox.warn("vox_login")
+    })
+    this.soundBank.loadRepository("hl1_suit",(hl1_suit) => {
+      hl1_suit.warn("hev_logon communications_on voice_on safe_day")
+    })
   }
   
   /**
@@ -93,10 +107,10 @@ export default class AudioProcessor extends HTMLElement {
    * ```
    */
   public loadAudio(name: string, url: string) {
-    if (this.audioBank[name]) {
+    if (this.audioRegister[name]) {
       console.warn(`Audio with name "${name}" already exists. It will be overwritten.`);
     }
-    this.audioBank[name] = url;
+    this.audioRegister[name] = url;
   }
   
   /**
@@ -114,13 +128,13 @@ export default class AudioProcessor extends HTMLElement {
    * });
    * ```
    */
-  public playAudio(name: string, onEnded?: () => void) {
+  public playAudio(name: string, onEnded?: OnEndedCallback) {
     if (!this.audioUnlocked) {
       console.warn("Audio is locked. Please interact with the page to unlock it.");
       if (onEnded) onEnded();
       return;
     }
-    const audio = this.audioBank[name] ? new Audio(this.audioBank[name]) : null;
+    const audio = this.audioRegister[name] ? new Audio(this.audioRegister[name]) : null;
     if (!audio) {
       console.error(`Audio with name "${name}" not found.`);
       if (onEnded) onEnded();
@@ -151,12 +165,20 @@ export default class AudioProcessor extends HTMLElement {
       return;
     }
     if (this.isPlaying || this.audioQueue.length === 0) return;
-    const nextAudioName = this.audioQueue.shift()!;
-    this.isPlaying = true;
-    this.playAudio(nextAudioName, () => {
+    const nextAudioName = this.audioQueue.shift();
+    if (nextAudioName) {
+      this.isPlaying = true;
+      this.playAudio(nextAudioName, () => {
+        this.isPlaying = false;
+        this.playFromQueue();
+      });
+    } else {
       this.isPlaying = false;
-      this.playFromQueue();
-    });
+      while (this.onEndedCallbacks.length > 0) {
+        const callback = this.onEndedCallbacks.shift();
+        if (callback) callback();
+      }
+    }
   }
   
   /**
@@ -173,8 +195,9 @@ export default class AudioProcessor extends HTMLElement {
    * // Se reproducirán uno después del otro
    * ```
    */
-  public enqueueAudio(name: string) {
+  public enqueueAudio(name: string, onEnded?: OnEndedCallback) {
     this.audioQueue.push(name);
+    if (onEnded) this.onEndedCallbacks.push(onEnded);
     this.playFromQueue();
   }
   
@@ -191,8 +214,9 @@ export default class AudioProcessor extends HTMLElement {
    * // Se reproducirán "hello", "world", "welcome" en secuencia
    * ```
    */
-  public enqueueAudios(names: string) {
+  public enqueueAudios(names: string, onEnded?: OnEndedCallback) {
     this.audioQueue.push(...names.split(" ").map(n => n.trim()));
+    if (onEnded) this.onEndedCallbacks.push(onEnded);
     this.playFromQueue();
   }
   

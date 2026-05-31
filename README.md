@@ -110,8 +110,6 @@ Configura el widget mediante parámetros URL:
 | `tts_variant` | number | `1` | Variante de voz predeterminada (1-n) 🎙️ |
 | `insecureHTML` | string | `""` | ⚠️ Permitir HTML en mensajes: `"onCommand"` (con $html) o `"onHighlight"` ⚡ |
 | `remoteAdmin` | string | `""` | 🎛️ Control remoto: `"streamer"` (solo streamer) o `"moderators"` (streamer + mods) 🔐 |
-| `hl1Vox` | boolean | `false` | 🎮 Habilitar sistema de voz VOX de Half-Life 1 |
-| `hl1Suit` | boolean | `false` | 🦾 Habilitar sistema de voz del traje HEV de Half-Life 1 |
 
 ### Ejemplos
 
@@ -347,112 +345,149 @@ processor.enqueueAudios("audio1 audio2 audio3");
 processor.volume = 0.5; // 50% de volumen
 ```
 
-## 🎮 Sistema de Voces de Half-Life 1
+## � Sistema de Repositorios de Sonidos (SoundsBank)
 
-CVTalk incluye dos sistemas completos de síntesis de voz basados en los icónicos audios de Half-Life 1, perfectos para agregar un toque nostálgico y retro-gaming a tu stream.
+CVTalk incluye un sistema modular y extensible para cargar y gestionar repositorios de sonidos desde configuraciones JSON remotas. Este sistema permite añadir fácilmente conjuntos temáticos de audio sin necesidad de recompilar la aplicación.
 
-### HL1 VOX (Sistema de Anuncios)
+### Arquitectura
 
-🎙️ Sistema de voz sintética utilizado en Black Mesa para anuncios públicos y alertas del complejo.
-
-**Activación:**
 ```
-?channel=micanal&hl1Vox=true
-```
-
-**Uso desde JavaScript:**
-```typescript
-const vox = window.OBSChat.hl1Vox;
-
-// Mensajes informativos (prefijo: "bloop")
-vox.log("system online");
-// Reproduce: "bloop" + "system" + "online"
-
-// Advertencias (prefijo: "buzwarn buzwarn")
-vox.warn("temperature critical");
-// Reproduce: "buzwarn" + "buzwarn" + "temperature" + "critical"
-
-// Errores (prefijo: "woop woop")
-vox.error("meltdown imminent");
-// Reproduce: "woop" + "woop" + "meltdown" + "imminent"
+SoundsBank (Singleton)
+  ↓
+  ├─→ SoundsRepository (hl1_vox)
+  ├─→ SoundsRepository (hl1_suit)
+  └─→ SoundsRepository (custom_sounds)
+         ↓
+      AudioProcessor
 ```
 
-**Características:**
-- ✅ 500+ palabras del vocabulario VOX original
-- ✅ Soporte para números, alfabeto fonético NATO, y términos científicos
-- ✅ Carga automática desde CDN (GitHub)
-- ✅ Sin impacto en rendimiento (lazy loading)
+### SoundsBank
 
-### HL1 Suit (Traje HEV)
-
-🦾 Sistema de voz del traje de protección de entornos peligrosos (HEV Suit) de Half-Life.
-
-**Activación:**
-```
-?channel=micanal&hl1Suit=true
-```
-
-**Uso desde JavaScript:**
-```typescript
-const suit = window.OBSChat.hl1Suit;
-
-// Mensajes informativos (prefijo: "boop")
-suit.log("power restored");
-// Reproduce: "boop" + "power" + "restored"
-
-// Advertencias (prefijo: "fuzz fuzz")
-suit.warn("health critical seek medic");
-// Reproduce: "fuzz" + "fuzz" + "health" + "critical" + "seek" + "medic"
-
-// Errores (prefijo: "buzz buzz")
-suit.error("warning evacuate area immediately");
-// Reproduce: "buzz" + "buzz" + "warning" + "evacuate" + "area" + "immediately"
-```
-
-**Características:**
-- ✅ 150+ clips de audio del traje HEV
-- ✅ Alertas de salud, armadura, y sistemas del traje
-- ✅ Notificaciones de armas y munición
-- ✅ Mensajes de inicio/apagado del traje
-- ✅ Carga automática desde CDN (GitHub)
-
-### Vocabulario Disponible
-
-**VOX**: Contiene palabras genéricas para construir frases como:
-- Números: `zero` a `one hundred`, `thousand`, `million`
-- Direcciones: `north`, `south`, `east`, `west`, `up`, `down`
-- Estados: `online`, `offline`, `activated`, `deactivated`, `nominal`
-- Alertas: `warning`, `danger`, `alert`, `alarm`, `emergency`
-- Instalaciones: `sector`, `level`, `chamber`, `reactor`, `laboratory`
-- Muchas más...
-
-**HEV Suit**: Contiene mensajes especializados del traje:
-- Estado: `power_level_is`, `armor_compromised`, `health_critical`
-- Médico: `administering_medical`, `morphine_shot`, `seek_medic`
-- Equipamiento: `get_medkit`, `weapon_pickup`, `ammo_depleted`
-- Sistema: `hev_logon`, `online`, `communications_on`
-- Y más...
-
-### Ejemplos de Uso Combinado
-
-```bash
-# Habilitar ambos sistemas
-?channel=micanal&hl1Vox=true&hl1Suit=true
-
-# Usar desde efectos personalizados o eventos
-```
+Gestor centralizado que maneja múltiples repositorios de sonidos:
 
 ```typescript
-// Ejemplo: Notificar raid con VOX
-client.on("raid", (data) => {
-  window.OBSChat.hl1Vox?.log(`alert raid detected from ${data.username}`);
+import SoundsBank from "@/lib/sounds_bank";
+
+const soundsBank = SoundsBank.getInstance();
+
+// Cargar repositorio por nombre corto (desde GitHub)
+soundsBank.loadRepository("hl1_vox", (vox) => {
+  vox.warn("system online");
 });
 
-// Ejemplo: Alerta de suscripción con HEV Suit
-client.on("sub", (data) => {
-  window.OBSChat.hl1Suit?.warn("new subscriber detected");
+// Cargar desde URL completa
+soundsBank.loadRepository(
+  "https://example.com/custom_sounds.json",
+  (custom) => {
+    custom.playSound("beep");
+  }
+);
+```
+
+### SoundsRepository
+
+Cada repositorio gestiona un conjunto temático de sonidos con métodos de conveniencia:
+
+```typescript
+// Reproducir sonido individual
+repository.playSound("beep");
+
+// Métodos con prefijos automáticos
+repository.log("system initialized");   // Añade logPrefix
+repository.warn("temperature high");     // Añade warnPrefix
+repository.error("critical failure");    // Añade errorPrefix
+```
+
+### Formato de Configuración JSON
+
+Los repositorios se definen mediante archivos JSON con el siguiente esquema:
+
+```json
+{
+  "name": "hl1_vox",
+  "baseURL": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/",
+  "sounds": {
+    "beep": "beep.wav",
+    "online": "online.wav",
+    "warning": "warning.wav"
+  },
+  "logPrefix": "bloop",
+  "warnPrefix": "buzwarn buzwarn",
+  "errorPrefix": "woop woop"
+}
+```
+
+### Repositorios Incluidos
+
+#### 🎙️ hl1_vox
+Sistema de voz sintética de Black Mesa (Half-Life 1):
+- 500+ palabras del vocabulario VOX
+- Números, direcciones, estados, alertas
+- Términos científicos y del complejo
+
+#### 🦾 hl1_suit
+Sistema de voz del traje HEV (Half-Life 1):
+- 150+ clips de audio del traje
+- Alertas de salud, armadura, sistemas
+- Notificaciones de equipamiento
+
+### Carga Automática
+
+CVTalk carga automáticamente los repositorios de Half-Life 1 al iniciar:
+
+```typescript
+// En src/components/audio_processor/index.ts
+this.soundBank.loadRepository("hl1_vox", (hl1_vox) => {
+  hl1_vox.warn("vox_login");
+});
+
+this.soundBank.loadRepository("hl1_suit", (hl1_suit) => {
+  hl1_suit.warn("hev_logon communications_on voice_on safe_day");
 });
 ```
+
+### Crear Repositorios Personalizados
+
+1. **Crear archivo JSON de configuración:**
+
+```json
+{
+  "name": "my_sounds",
+  "baseURL": "https://cdn.example.com/sounds/",
+  "sounds": {
+    "welcome": "welcome.mp3",
+    "goodbye": "goodbye.mp3"
+  },
+  "logPrefix": "",
+  "warnPrefix": "alert",
+  "errorPrefix": "error"
+}
+```
+
+2. **Cargar en la aplicación:**
+
+```typescript
+soundsBank.loadRepository("https://cdn.example.com/my_sounds.json", (repo) => {
+  repo.log("welcome");  // Reproduce: welcome.mp3
+  repo.warn("system"); // Reproduce: alert.mp3 → system.mp3
+});
+```
+
+### Características
+
+- ✅ **Lazy Loading**: Los sonidos se cargan bajo demanda
+- ✅ **Validación**: Validación automática de configuraciones
+- ✅ **CDN-Ready**: Carga desde GitHub o cualquier CDN
+- ✅ **Type-Safe**: Totalmente tipado con TypeScript
+- ✅ **Extensible**: Añade repositorios sin modificar código
+- ✅ **Prefijos automáticos**: Construye secuencias complejas fácilmente
+
+### Directorio de Repositorios
+
+Los repositorios de ejemplo están en `/sounds_repository/`:
+- `example.json` - Plantilla para crear repositorios
+- `hl1_vox.json` - Configuración del sistema VOX
+- `hl1_suit.json` - Configuración del traje HEV
 
 ### Créditos
 
@@ -468,6 +503,10 @@ Los audios de Half-Life 1 provienen del repositorio [sourcesounds/hl1](https://g
 │   │   ├── fonts/          # Fuentes personalizadas
 │   │   └── styles/         # Estilos CSS globales
 │   └── favicon.ico
+├── sounds_repository/      # Configuraciones de repositorios de sonidos
+│   ├── example.json        # Plantilla de ejemplo
+│   ├── hl1_vox.json        # Config sistema VOX Half-Life 1
+│   └── hl1_suit.json       # Config traje HEV Half-Life 1
 ├── src/
 │   ├── components/         # Web Components
 │   │   ├── audio_processor/ # Gestor centralizado de audio
@@ -478,8 +517,8 @@ Los audios de Half-Life 1 provienen del repositorio [sourcesounds/hl1](https://g
 │   │   │   ├── index.ts    # EfectsLoop core
 │   │   │   └── efects/     # Efectos disponibles
 │   │   │       └── pato_bot_tribute.ts
-│   │   ├── hl1_vox.ts      # Sistema VOX de Half-Life 1
-│   │   ├── hl1_suit.ts     # Sistema HEV Suit de Half-Life 1
+│   │   ├── sounds_bank.ts      # Gestor de repositorios de sonidos (Singleton)
+│   │   ├── sounds_repository.ts # Repositorio individual de sonidos
 │   │   ├── get_curated_color.ts
 │   │   ├── get_ornament.ts
 │   │   └── mock_messages.ts

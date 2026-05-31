@@ -516,4 +516,310 @@ graph TD
 
 ---
 
+## 🔊 Sistema de Audio
+
+CVTalk incluye un sistema completo de gestión de audio que permite reproducir sonidos de forma centralizada y gestionar repositorios de sonidos temáticos.
+
+### AudioProcessor
+
+Componente centralizado para gestión de audio.
+
+```typescript
+class AudioProcessor extends HTMLElement {
+  private audioRegister: Record<string, string>
+  private audioQueue: string[]
+  private isPlaying: boolean
+  private audioUnlocked: boolean
+  
+  loadAudio(name: string, url: string): void
+  playAudio(name: string, onEnded?: OnEndedCallback): void
+  enqueueAudio(name: string, onEnded?: OnEndedCallback): void
+  enqueueAudios(names: string, onEnded?: OnEndedCallback): void
+  unlockAudio(): void
+}
+```
+
+#### Métodos
+
+##### `loadAudio(name, url)`
+
+Registra un audio en el sistema.
+
+**Parámetros:**
+- `name` (string): Nombre identificador del audio
+- `url` (string): URL del archivo de audio
+
+**Ejemplo:**
+```typescript
+audioProcessor.loadAudio("beep", "/assets/beep.mp3")
+```
+
+##### `playAudio(name, onEnded?)`
+
+Reproduce un audio inmediatamente.
+
+**Parámetros:**
+- `name` (string): Nombre del audio a reproducir
+- `onEnded` (OnEndedCallback): Callback opcional al terminar
+
+**Ejemplo:**
+```typescript
+audioProcessor.playAudio("notification", () => {
+  console.log("Audio terminado")
+})
+```
+
+##### `enqueueAudio(name, onEnded?)`
+
+Encola un audio para reproducción secuencial.
+
+**Parámetros:**
+- `name` (string): Nombre del audio
+- `onEnded` (OnEndedCallback): Callback opcional cuando termina toda la cola
+
+**Ejemplo:**
+```typescript
+audioProcessor.enqueueAudio("beep")
+audioProcessor.enqueueAudio("boop")
+// Se reproducen secuencialmente
+```
+
+##### `enqueueAudios(names, onEnded?)`
+
+Encola múltiples audios a partir de una cadena separada por espacios.
+
+**Parámetros:**
+- `names` (string): Nombres de audios separados por espacios
+- `onEnded` (OnEndedCallback): Callback opcional cuando termina toda la cola
+
+**Ejemplo:**
+```typescript
+audioProcessor.enqueueAudios("hello world welcome")
+// Se reproducen: "hello", "world", "welcome" en secuencia
+```
+
+##### `unlockAudio()`
+
+Configura el desbloqueo de audio en la primera interacción del usuario (requerido por políticas de navegadores).
+
+**Acceso global:**
+```typescript
+const audioProcessor = window.OBSChat.audioProcessor
+```
+
+### SoundsBank
+
+Gestor centralizado de repositorios de sonidos (Singleton).
+
+```typescript
+class SoundsBank {
+  private bank: Record<SoundRepositoryName, SoundsRepository>
+  
+  static getInstance(): SoundsBank
+  loadRepository(url: SoundRepositoryConfigUrl, onLoaded?: SoundRepositoryOnLoadedCallback): void
+}
+```
+
+#### Métodos
+
+##### `getInstance()` (static)
+
+Obtiene la instancia única del SoundsBank.
+
+**Retorna:** Instancia del SoundsBank
+
+**Ejemplo:**
+```typescript
+const soundsBank = SoundsBank.getInstance()
+```
+
+##### `loadRepository(url, onLoaded?)`
+
+Carga un repositorio de sonidos desde una URL o nombre corto.
+
+**Parámetros:**
+- `url` (string): URL completa o nombre corto (ej: "hl1_vox")
+- `onLoaded` (callback): Función que recibe el repositorio cargado
+
+**Ejemplo:**
+```typescript
+soundsBank.loadRepository("hl1_vox", (vox) => {
+  vox.warn("system online")
+})
+
+soundsBank.loadRepository("https://example.com/sounds.json", (repo) => {
+  repo.playSound("beep")
+})
+```
+
+### SoundsRepository
+
+Repositorio individual que gestiona un conjunto temático de sonidos.
+
+```typescript
+class SoundsRepository {
+  private name: SoundRepositoryName
+  private audioProcessor: AudioProcessor
+  private baseURL: SoundRepositoryBaseURL
+  private logPrefix: SoundPrefix
+  private warnPrefix: SoundPrefix
+  private errorPrefix: SoundPrefix
+  
+  static validateConfig(config: SoundsRepositoryConfig): boolean
+  constructor(config: SoundsRepositoryConfig)
+  playSound(soundName: SoundName, onEnded?: OnEndedCallback): void
+  log(message: string): void
+  warn(message: string): void
+  error(message: string): void
+}
+```
+
+#### Métodos
+
+##### `validateConfig(config)` (static)
+
+Valida una configuración de repositorio.
+
+**Parámetros:**
+- `config` (SoundsRepositoryConfig): Configuración a validar
+
+**Retorna:** `boolean` - true si es válida
+
+**Ejemplo:**
+```typescript
+const config = { name: "test", baseURL: "https://...", sounds: {...} }
+if (SoundsRepository.validateConfig(config)) {
+  const repo = new SoundsRepository(config)
+}
+```
+
+##### `constructor(config)`
+
+Crea una instancia del repositorio y registra todos los sonidos en el AudioProcessor.
+
+**Parámetros:**
+- `config` (SoundsRepositoryConfig): Configuración del repositorio
+
+##### `playSound(soundName, onEnded?)`
+
+Reproduce un sonido individual del repositorio.
+
+**Parámetros:**
+- `soundName` (string): Nombre del sonido (sin prefijo del repositorio)
+- `onEnded` (callback): Función a ejecutar cuando termina
+
+**Ejemplo:**
+```typescript
+repository.playSound("beep")
+repository.playSound("warning", () => console.log("Terminado"))
+```
+
+##### `log(message)`
+
+Encola una secuencia de sonidos con el prefijo "log" configurado.
+
+**Parámetros:**
+- `message` (string): Nombres de sonidos separados por espacios
+
+**Ejemplo:**
+```typescript
+// Si logPrefix = "system_"
+repository.log("initialized ready")
+// Reproduce: "system_ initialized ready"
+```
+
+##### `warn(message)`
+
+Encola una secuencia de sonidos con el prefijo "warn" configurado.
+
+**Parámetros:**
+- `message` (string): Nombres de sonidos separados por espacios
+
+**Ejemplo:**
+```typescript
+// Si warnPrefix = "warning "
+repository.warn("low health")
+// Reproduce: "warning low health"
+```
+
+##### `error(message)`
+
+Encola una secuencia de sonidos con el prefijo "error" configurado.
+
+**Parámetros:**
+- `message` (string): Nombres de sonidos separados por espacios
+
+**Ejemplo:**
+```typescript
+// Si errorPrefix = "error critical "
+repository.error("shutdown")
+// Reproduce: "error critical shutdown"
+```
+
+### Types de Audio
+
+```typescript
+type SoundRepositoryName = string
+type SoundRepositoryBaseURL = string
+type SoundName = string
+type SoundRelativePath = string
+type SoundsDictionary = Record<SoundName, SoundRelativePath>
+type SoundPrefix = string
+type OnEndedCallback = () => void
+
+interface SoundsRepositoryConfig {
+  name: SoundRepositoryName
+  baseURL: SoundRepositoryBaseURL
+  sounds: SoundsDictionary
+  logPrefix?: SoundPrefix
+  warnPrefix?: SoundPrefix
+  errorPrefix?: SoundPrefix
+}
+```
+
+### Formato de Configuración JSON
+
+Los repositorios se definen mediante archivos JSON:
+
+```json
+{
+  "name": "hl1_vox",
+  "baseURL": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/",
+  "sounds": {
+    "beep": "beep.wav",
+    "online": "online.wav",
+    "warning": "warning.wav"
+  },
+  "logPrefix": "bloop",
+  "warnPrefix": "buzwarn buzwarn",
+  "errorPrefix": "woop woop"
+}
+```
+
+### Ejemplo de Uso Completo
+
+```typescript
+// 1. Obtener instancia del banco de sonidos
+const soundsBank = SoundsBank.getInstance()
+
+// 2. Cargar un repositorio
+soundsBank.loadRepository("hl1_vox", (vox) => {
+  // 3. Usar el repositorio cargado
+  vox.log("system initialized")
+  vox.warn("temperature high")
+  vox.error("critical failure")
+})
+
+// 4. Cargar desde URL personalizada
+soundsBank.loadRepository("https://example.com/custom.json", (custom) => {
+  custom.playSound("welcome")
+})
+
+// 5. Acceso directo al AudioProcessor si es necesario
+const audioProcessor = window.OBSChat.audioProcessor
+audioProcessor.enqueueAudios("sound1 sound2 sound3")
+```
+
+---
+
 Para más ejemplos y guías, consulta [EFFECTS.md](./EFFECTS.md)
