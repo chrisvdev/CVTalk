@@ -33,7 +33,7 @@ export type SoundRepositoryOnLoadedCallback = (repository: SoundsRepository) => 
  * URL base por defecto para cargar repositorios de sonidos desde GitHub
  * @constant {string}
  */
-const defaultSoundsRepositoryBaseUrl = "https://raw.githubusercontent.com/chrisvdev/CVTalk/refs/heads/main/sounds_repositories/";
+const defaultSoundsRepositoryBaseUrl = "https://raw.githubusercontent.com/chrisvdev/CVTalk/refs/heads/main/default_config_files/sounds_repository/";
 
 /**
  * Gestor centralizado de repositorios de sonidos (Patrón Singleton)

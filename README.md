@@ -484,14 +484,198 @@ soundsBank.loadRepository("https://cdn.example.com/my_sounds.json", (repo) => {
 
 ### Directorio de Repositorios
 
-Los repositorios de ejemplo están en `/sounds_repository/`:
-- `example.json` - Plantilla para crear repositorios
-- `hl1_vox.json` - Configuración del sistema VOX
-- `hl1_suit.json` - Configuración del traje HEV
+Los repositorios de configuración están en `/default_config_files/`:
+- `sounds_repository/` - Directorio de repositorios de sonidos
+  - `example.json` - Plantilla para crear repositorios
+  - `hl1_vox.json` - Configuración del sistema VOX (movido desde raíz)
+  - `hl1_suit.json` - Configuración del traje HEV (movido desde raíz)
+- `notifications.json` - Configuración de notificaciones de eventos de Twitch
+- `notifications_example.json` - Plantilla de configuración de notificaciones
 
 ### Créditos
 
 Los audios de Half-Life 1 provienen del repositorio [sourcesounds/hl1](https://github.com/sourcesounds/hl1) y son propiedad de Valve Corporation.
+
+## 🔔 Sistema de Notificaciones (NotificationsView)
+
+CVTalk incluye un sistema completo para capturar y procesar todos los eventos de Twitch de forma centralizada. El componente `NotificationsView` escucha eventos como suscripciones, raids, bits, y más, permitiendo personalizarlos mediante configuración JSON.
+
+### Arquitectura
+
+```
+NotificationsView (Custom Element)
+  ↓
+  ├─→ Escucha eventos MTMI (sub, raid, bits, etc.)
+  ├─→ Carga configuración desde JSON
+  ├─→ Procesa eventos según configuración
+  └─→ Reproduce efectos de sonido y muestra mensajes
+```
+
+### Eventos Soportados
+
+El sistema captura **todos** los eventos de Twitch IRC:
+
+**Suscripciones y Regalos:**
+- `sub` - Nueva suscripción
+- `resub` - Resuscripción
+- `subgift` - Regalo de suscripción
+- `submysterygift` - Regalos misteriosos masivos
+- `primepaidupgrade` - Upgrade de Prime a pago
+- `giftpaidupgrade` - Upgrade de regalo a pago
+- `communitypayforward` - Pago adelantado de comunidad
+- `standardpayforward` - Pago adelantado estándar
+
+**Moderación:**
+- `ban` - Usuario baneado
+- `timeout` - Usuario en timeout
+- `clearchat` - Chat limpiado
+- `clearmsg` - Mensaje eliminado
+
+**Eventos Especiales:**
+- `raid` - Raid entrante
+- `bits` - Cheers con bits
+- `announcement` - Anuncio oficial
+- `viewermilestone` - Hito de espectador
+
+**Modos de Chat:**
+- `emote_only_on/off` - Modo solo emotes
+- `followers_on/off` - Modo solo seguidores
+- `slow_on/off` - Modo lento
+- `subs_on/off` - Modo solo suscriptores
+- `r9k_on/off` - Modo R9K (mensajes únicos)
+
+**Otros:**
+- `action` - Mensaje con /me
+- `roomstate` - Cambio de estado de sala
+- `raw` - Eventos IRC sin procesar
+
+### Configuración JSON
+
+Las notificaciones se configuran mediante archivos JSON con el siguiente esquema:
+
+```json
+{
+  "soundsRepositoryUrl": "notifications",
+  "onSub": {
+    "messageTemplate": "¡{displayName} se ha suscrito!",
+    "soundEffect": ["celebration", "tada"]
+  },
+  "onRaid": {
+    "messageTemplate": "¡Raid de {raiderName} con {viewerCount} viewers!",
+    "soundEffect": ["raid_alarm"]
+  },
+  "onBits": {
+    "messageTemplate": "{displayName} ha donado {bits} bits",
+    "soundEffect": ["coins"]
+  }
+}
+```
+
+#### Campos de Configuración
+
+- **`soundsRepositoryUrl`** (opcional): Repositorio de sonidos a cargar automáticamente
+- **`on[EventName]`**: Configuración para cada evento
+  - **`messageTemplate`**: Plantilla del mensaje a mostrar (acepta variables)
+  - **`soundEffect`**: Array de nombres de sonidos a reproducir en secuencia
+
+### Carga de Configuración
+
+Por defecto, el sistema carga `notifications.json` desde GitHub:
+
+```typescript
+// URL por defecto
+https://raw.githubusercontent.com/chrisvdev/CVTalk/refs/heads/main/default_config_files/notifications.json
+```
+
+Puedes personalizar la URL de configuración:
+
+```typescript
+// En el componente NotificationsView
+const notificationsView = document.querySelector('notifications-view');
+notificationsView.loadNotificationsConfig('https://mi-cdn.com/config.json');
+```
+
+### Integración con SoundsBank
+
+El sistema se integra automáticamente con el sistema de sonidos:
+
+```json
+{
+  "soundsRepositoryUrl": "mi_repositorio",
+  "onSub": {
+    "messageTemplate": "",
+    "soundEffect": ["fanfare", "applause", "celebration"]
+  }
+}
+```
+
+Esto cargará el repositorio `mi_repositorio.json` y reproducirá la secuencia de sonidos cuando ocurra una suscripción.
+
+### Estado Actual: En Desarrollo 🚧
+
+El sistema de notificaciones está **parcialmente implementado**. Actualmente:
+
+✅ **Implementado:**
+- Estructura base del componente
+- Escucha de todos los eventos de Twitch
+- Carga y validación de configuración JSON
+- Integración con SoundsBank
+- Sistema de handlers para cada evento
+
+⏳ **Pendiente:**
+- Implementación de lógica de cada handler (actualmente solo hacen `console.debug`)
+- Sistema de renderizado de notificaciones visuales
+- Sistema de plantillas para mensajes personalizados
+- Animaciones y transiciones de notificaciones
+
+### Uso en el Código
+
+El componente se inicializa automáticamente al cargar la página:
+
+```html
+<!-- En src/pages/index.astro -->
+<notifications-view></notifications-view>
+```
+
+Todos los eventos se capturan automáticamente y se loguean en la consola del navegador:
+
+```javascript
+console.debug("Not Implemented SUB: ", data);
+console.debug("Not Implemented RAID: ", data);
+// etc...
+```
+
+### Personalizar Configuración
+
+1. **Crear archivo de configuración personalizado:**
+
+```json
+{
+  "soundsRepositoryUrl": "custom_notifications",
+  "onSub": {
+    "messageTemplate": "¡Gracias {displayName} por suscribirte!",
+    "soundEffect": ["ba_yell", "tada"]
+  },
+  "onRaid": {
+    "messageTemplate": "¡{raiderName} llegó con {viewerCount} personas!",
+    "soundEffect": ["raid_horn"]
+  }
+}
+```
+
+2. **Subirlo a tu servidor/CDN**
+
+3. **Modificar el código para usar tu configuración:**
+
+```typescript
+// En src/components/notifications-view/index.ts
+this.loadNotificationsConfig('https://mi-server.com/mi-config.json');
+```
+
+### Archivos de Ejemplo
+
+- **`default_config_files/notifications.json`**: Configuración activa
+- **`default_config_files/notifications_example.json`**: Plantilla de ejemplo
 
 ## 🏗️ Estructura del Proyecto
 
@@ -503,15 +687,19 @@ Los audios de Half-Life 1 provienen del repositorio [sourcesounds/hl1](https://g
 │   │   ├── fonts/          # Fuentes personalizadas
 │   │   └── styles/         # Estilos CSS globales
 │   └── favicon.ico
-├── sounds_repository/      # Configuraciones de repositorios de sonidos
-│   ├── example.json        # Plantilla de ejemplo
-│   ├── hl1_vox.json        # Config sistema VOX Half-Life 1
-│   └── hl1_suit.json       # Config traje HEV Half-Life 1
+├── default_config_files/   # Configuraciones por defecto
+│   ├── notifications.json          # Config de notificaciones activa
+│   ├── notifications_example.json  # Plantilla de notificaciones
+│   └── sounds_repository/  # Repositorios de sonidos
+│       ├── example.json        # Plantilla de ejemplo
+│       ├── hl1_vox.json        # Config sistema VOX Half-Life 1
+│       └── hl1_suit.json       # Config traje HEV Half-Life 1
 ├── src/
 │   ├── components/         # Web Components
-│   │   ├── audio_processor/ # Gestor centralizado de audio
-│   │   ├── chat-view/      # Contenedor principal del chat
-│   │   └── user-message/   # Mensaje individual de usuario
+│   │   ├── audio_processor/    # Gestor centralizado de audio
+│   │   ├── chat-view/          # Contenedor principal del chat
+│   │   ├── notifications-view/ # Sistema de notificaciones de Twitch
+│   │   └── user-message/       # Mensaje individual de usuario
 │   ├── lib/                # Utilidades y lógica de negocio
 │   │   ├── efects_loop/    # Sistema de efectos
 │   │   │   ├── index.ts    # EfectsLoop core

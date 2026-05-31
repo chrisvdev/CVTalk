@@ -2,6 +2,7 @@
 import AudioProcessor from "@components/audio_processor/index.astro";
 import ChatView from "@components/chat-view/index.astro";
 import UserMessage from "@components/user-message/index.astro";
+import NotificationsView from "@/components/notifications-view/index.astro";
 import { ensureTrailingSlash } from "@/lib/ensure_trailing_slash";
 
 const baseUrl = ensureTrailingSlash(import.meta.env.BASE_URL);
@@ -30,6 +31,7 @@ const baseUrl = ensureTrailingSlash(import.meta.env.BASE_URL);
     <AudioProcessor />
     <UserMessage />
     <ChatView />
+    <NotificationsView />
     <script src="@/scripts/start.ts"></script>
   </body>
 </html>

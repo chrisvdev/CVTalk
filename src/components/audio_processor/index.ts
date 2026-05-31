@@ -85,12 +85,6 @@ export default class AudioProcessor extends HTMLElement {
     this.loadAudio("_comma", "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/_comma.wav");
     this.unlockAudio() // Configurar desbloqueo de audio en la primera interacción
     window.OBSChat.audioProcessor = this; // Registrar instancia en el sistema global tipado
-    this.soundBank.loadRepository("hl1_vox",(hl1_vox) => {
-      hl1_vox.warn("vox_login")
-    })
-    this.soundBank.loadRepository("hl1_suit",(hl1_suit) => {
-      hl1_suit.warn("hev_logon communications_on voice_on safe_day")
-    })
   }
   
   /**

@@ -3,6 +3,7 @@ import startEfects from "@/lib/efects_loop/start_efects";
 import useTemplate from "@/lib/use_template";
 import type { UserMessageInfoType } from "mtmi";
 import { UserMessage } from "../user-message";
+import { client } from "mtmi";
 
 /**
  * Custom element para mostrar una lista de mensajes de chat
@@ -16,13 +17,13 @@ export default class ChatView extends HTMLElement {
    * @type {HTMLUListElement | null}
    */
   list: HTMLUListElement | null = null;
-  
+
   /**
    * Sistema de procesamiento de mensajes mediante efectos
    * @public
    * @type {EfectsLoop}
    */
-  public efectsLoop : EfectsLoop
+  public efectsLoop: EfectsLoop
 
   /**
    * Constructor del elemento custom ChatView
@@ -35,6 +36,9 @@ export default class ChatView extends HTMLElement {
     this.efectsLoop.addOutput(this.renderMessage.bind(this));
     startEfects(this.efectsLoop);
     this.list = this.querySelector("ul") as HTMLUListElement;
+    client.on("message", (message) => {
+      this.newMessage(message);
+    });
   }
 
   /**

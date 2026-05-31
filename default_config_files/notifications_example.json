@@ -1,0 +1,119 @@
+{
+  "soundsRepositoryUrl": "",
+  "onSub": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onResub": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onSubGift": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onSubMysteryGift": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onPrimePaidUpgrade": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onCommunityPayforward": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onStandardPayforward": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onGiftPaidUpgrade": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onClearChat": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onBan": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onTimeout": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onClearMsg": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onRaid": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onViewerMilestone": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onRoomState": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onAnnouncement": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onBits": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onAction": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onEmoteOnlyOn": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onEmoteOnlyOff": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onFollowersOn": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onFollowersOff": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onSlowOn": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onSlowOff": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onSubsOn": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onSubsOff": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onR9kOn": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onR9kOff": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  },
+  "onRaw": {
+    "messageTemplate": "",
+    "soundEffect": [""]
+  }
+}
