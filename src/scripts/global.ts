@@ -5,6 +5,7 @@
  */
 
 import type AudioProcessor from "@/components/audio_processor"
+import type NotificationsView from "@/components/notifications-view"
 import type { UserMessageInfoType } from "mtmi"
 
 /**
@@ -113,6 +114,7 @@ function parseProperties<T extends Record<string, any>>(
  * @property {(messageInfo: UserMessageInfoType) => string} addMessage - Función para agregar un nuevo mensaje al almacenamiento global y devolver su ID
  */
 export type OBSChat = {
+  notifications?: NotificationsView
   properties?: Properties
   audioProcessor?: AudioProcessor
   appCustomElements?: Record<string, CustomElementConstructor>

@@ -3,6 +3,9 @@
   "baseURL": "",
   "sounds": {
     "ba_yell": "https://github.com/sourcesounds/hl2/raw/refs/heads/master/sound/vo/npc/barney/ba_yell.wav",
-    "warn": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/warn.wav"
+    "warn": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/warn.wav",
+    "whatyoudoing": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/scientist/whatyoudoing.wav",
+    "nooo": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/scientist/nooo.wav",
+    "noplease": "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/scientist/noplease.wav"
   }
 }

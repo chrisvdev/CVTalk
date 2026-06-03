@@ -186,7 +186,7 @@ El sistema de notificaciones escucha y procesa más de 28 eventos diferentes de 
 
 Las notificaciones se configuran mediante un archivo JSON que define:
 - **Plantillas de mensaje**: Texto con variables reemplazables (ej: `{user}`, `{bits}`, `{months}`)
-- **Efectos de sonido**: Array de sonidos aleatorios a reproducir
+- **Efectos de sonido**: Array de sonidos a reproducir
 - **Repositorio de sonidos**: URL del repositorio de audio a utilizar
 
 #### Archivo de Configuración por Defecto
@@ -211,6 +211,8 @@ El sistema carga automáticamente la configuración desde:
   }
 }
 ```
+
+> Nota: Actualmente la sustitución de variables está implementada principalmente para eventos de suscripciones y bits. Otros eventos usan la plantilla como texto plano hasta completar lógica adicional.
 
 #### Variables Disponibles
 
@@ -647,15 +649,11 @@ Las notificaciones se configuran mediante archivos JSON con el siguiente esquema
 {
   "soundsRepositoryUrl": "notifications",
   "onSub": {
-    "messageTemplate": "¡{displayName} se ha suscrito!",
+    "messageTemplate": "¡{user} se ha suscrito!",
     "soundEffect": ["celebration", "tada"]
   },
-  "onRaid": {
-    "messageTemplate": "¡Raid de {raiderName} con {viewerCount} viewers!",
-    "soundEffect": ["raid_alarm"]
-  },
   "onBits": {
-    "messageTemplate": "{displayName} ha donado {bits} bits",
+    "messageTemplate": "{user} ha donado {bits} bits",
     "soundEffect": ["coins"]
   }
 }
@@ -743,11 +741,11 @@ console.debug("Not Implemented RAID: ", data);
 {
   "soundsRepositoryUrl": "custom_notifications",
   "onSub": {
-    "messageTemplate": "¡Gracias {displayName} por suscribirte!",
+    "messageTemplate": "¡Gracias {user} por suscribirte!",
     "soundEffect": ["ba_yell", "tada"]
   },
-  "onRaid": {
-    "messageTemplate": "¡{raiderName} llegó con {viewerCount} personas!",
+  "onBits": {
+    "messageTemplate": "¡{user} ha donado {bits} bits!",
     "soundEffect": ["raid_horn"]
   }
 }

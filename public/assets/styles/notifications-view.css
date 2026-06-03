@@ -1,0 +1,18 @@
+.notifications-view {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: "JetBrains Mono Variable", monospace;
+}
+.notifications-view > span::before {
+  --margin: 0.25rem;
+  content: ">";
+  margin-right: var(--margin);
+  margin-left: var(--margin);
+  color: var(--text-color);
+}

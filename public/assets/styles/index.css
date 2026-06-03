@@ -1,7 +1,13 @@
 @import url("./fonts.css");
 @import url("./user-message.css");
 @import url("./chat-view.css");
+@import url("./notifications-view.css");
 
+
+* {
+  --text-color: #f8f8f8;
+  --background-color: #222222;
+}
 body {
   position: relative;
   height: 100vh;

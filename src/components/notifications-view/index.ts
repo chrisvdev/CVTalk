@@ -267,6 +267,7 @@ export default class NotificationsView extends HTMLElement {
       client.on("r9k_on", this.onR9kOn.bind(this));
       client.on("r9k_off", this.onR9kOff.bind(this));
       client.on("raw", this.onRaw.bind(this));
+      window.OBSChat.notifications = this;
     }
   }
 
@@ -388,7 +389,7 @@ export default class NotificationsView extends HTMLElement {
     // @ts-expect-error - cumulativeMonths no está documentado oficialmente pero está presente en los datos de resub
     subInfo: { cumulativeMonths },
   }: SubNoticeType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onResub || {};
     if (messageTemplate) {
       // si no hay plantilla, no se muestra notificación ni se reproduce sonido
       const finalMessage = messageTemplate
@@ -419,7 +420,7 @@ export default class NotificationsView extends HTMLElement {
     recipientDisplayName,
     subPlan: { planName },
   }: GiftInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onSubGift || {};
     if (messageTemplate) {
       // si no hay plantilla, no se muestra notificación ni se reproduce sonido
       const finalMessage = messageTemplate
@@ -450,7 +451,7 @@ export default class NotificationsView extends HTMLElement {
     senderUsername,
     subPlan,
   }: MysteryGiftInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onSubMysteryGift || {};
     if (messageTemplate) {
       // si no hay plantilla, no se muestra notificación ni se reproduce sonido
       const finalMessage = messageTemplate
@@ -479,7 +480,7 @@ export default class NotificationsView extends HTMLElement {
     displayName,
     subPlan,
   }: PrimePaidUpgradeInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onPrimePaidUpgrade || {};
     if (messageTemplate) {
       // si no hay plantilla, no se muestra notificación ni se reproduce sonido
       const finalMessage = messageTemplate
@@ -503,7 +504,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onCommunityPayforward(data: CommunityPayforwardInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onCommunityPayforward || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -524,7 +525,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onStandardPayforward(data: StandardPayforwardInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onStandardPayforward || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -545,7 +546,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onGiftPaidUpgrade(data: GiftPaidUpgradeInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onGiftPaidUpgrade || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -566,7 +567,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onClearChat(data: ClearChatInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onClearChat || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -587,7 +588,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onBan(data: BanInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onBan || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -608,7 +609,8 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onTimeout(data: TimeoutInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    console.log("Timeout event data:", data);
+    const { messageTemplate, soundEffect } = this.config?.onTimeout || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -629,7 +631,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onClearMsg(data: ClearMsgInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onClearMsg || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -650,7 +652,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onRaid(data: RaidInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onRaid || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -671,7 +673,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onViewerMilestone(data: ViewerMilestoneType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onViewerMilestone || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -692,7 +694,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onRoomState(data: RoomStateInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onRoomState || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -713,7 +715,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onAnnouncement(data: AnnouncementInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onAnnouncement || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -739,7 +741,7 @@ export default class NotificationsView extends HTMLElement {
     bitsInfo: { bits },
     messageInfo: { message },
   }: UserMessageInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onBits || {};
     if (messageTemplate) {
       // si no hay plantilla, no se muestra notificación ni se reproduce sonido
       const finalMessage = messageTemplate
@@ -764,7 +766,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onAction(data: UserMessageInfoType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onAction || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -785,7 +787,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onEmoteOnlyOn(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onEmoteOnlyOn || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -806,7 +808,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onEmoteOnlyOff(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onEmoteOnlyOff || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -827,7 +829,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onFollowersOn(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onFollowersOn || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -848,7 +850,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onFollowersOff(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onFollowersOff || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -869,7 +871,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSlowOn(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onSlowOn || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -890,7 +892,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSlowOff(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onSlowOff || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -911,7 +913,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSubsOn(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onSubsOn || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -932,7 +934,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSubsOff(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onSubsOff || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -953,7 +955,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onR9kOn(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onR9kOn || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -974,7 +976,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onR9kOff(data: NoticeGroupType) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onR9kOff || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");
@@ -995,7 +997,7 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onRaw(data: object) {
-    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    const { messageTemplate, soundEffect } = this.config?.onRaw || {};
     if (messageTemplate) {
       const finalMessage = messageTemplate;
       const notification = document.createElement("span");

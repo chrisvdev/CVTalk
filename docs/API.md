@@ -10,12 +10,17 @@ Objeto global que gestiona la configuración y estado de la aplicación.
 
 ```typescript
 interface OBSChat {
+  notifications?: NotificationsView
   properties?: Properties
   appCustomElements?: Record<string, CustomElementConstructor>
   addCustomElement: (name: string, constructor: CustomElementConstructor) => void
   messages: Record<string, Message>
   addMessage: (messageInfo: UserMessageInfoType) => string
 }
+
+#### `notifications`
+
+Instancia del componente `NotificationsView` cuando las funcionalidades experimentales están habilitadas y el widget ha inicializado el sistema de notificaciones.
 ```
 
 #### `properties`

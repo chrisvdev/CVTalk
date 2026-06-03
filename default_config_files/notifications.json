@@ -41,8 +41,8 @@
     "soundEffect": ["warn"]
   },
   "onTimeout": {
-    "messageTemplate": "onTimeout not implemented yet",
-    "soundEffect": ["warn"]
+    "messageTemplate": "{user} Ha sido enviado al rincón de pensar! ⏰",
+    "soundEffect": ["nooo", "noplease", "whatyoudoing"]
   },
   "onClearMsg": {
     "messageTemplate": "onClearMsg not implemented yet",
