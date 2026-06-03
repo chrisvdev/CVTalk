@@ -503,7 +503,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onCommunityPayforward(data: CommunityPayforwardInfoType) {
-    console.debug("Not Implemented COMMUNITYPAYFORWARD: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -513,7 +524,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onStandardPayforward(data: StandardPayforwardInfoType) {
-    console.debug("Not Implemented STANDARDPAYFORWARD: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -523,7 +545,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onGiftPaidUpgrade(data: GiftPaidUpgradeInfoType) {
-    console.debug("Not Implemented GIFTPAIDUPGRADE: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -533,7 +566,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onClearChat(data: ClearChatInfoType) {
-    console.debug("Not Implemented CLEARCHAT: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -543,7 +587,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onBan(data: BanInfoType) {
-    console.debug("Not Implemented BAN: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -553,7 +608,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onTimeout(data: TimeoutInfoType) {
-    console.debug("Not Implemented TIMEOUT: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -563,7 +629,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onClearMsg(data: ClearMsgInfoType) {
-    console.debug("Not Implemented CLEARMSG: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -573,7 +650,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onRaid(data: RaidInfoType) {
-    console.debug("Not Implemented RAID: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -583,7 +671,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onViewerMilestone(data: ViewerMilestoneType) {
-    console.debug("Not Implemented VIEWERMILESTONE: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -593,7 +692,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onRoomState(data: RoomStateInfoType) {
-    console.debug("Not Implemented ROOMSTATE: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -603,7 +713,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onAnnouncement(data: AnnouncementInfoType) {
-    console.debug("Not Implemented ANNOUNCEMENT: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -643,7 +764,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onAction(data: UserMessageInfoType) {
-    console.debug("Not Implemented ACTION: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -653,7 +785,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onEmoteOnlyOn(data: NoticeGroupType) {
-    console.debug("Not Implemented EMOTE_ONLY_ON: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -663,7 +806,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onEmoteOnlyOff(data: NoticeGroupType) {
-    console.debug("Not Implemented EMOTE_ONLY_OFF: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -673,7 +827,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onFollowersOn(data: NoticeGroupType) {
-    console.debug("Not Implemented FOLLOWERS_ON: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -683,7 +848,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onFollowersOff(data: NoticeGroupType) {
-    console.debug("Not Implemented FOLLOWERS_OFF: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -693,7 +869,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSlowOn(data: NoticeGroupType) {
-    console.debug("Not Implemented SLOW_ON: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -703,7 +890,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSlowOff(data: NoticeGroupType) {
-    console.debug("Not Implemented SLOW_OFF: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -713,7 +911,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSubsOn(data: NoticeGroupType) {
-    console.debug("Not Implemented SUBS_ON: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -723,7 +932,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onSubsOff(data: NoticeGroupType) {
-    console.debug("Not Implemented SUBS_OFF: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -733,7 +953,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onR9kOn(data: NoticeGroupType) {
-    console.debug("Not Implemented R9K_ON: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -743,7 +974,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onR9kOff(data: NoticeGroupType) {
-    console.debug("Not Implemented R9K_OFF: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 
   /**
@@ -753,7 +995,18 @@ export default class NotificationsView extends HTMLElement {
    * @returns {void}
    */
   private onRaw(data: object) {
-    console.debug("Not Implemented RAW: ", data);
+    const { messageTemplate, soundEffect } = this.config?.onSub || {};
+    if (messageTemplate) {
+      const finalMessage = messageTemplate;
+      const notification = document.createElement("span");
+      notification.textContent = finalMessage;
+      this.renderNotification(notification);
+      if (soundEffect && this.soundsRepository) {
+        this.soundsRepository?.playSound(
+          soundEffect[this.getRandomIndex(soundEffect)],
+        );
+      }
+    }
   }
 }
 

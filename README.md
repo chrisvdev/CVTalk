@@ -228,11 +228,15 @@ Cada tipo de evento tiene variables específicas que puedes usar en las plantill
 - Carga de repositorios de sonidos
 - Renderizado de notificaciones con auto-expiración
 - Plantillas de mensaje con variables
-- Eventos: `onSub`, `onResub`, `onSubGift`, `onSubMysteryGift`, `onPrimePaidUpgrade`, `onBits`
+- Eventos completamente funcionales: `onSub`, `onResub`, `onSubGift`, `onSubMysteryGift`, `onPrimePaidUpgrade`, `onBits`
+- Stubs base para todos los eventos de Twitch (28+ eventos)
+- Sistema de placeholders para eventos no implementados
 
 **🚧 Pendiente:**
-- Implementar lógica para eventos restantes (raid, moderación, etc.)
-- Sistema de animaciones y transiciones
+- Completar lógica para eventos: `onRaid`, `onBan`, `onTimeout`, `onClearChat`, `onClearMsg`, `onViewerMilestone`
+- Completar lógica para modos de sala: `onEmoteOnlyOn/Off`, `onFollowersOn/Off`, `onSlowOn/Off`, `onSubsOn/Off`, `onR9kOn/Off`
+- Completar eventos de pago: `onCommunityPayforward`, `onStandardPayforward`, `onGiftPaidUpgrade`
+- Sistema de animaciones y transiciones CSS
 - Editor visual de configuración
 - Soporte para GIFs y stickers
 

@@ -76,7 +76,7 @@ export default class SoundsBank {
    * Constructor privado para implementar el patrón Singleton
    * @private
    */
-  private constructor() {
+  private constructor() { 
     this.bank = {};
   }
   

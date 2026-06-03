@@ -24,12 +24,19 @@ Configuración global de la aplicación.
 
 ```typescript
 type Properties = {
-  channel?: string        // Canal de Twitch
-  messageTTL: number     // Tiempo de vida de mensajes (ms)
-  pato_bot: boolean      // Habilitar PatoBotTribute
-  mute_bots: boolean     // Silenciar mensajes de bots
-  mute_prefixes: string  // Prefijos para silenciar comandos (separados por comas)
-  baseUrl: string        // URL base de la aplicación (siempre termina con /)
+  channel?: string              // Canal de Twitch
+  messageTTL: number           // Tiempo de vida de mensajes (ms)
+  pato_bot: boolean            // Habilitar PatoBotTribute
+  mute_bots: boolean           // Silenciar mensajes de bots
+  mute_replays: boolean        // Silenciar mensajes que son respuestas
+  mute_prefixes: string        // Prefijos para silenciar comandos (separados por comas)
+  tts: string                  // Habilitar TTS ("true" o "")
+  tts_accent: string           // Acento predeterminado para TTS (ej: es-AR, en-US)
+  tts_variant: number          // Variante de voz predeterminada (1-n)
+  experimental_features: boolean // ⚡ Activar funcionalidades experimentales (notificaciones)
+  insecureHTML: string         // Permitir HTML: "" | "onCommand" | "onHighlight"
+  remoteAdmin: string          // Control remoto: "" | "streamer" | "moderators"
+  baseUrl: string              // URL base de la aplicación (siempre termina con /)
 }
 ```
 
@@ -39,7 +46,14 @@ type Properties = {
   messageTTL: 10000,
   pato_bot: false,
   mute_bots: false,
+  mute_replays: false,
   mute_prefixes: '',
+  tts: '',
+  tts_accent: 'es-AR',
+  tts_variant: 1,
+  experimental_features: false,
+  insecureHTML: '',
+  remoteAdmin: '',
   baseUrl: '/'
 }
 ```

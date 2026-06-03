@@ -21,99 +21,99 @@
     "soundEffect": ["ba_yell"]
   },
   "onCommunityPayforward": {
-    "messageTemplate": "",
-    "soundEffect": ["ba_yell"]
+    "messageTemplate": "OnonCommunityPayforward not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onStandardPayforward": {
-    "messageTemplate": "",
-    "soundEffect": ["ba_yell"]
+    "messageTemplate": "onStandardPayforward not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onGiftPaidUpgrade": {
-    "messageTemplate": "",
-    "soundEffect": ["ba_yell"]
+    "messageTemplate": "onGiftPaidUpgrade not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onClearChat": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onClearChat not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onBan": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onBan not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onTimeout": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onTimeout not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onClearMsg": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onClearMsg not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onRaid": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onRaid not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onViewerMilestone": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onViewerMilestone not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onRoomState": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onRoomState not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onAnnouncement": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onAnnouncement not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onBits": {
     "messageTemplate": "{user} ha donado {bits} bits! 🎉",
     "soundEffect": ["ba_yell"]
   },
   "onAction": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onAction not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onEmoteOnlyOn": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onEmoteOnlyOn not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onEmoteOnlyOff": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onEmoteOnlyOff not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onFollowersOn": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onFollowersOn not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onFollowersOff": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onFollowersOff not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onSlowOn": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onSlowOn not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onSlowOff": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onSlowOff not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onSubsOn": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onSubsOn not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onSubsOff": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onSubsOff not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onR9kOn": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onR9kOn not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onR9kOff": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onR9kOff not implemented yet",
+    "soundEffect": ["warn"]
   },
   "onRaw": {
-    "messageTemplate": "",
-    "soundEffect": [""]
+    "messageTemplate": "onRaw not implemented yet",
+    "soundEffect": ["warn"]
   }
 }
