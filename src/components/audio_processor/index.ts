@@ -63,12 +63,19 @@ export default class AudioProcessor extends HTMLElement {
   private _volume: number = 1;
 
   /**
+   * Indica si el audio ha sido desbloqueado por interacción del usuario.
+   * @private
+   * @type {boolean}
+   */
+  private _audioUnlocked = false;
+
+  /**
    * Elemento de aviso visible mientras el audio está bloqueado.
    * Se elimina tras la primera interacción válida del usuario.
    * @private
    * @type {HTMLSpanElement | null}
    */
-  private audioUnlocked: HTMLSpanElement | null = null;
+  private audioLockOverlay: HTMLSpanElement | null = null;
 
   private soundBank: SoundsBank = SoundsBank.getInstance();
 
@@ -87,24 +94,8 @@ export default class AudioProcessor extends HTMLElement {
       "_comma",
       "https://github.com/sourcesounds/hl1/raw/refs/heads/master/sound/vox/_comma.wav",
     );
-    this.unlockAudio(); // Configurar desbloqueo de audio en la primera interacción
     window.OBSChat.audioProcessor = this; // Registrar instancia en el sistema global tipado
-    this.audioUnlocked = document.createElement("span");
-    this.audioUnlocked.innerHTML =
-      "¡Audio Locked!<br>Click to anywhere to unlock";
-    this.audioUnlocked.style.textAlign = "center";
-    this.audioUnlocked.style.position = "fixed";
-    this.audioUnlocked.style.top = "50%";
-    this.audioUnlocked.style.left = "50%";
-    this.audioUnlocked.style.transform = "translate(-50%, -50%)";
-    this.audioUnlocked.style.backgroundColor = "#f00";
-    this.audioUnlocked.style.color = "#fff";
-    this.audioUnlocked.style.padding = ".5rem 1rem";
-    this.audioUnlocked.style.borderRadius = "0.5rem";
-    this.audioUnlocked.style.fontSize = "2rem";
-    this.audioUnlocked.style.zIndex = "10000";
-    this.audioUnlocked.style.fontFamily = "monospace";
-    document.body.appendChild(this.audioUnlocked);
+    this.unlockAudio(); // Configurar desbloqueo de audio en la primera interacción
   }
 
   /**
@@ -145,7 +136,7 @@ export default class AudioProcessor extends HTMLElement {
    * ```
    */
   public playAudio(name: string, onEnded?: OnEndedCallback) {
-    if (!this.audioUnlocked) {
+    if (!this._audioUnlocked) {
       console.warn(
         "Audio is locked. Please interact with the page to unlock it.",
       );
@@ -180,7 +171,7 @@ export default class AudioProcessor extends HTMLElement {
    * @private
    */
   private playFromQueue() {
-    if (!this.audioUnlocked) {
+    if (!this._audioUnlocked) {
       console.warn(
         "Audio is locked. Please interact with the page to unlock it.",
       );
@@ -248,7 +239,7 @@ export default class AudioProcessor extends HTMLElement {
    * @public
    */
   public get isAudioUnlocked(): boolean {
-    return !this.audioUnlocked;
+    return this._audioUnlocked;
   }
 
   /**
@@ -307,6 +298,22 @@ export default class AudioProcessor extends HTMLElement {
    * @private
    */
   private unlockAudio() {
+    this.audioLockOverlay = document.createElement("span");
+    this.audioLockOverlay.innerHTML =
+      "¡Audio Locked!<br>Click to anywhere to unlock";
+    this.audioLockOverlay.style.textAlign = "center";
+    this.audioLockOverlay.style.position = "fixed";
+    this.audioLockOverlay.style.top = "50%";
+    this.audioLockOverlay.style.left = "50%";
+    this.audioLockOverlay.style.transform = "translate(-50%, -50%)";
+    this.audioLockOverlay.style.backgroundColor = "#f00";
+    this.audioLockOverlay.style.color = "#fff";
+    this.audioLockOverlay.style.padding = ".5rem 1rem";
+    this.audioLockOverlay.style.borderRadius = "0.5rem";
+    this.audioLockOverlay.style.fontSize = "2rem";
+    this.audioLockOverlay.style.zIndex = "10000";
+    this.audioLockOverlay.style.fontFamily = "monospace";
+    document.body.appendChild(this.audioLockOverlay);
     const unlock = async () => {
       try {
         // Crear un audio temporal vacío solo para desbloquear el contexto
@@ -318,17 +325,16 @@ export default class AudioProcessor extends HTMLElement {
         await tempAudio.play();
         tempAudio.pause();
         tempAudio.remove();
-
-        if (this.audioUnlocked) {
-          this.audioUnlocked.remove();
-          this.audioUnlocked = null;
-        }
         console.log("Audio desbloqueado correctamente");
-
-        // Remover listeners una vez desbloqueado
         document.removeEventListener("click", unlock);
         document.removeEventListener("touchstart", unlock);
         document.removeEventListener("keydown", unlock);
+        this._audioUnlocked = true;
+        if (this.audioLockOverlay) {
+          this.audioLockOverlay.removeEventListener("click", unlock);
+          this.audioLockOverlay.remove();
+          this.audioLockOverlay = null;
+        }
         this.playFromQueue(); // Intentar reproducir cualquier audio en cola después de desbloquear
       } catch (error) {
         console.log(
@@ -339,6 +345,7 @@ export default class AudioProcessor extends HTMLElement {
     };
 
     // Intentar desbloquear en múltiples eventos de usuario
+    this.audioLockOverlay?.addEventListener("click", unlock, { once: true });
     document.addEventListener("click", unlock, { once: true });
     document.addEventListener("touchstart", unlock, { once: true });
     document.addEventListener("keydown", unlock, { once: true });

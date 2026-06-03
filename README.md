@@ -417,7 +417,9 @@ El componente `AudioProcessor` es el núcleo del sistema de audio y proporciona:
 - **Sistema de colas**: Reproducción secuencial automática de múltiples audios
 - **Desbloqueo automático**: Manejo inteligente de políticas de autoplay de navegadores
 - **Aviso de desbloqueo**: Overlay interactivo que solicita la primera interacción del usuario para habilitar audio
+- **Estado de desbloqueo**: Consultar si el audio ya está disponible con `isAudioUnlocked`
 - **Control de volumen**: Ajuste de volumen global para todos los audios
+- **Gestión de cola**: Limpiar la cola con `clearQueue()` o detener todos los audios con `stopAll()`
 - **Gestión de memoria**: Los audios se crean y eliminan dinámicamente
 
 ### Integración desde JavaScript

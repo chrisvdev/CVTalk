@@ -548,12 +548,18 @@ class AudioProcessor extends HTMLElement {
   private audioRegister: Record<string, string>
   private audioQueue: string[]
   private isPlaying: boolean
-  private audioUnlocked: HTMLSpanElement | null
+  private _audioUnlocked: boolean
+  private audioLockOverlay: HTMLSpanElement | null
   
   loadAudio(name: string, url: string): void
   playAudio(name: string, onEnded?: OnEndedCallback): void
   enqueueAudio(name: string, onEnded?: OnEndedCallback): void
   enqueueAudios(names: string, onEnded?: OnEndedCallback): void
+  clearQueue(): void
+  stopAll(): void
+  get volume(): number
+  set volume(volume: number)
+  get isAudioUnlocked(): boolean
   unlockAudio(): void
 }
 ```
@@ -615,6 +621,52 @@ Encola múltiples audios a partir de una cadena separada por espacios.
 ```typescript
 audioProcessor.enqueueAudios("hello world welcome")
 // Se reproducen: "hello", "world", "welcome" en secuencia
+```
+
+##### `clearQueue()`
+
+Limpia la cola de audios pendientes de reproducción sin detener el audio que ya se está reproduciendo.
+
+**Ejemplo:**
+```typescript
+audioProcessor.clearQueue()
+```
+
+##### `stopAll()`
+
+Detiene y elimina todos los audios activos y vacía la cola de reproducción.
+
+**Ejemplo:**
+```typescript
+audioProcessor.stopAll()
+```
+
+##### `volume`
+
+Propiedad de volumen global para todos los audios.
+
+**Asignar volumen:**
+```typescript
+audioProcessor.volume = 0.5
+```
+
+**Leer volumen actual:**
+```typescript
+console.log(audioProcessor.volume)
+```
+
+##### `isAudioUnlocked()`
+
+Verifica si el audio ha sido desbloqueado mediante interacción del usuario.
+
+**Retorna:**
+- `boolean`: `true` si el audio está desbloqueado y listo para reproducir.
+
+**Ejemplo:**
+```typescript
+if (audioProcessor.isAudioUnlocked) {
+  audioProcessor.playAudio("notification")
+}
 ```
 
 ##### `unlockAudio()`
