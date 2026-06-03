@@ -416,6 +416,7 @@ El componente `AudioProcessor` es el núcleo del sistema de audio y proporciona:
 - **Carga dinámica de audios**: Carga archivos de audio bajo demanda desde URLs
 - **Sistema de colas**: Reproducción secuencial automática de múltiples audios
 - **Desbloqueo automático**: Manejo inteligente de políticas de autoplay de navegadores
+- **Aviso de desbloqueo**: Overlay interactivo que solicita la primera interacción del usuario para habilitar audio
 - **Control de volumen**: Ajuste de volumen global para todos los audios
 - **Gestión de memoria**: Los audios se crean y eliminan dinámicamente
 

@@ -548,7 +548,7 @@ class AudioProcessor extends HTMLElement {
   private audioRegister: Record<string, string>
   private audioQueue: string[]
   private isPlaying: boolean
-  private audioUnlocked: boolean
+  private audioUnlocked: HTMLSpanElement | null
   
   loadAudio(name: string, url: string): void
   playAudio(name: string, onEnded?: OnEndedCallback): void
