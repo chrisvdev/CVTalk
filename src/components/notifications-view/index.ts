@@ -608,11 +608,10 @@ export default class NotificationsView extends HTMLElement {
    * @param {TimeoutInfoType} data - Información del timeout
    * @returns {void}
    */
-  private onTimeout(data: TimeoutInfoType) {
-    console.log("Timeout event data:", data);
+  private onTimeout({username}: TimeoutInfoType) {
     const { messageTemplate, soundEffect } = this.config?.onTimeout || {};
     if (messageTemplate) {
-      const finalMessage = messageTemplate;
+      const finalMessage = messageTemplate.replace("{user}", username);
       const notification = document.createElement("span");
       notification.textContent = finalMessage;
       this.renderNotification(notification);
