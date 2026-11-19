@@ -33,7 +33,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.1.3",
+    "astro": "^7.4.13",
     "mtmi": "^0.0.19",
     "mtmi-async-badges": "^1.0.6",
     "validator": "^13.15.35"
